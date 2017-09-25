@@ -135,11 +135,11 @@ class WebServiceController extends Controller
 					$basePath = URL::to('/').'/..';
 					$imagePath = $basePath.trans('main.user_path');	
 					$logoPath = trans('main.user_path');
-					$emailCount = User::where('email',$data['email'])->count();
-					if($emailCount != 0){
+					//$emailCount = User::where('email',$data['email'])->count();
+					/*if($emailCount != 0){
 						$resultData = array('status'=>false,'message'=>'Email exists already','result'=>'');
 						return $resultData;
-					}
+					}*/
 					$userData['name'] = $data['fullname'];
 					$userData['email'] = $data['email'];
 					$userData['mobile'] = ($data['mobile']) ? $data['mobile'] : ""; 
@@ -210,7 +210,10 @@ class WebServiceController extends Controller
 								$resultData = array('status'=>false,'message'=>'facebook id is mandatory','result'=>'');
 								return $resultData;
 						}
-						$facebookAndEmailExists = User::get()->where('facebook_id',$data['facebook_id'])->orWhere('email',$data['email'])->count();
+						//$facebookAndEmailExists = User::get()->where('facebook_id',$data['facebook_id'])->orWhere('email',$data['email'])->count();
+						$facebookAndEmailExists = User::where(function ($q) use ($data){
+							return $q->where('facebook_id',$data['facebook_id'])->orWhere('email',$data['email']);
+						})->count();
 						if($facebookAndEmailExists == 0){
 
 							$data['password'] = bcrypt($data['fullname']);
@@ -224,12 +227,15 @@ class WebServiceController extends Controller
 							} else {
 								$data['profile_picture'] = '';
 							}*/
-							if(isset($data['profile_url']) && $data['profile_url']){
-								if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) { 
-									$input['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'],$data['fullname'],$logoPath);
-									$userData['image'] = $imagePath.$input['profile_picture'];								
+							
+							if(isset($data['profile_url']) && $data['profile_url']){ 
+								if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {  
+									$data['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'],$data['fullname'],$logoPath);
+									
+									$userData['image'] = $imagePath.$data['profile_picture'];	
 								}	
 							}
+
 							$registerStatus = User::create($data);
 							$id = User::max('id');
 							if($registerStatus){
@@ -239,11 +245,17 @@ class WebServiceController extends Controller
 								$resultData = array('status'=>false,'message'=>'registration failed','result'=>'');
 							}
 						} else {
-							$user = User::get()->where('facebook_id',$data['facebook_id'])->where('email',$data['email'])->first();
+							$userFacebook = User::get()->where('facebook_id',$data['facebook_id'])->count();
+							$userEmail = User::get()->where('email',$data['email'])->count();
+							if($userFacebook != 0){
+								$user = User::get()->where('facebook_id',$data['facebook_id'])->first();
+							}else if($userEmail != 0){
+								$user = User::get()->where('email',$data['email'])->first();
+							}
 							
 							$userData['id'] =  $user->id;
 							$userData['image'] = ($user->profile_picture) ? $imagePath.$user->profile_picture : "";
-							$resultData = array('status'=>false,'message'=>'You already have an account with the given details','result'=>$userData);
+							$resultData = array('status'=>true,'message'=>'You already have an account with the given details','result'=>$userData);
 						}
 					} else {
 					}

@@ -210,7 +210,6 @@ class WebServiceController extends Controller
 								$resultData = array('status'=>false,'message'=>'facebook id is mandatory','result'=>'');
 								return $resultData;
 						}
-						//$facebookAndEmailExists = User::get()->where('facebook_id',$data['facebook_id'])->orWhere('email',$data['email'])->count();
 						$facebookAndEmailExists = User::where(function ($q) use ($data){
 							return $q->where('facebook_id',$data['facebook_id'])->orWhere('email',$data['email']);
 						})->count();

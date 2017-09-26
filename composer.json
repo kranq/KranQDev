@@ -14,7 +14,7 @@
         "laravelcollective/html": "^5.4",
         "league/flysystem-aws-s3-v3": "~1.0",
         "rafwell/laravel-simplegrid": "~1.1",
-        "ext-gd": "*"
+		"ext-gd": "*"
     },
     "require-dev": {
         "appzcoder/crud-generator": "^2.0",

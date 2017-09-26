@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use URL;
 use Mail;
+use Storage;
 use App\Models\City;
 use App\Models\User;
 use GuzzleHttp\Client;
@@ -140,6 +141,11 @@ class WebServiceController extends Controller
 						$resultData = array('status'=>false,'message'=>'Email exists already','result'=>'');
 						return $resultData;
 					}*/
+					// To create a directory if not exists
+					/*if (!(Storage::disk('s3')->exists('/uploads/user')))
+					{
+						Storage::disk('s3')->makeDirectory('/uploads/user/');
+					}*/
 					$userData['name'] = $data['fullname'];
 					$userData['email'] = $data['email'];
 					$userData['mobile'] = ($data['mobile']) ? $data['mobile'] : ""; 
@@ -159,6 +165,8 @@ class WebServiceController extends Controller
 									$input['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'],$data['fullname'],$logoPath);		
 									$userData['image'] = $imagePath.$input['profile_picture'];
 								}
+								// To upload the images into Amazon S3
+								//$amazonImgUpload = Storage::disk('s3')->put('/uploads/user/'.$input['profile_picture'], file_get_contents($input['profile_picture']), 'public');
 
 							}
 							
@@ -1574,7 +1582,7 @@ class WebServiceController extends Controller
 						//$end = $recordLimit;
 						//$reviewDetails = Review::where('status','Active')->where('service_provider_id',$data['id'])->skip($page)->take($recordLimit)->get();
 						$reviewDetails = Review::where('status','Active')->where('service_provider_id',$data['id'])->get();
-						if ($reviewDetails) {
+						if (count($reviewDetails) > 0) {
 							foreach ($reviewDetails as $index => $value) {
 								$user = User::find($value['user_id']);
 								$basePath = URL::to('/').'/..';

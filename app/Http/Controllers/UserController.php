@@ -69,7 +69,7 @@ class UserController extends Controller
         $Grid->action('View', URL::to('user/show/{id}'), ['class'=>'fa fa-eye'])
             ->action('Edit', URL::to('user/edit/{id}'), ['class'=>'fa fa-edit'])
             ->action('Delete', URL::to('user/destroy/{id}'), [
-          'confirm'=>'Do you with so continue?',
+          'confirm'=>'Are you sure to delete the record?',
           'method'=>'DELETE',
 		  'class'=>'fa fa-trash-o',
         ]);

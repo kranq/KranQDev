@@ -57,7 +57,7 @@ class ServiceController extends Controller
            // $Grid->action('View', URL::to('service/show/{id}'))
               $Grid->action('Edit', URL::to('service/edit/{id}'), ['class'=>'fa fa-edit'])
                 ->action('Delete', URL::to('service/destroy/{id}'), [
-                'confirm'=>'Do you with so continue?',
+                'confirm'=>'Are you sure to delete the record?',
                 'method'=>'DELETE',
 				'class'=>'fa fa-trash-o',
             ]);

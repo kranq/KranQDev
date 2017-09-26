@@ -68,7 +68,7 @@ class ReviewController extends Controller
         $Grid->action('View', URL::to('review/show/{id}'), ['class'=>'fa fa-eye'])
             ->action('Status', URL::to('review/edit/{id}'), ['class'=>'fa fa-edit'])
             ->action('Delete', URL::to('review/destroy/{id}'), [
-          'confirm'=>'Do you with so continue?',
+          'confirm'=>'Are you sure to delete the record?',
           'method'=>'DELETE',
 		  'class'=>'fa fa-trash-o',
         ]);

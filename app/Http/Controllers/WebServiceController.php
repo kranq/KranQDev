@@ -634,6 +634,7 @@ class WebServiceController extends Controller
 					Mail::send('email.feedback', ['data' => $data], function($message)
 					{
 						$message->to('logu@boscosofttech.com', 'Loganathan')->subject('Feedback');
+						//$message->to('joanbritto18@gmail.com', 'Loganathan')->subject('Feedback');
 					});
 					$feedbackStatus = Feedback::create($data);
 					if($feedbackStatus){
@@ -1573,7 +1574,7 @@ class WebServiceController extends Controller
 			if ($data) {
 				if (isset($data['id'])) {
 					$sp = ServiceProvider::find($data['id']);
-					if($sp){
+					if(count($sp)){
 						//$page = (isset($data['page'])) ? $data['page'] : "0";	
 						//$recordLimit = (isset($data['limit'])) ? $data['limit'] : "20";	
 						//$page = ($page > 0) ? $page - 1 : 0;

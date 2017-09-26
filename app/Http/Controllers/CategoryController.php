@@ -65,7 +65,7 @@ class CategoryController extends Controller
             $Grid->action('View', URL::to('category/show/{id}'), ['class'=>'fa fa-eye'])
                 ->action('Edit', URL::to('category/edit/{id}'), ['class'=>'fa fa-edit'])
                 ->action('Delete', URL::to('category/destroy/{id}'), [
-              'confirm'=>'Do you with so continue?',
+              'confirm'=>'Are you sure to delete the record?',
               'method'=>'DELETE',
 			  'class'=>'fa fa-trash-o',
             ]);

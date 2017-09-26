@@ -59,7 +59,7 @@ class CityController extends Controller
             $Grid->action('View', URL::to('city/show/{id}'), ['class'=>'fa fa-eye'])
                 ->action('Edit', URL::to('city/edit/{id}'), ['class'=>'fa fa-edit'])
                 ->action('Delete', URL::to('city/destroy/{id}'), [
-                'confirm'=>'Do you with so continue?',
+                'confirm'=>'Are you sure to delete the record?',
                 'method'=>'DELETE',
 				'class'=>'fa fa-trash-o',
             ]);

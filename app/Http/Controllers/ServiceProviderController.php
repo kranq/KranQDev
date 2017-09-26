@@ -69,7 +69,7 @@ class ServiceProviderController extends Controller
                $Grid->action('View', URL::to('provider/show/{id}'), ['class'=>'fa fa-eye'])
                    ->action('Edit', URL::to('provider/edit/{id}'), ['class'=>'fa fa-edit'])
                    ->action('Delete', URL::to('provider/destroy/{id}'), [
-                 'confirm'=>'Do you with so continue?',
+                 'confirm'=>'Are you sure to delete the record?',
                  'method'=>'DELETE',
 				 'class'=>'fa fa-trash-o',
              ]);

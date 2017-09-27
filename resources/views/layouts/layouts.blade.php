@@ -92,6 +92,9 @@
           @yield('content')
         </div>
     </div>
+	<!-- to display the MSG91 logo (for free SMS)-->
+	<div align="right"><a href="https://msg91.com/startups/?utm_source=startup-banner"><img src="https://msg91.com/images/startups/msg91Badge.png" width="120" height="90" title="MSG91 - SMS for Startups" alt="Bulk SMS - MSG91"></a></div>
+	<!-- End to display the MSG91 logo (for free SMS)-->
   </section>
 </section>
     {{-- Html::script('js/app.js') --}}

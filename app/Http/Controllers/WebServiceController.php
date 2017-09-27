@@ -1421,7 +1421,16 @@ class WebServiceController extends Controller
 						$logoPath = trans('main.user_path');
 						if(isset($data['profile_picture']) && $data['profile_picture']){
 							if (!filter_var($data['profile_picture'], FILTER_VALIDATE_URL)) { 
+								// To decode the base64 base
+								$imageData = base64_decode($data['profile_picture']);
 								$input['profile_picture'] = KranHelper::convertStringToImage($data['profile_picture'],$data['fullname'],$logoPath);
+								// To check the object is exists or not
+								if (Storage::disk('s3')->exists('uploads/user/'.$user->profile_picture)) {
+									// To delete the object from Amazon S3 repository
+									Storage::disk('s3')->delete('uploads/user/'.$user->profile_picture);
+								}
+								// To upload the object to the particular path with the permission as (Public)
+								$amazonImgUpload = Storage::disk('s3')->put('uploads/user/'.$input['profile_picture'], imageData, 'public');
 								if($user->profile_picture){
 									@unlink(base_path().$logoPath.'/'.$user->profile_picture);
 								}
@@ -1474,7 +1483,7 @@ class WebServiceController extends Controller
 						$data['location_id']		= ($serviceProvider->location_id) ? $serviceProvider->location_id : "";
 						$data['locality']		= ($serviceProvider->locality->locality_name) ? $serviceProvider->locality->locality_name : "";
 						$data['name_sp']			= ($serviceProvider->name_sp) ? $serviceProvider->name_sp : "";
-						$data['logo']			= ($serviceProvider->logo) ? $imagePath.$serviceProvider->logo : "";
+						$data['logo']			= ($serviceProvider->logo) ? $ .$serviceProvider->logo : "";
 						$data['city_id']			= ($serviceProvider->city) ? $serviceProvider->city : "";
 						$data['city_name']			= ($serviceProvider->city) ? $serviceProvider->cities->city_name : "";
 						$data['address']			= ($serviceProvider->address) ? $serviceProvider->address : "";				
@@ -1503,6 +1512,7 @@ class WebServiceController extends Controller
 							foreach ($spImages as $index => $row) {
 								$basePath = URL::to('/').'/..';
 								$imagePath = $basePath.trans('main.provider_path');	
+								
 					            $file = $imagePath.$row['service_provider_id'].'/'.$row['image_name'];
 					            $arrayData[$index]['image_no'] = $row['id'];
 					            $arrayData[$index]['name'] = $file;

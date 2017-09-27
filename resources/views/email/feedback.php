@@ -1,9 +1,9 @@
 <html>
 <head>
-<link rel="stylesheet" href="<?php echo URL::to('/'); ?>/css/bootstrap.css" />
+<link rel="stylesheet" href="../../../public/css/bootstrap.css" />
 <style>
 body {
-	background-color: #cdcdcd;
+	background-color: #fff;
 }
 .pull-right {
 	float: left !important;
@@ -14,7 +14,7 @@ body {
 <div class="container clearfix">
 <div style="background-color:#fff; padding:10px;">
   <div style="position: relative;    left: 14.4em; width: 60% !important; border:1px solid #000; background-color:#fff; border-collapse:collapse;">
-    <div style="background: #1fb5ad none repeat scroll 0 0; min-height:70px;" align="center"> <img src="<?php echo URL::to('/'); ?>/images/logocrop.png" style="width: 170px; " alt="KranQ" title="KranQ"> 
+    <div style="background: #1fb5ad none repeat scroll 0 0; min-height:70px;" align="center"> <img src="../../../public/images/logocrop.png" style="width: 170px; " alt="KranQ" title="KranQ"> 
       <!--img src="<?php //echo URL::to('/'); ?>/images/logocrop.png" style="width: 170px; margin-top: -15px;padding: 0.9em 22em;" alt="KranQ" title="KranQ"--> 
     </div>
     <section class="panel">

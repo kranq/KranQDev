@@ -1585,17 +1585,17 @@ class WebServiceController extends Controller
 						$reviewDetails = Review::where('status','Active')->where('service_provider_id',$data['id'])->get();
 						if (count($reviewDetails) > 0) {
 							foreach ($reviewDetails as $index => $value) {
-								$user = User::find($value['user_id']);
+								$user = User::find($value->user_id);
 								$basePath = URL::to('/').'/..';
-								$imagePath = $basePath.trans('main.user_path');							
-								$arrayData[$index]['id'] = $value['id'];
-								$arrayData[$index]['user_id'] = $value['user_id'];
+								$imagePath = $basePath.trans('main.user_path');				
+								$arrayData[$index]['id'] = $value->id;
+								$arrayData[$index]['user_id'] = $value->user_id;
 							//$arrayData[$index]['service_provider_name'] = ($value['service_provider_id']) ? ServiceProvider::getServiceNameById($value['service_provider_id']) : "";
-								$arrayData[$index]['name'] = ($value['user_id']) ? User::getUserNameById($value['user_id']) : "";
+								$arrayData[$index]['name'] = ($value->user_id) ? User::getUserNameById($value->user_id) : "";
 								$arrayData[$index]['image'] = $imagePath.$user->profile_picture;
-								$arrayData[$index]['reviews'] = ($value['reviews']) ? $value['reviews'] : "";
-								$arrayData[$index]['ratings'] = ($value['rating']) ? $value['rating'] : "";
-								$arrayData[$index]['posted_on'] = ($value['postted_on']) ? KranHelper::formatDate($value['postted_on']) : "";
+								$arrayData[$index]['reviews'] = ($value->reviews) ? $value->reviews : "";
+								$arrayData[$index]['ratings'] = ($value->rating) ? $value->rating : "";
+								$arrayData[$index]['posted_on'] = ($value->postted_on) ? KranHelper::formatDate($value->postted_on) : "";
 							}
 						//$data['reviews_list'] = $arrayData;
 							$resultData = array('status'=>true,'message'=>'request success','result'=>$arrayData);	

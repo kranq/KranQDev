@@ -142,10 +142,10 @@ class WebServiceController extends Controller
 						return $resultData;
 					}*/
 					// To create a directory if not exists
-					/*if (!(Storage::disk('s3')->exists('/uploads/user')))
+					if (!(Storage::disk('s3')->exists('/uploads/user')))
 					{
 						Storage::disk('s3')->makeDirectory('/uploads/user/');
-					}*/
+					}
 					$userData['name'] = $data['fullname'];
 					$userData['email'] = $data['email'];
 					$userData['mobile'] = ($data['mobile']) ? $data['mobile'] : ""; 
@@ -166,7 +166,7 @@ class WebServiceController extends Controller
 									$userData['image'] = $imagePath.$input['profile_picture'];
 								}
 								// To upload the images into Amazon S3
-								//$amazonImgUpload = Storage::disk('s3')->put('/uploads/user/'.$input['profile_picture'], file_get_contents($input['profile_picture']), 'public');
+								$amazonImgUpload = Storage::disk('s3')->put('/uploads/user/'.$input['profile_picture'], file_get_contents($input['profile_picture']), 'public');
 
 							}
 							
@@ -240,6 +240,8 @@ class WebServiceController extends Controller
 									$data['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'],$data['fullname'],$logoPath);
 									
 									$userData['image'] = $imagePath.$data['profile_picture'];	
+									// To upload the images into Amazon S3
+									$amazonImgUpload = Storage::disk('s3')->put('/uploads/user/'.$input['profile_picture'], file_get_contents($input['profile_picture']), 'public');
 								}	
 							}
 
@@ -303,7 +305,12 @@ class WebServiceController extends Controller
 			if($categoryData){
 				foreach($categoryData as $index => $row){
 					$arrayData[$index] = $row;
-					$arrayData[$index]['category_image'] = ($categoryPath.$row->category_image) ? $categoryPath.$row->category_image : "";
+					// To get the image form the Amazon s3 account
+					if (Storage::disk('s3')->exists('uploads/category/'.$row->category_image)) {
+						$arrayData[$index]['category_image']= \Storage::disk('s3')->url('uploads/category/'.$row->category_image);
+					} else {
+						$arrayData[$index]['category_image'] = ($categoryPath.$row->category_image) ? $categoryPath.$row->category_image : "";
+					}
 				}
 			}
 			$data['categoryData']			= $arrayData;	
@@ -463,7 +470,12 @@ class WebServiceController extends Controller
 						$userData['name'] = $user->fullname;
 						$userData['email'] = $user->email;
 						$userData['mobile'] = $user->mobile;
-						$userData['profile_picture'] = ($user->profile_picture) ? $imagePath.$user->profile_picture : "";
+						// To get the image form the Amazon s3 account
+						if (Storage::disk('s3')->exists('uploads/user/'.$user->profile_picture)) {
+							$userData['profile_picture']= \Storage::disk('s3')->url('uploads/user/'.$user->profile_picture);
+						} else {
+							$userData['profile_picture'] = ($user->profile_picture) ? $imagePath.$user->profile_picture : "";
+						}
 
 						$otpStoreStatus = User::where('mobile', '=', $data['mobile'])->update(['mobile_verification_status' => '1']);
 						$resultData = array('status'=>true,'message'=>'OTP verification success','result'=>$userData);
@@ -495,7 +507,13 @@ class WebServiceController extends Controller
 				$categoryData[$index]['id']						= $category->id;
 				$categoryData[$index]['category_name']			= $category->category_name;
 				$categoryData[$index]['description']			= $category->description;
-				$categoryData[$index]['category_image']			= ($category->category_image) ? $imagePath.$category->category_image : "";
+				// To get the image form the Amazon s3 account
+				if (Storage::disk('s3')->exists('uploads/category/'.$category->category_image)) {
+					$categoryData[$index]['category_image'] = \Storage::disk('s3')->url('uploads/category/'.$category->category_image);
+				} else {
+					$categoryData[$index]['category_image']	= ($category->category_image) ? $imagePath.$category->category_image : "";
+				}
+				
 				$categoryData[$index]['category_service_data']	= $this->getCategoryServices($category->id);
 			}
 			$data['categoryData']			= $categoryData;	
@@ -549,7 +567,12 @@ class WebServiceController extends Controller
 							$serviceProviderData[$index]['locality']		= $serviceProvider->locality->locality_name;
 							$serviceProviderData[$index]['name_sp']			= $serviceProvider->name_sp;
 							$serviceProviderData[$index]['city']			= $serviceProvider->cities->city_name;
-							$serviceProviderData[$index]['logo']			= ($serviceProvider->logo) ? $imagePath.$serviceProvider->logo : "";
+							// To get the image form the Amazon s3 account
+							if (Storage::disk('s3')->exists('uploads/provider/'.$serviceProvider->logo)) {
+								$serviceProviderData[$index]['logo'] = \Storage::disk('s3')->url('uploads/provider/'.$serviceProvider->logo);
+							} else {
+								$serviceProviderData[$index]['logo']	= ($serviceProvider->logo) ? $imagePath.$serviceProvider->logo : "";
+							}
 							$serviceProviderData[$index]['address']			= ($serviceProvider->address) ? $serviceProvider->address : "";				
 							
 							$serviceProviderData[$index]['googlemap_latitude']		= ($serviceProvider->googlemap_latitude) ? $serviceProvider->googlemap_latitude : "";
@@ -719,7 +742,12 @@ class WebServiceController extends Controller
     					$userData['name'] = $unameData->name_sp;
     					$userData['email'] = $unameData->email;
     					$userData['mobile'] = $unameData->phone;
-    					$userData['logo'] = ($unameData->logo) ? $imagePath.$unameData->logo : ""; 
+						// To get the image form the Amazon s3 account
+						if (Storage::disk('s3')->exists('uploads/provider/'.$unameData->logo)) {
+							$userData['logo'] = \Storage::disk('s3')->url('uploads/provider/'.$unameData->logo);
+						} else {
+	    					$userData['logo'] = ($unameData->logo) ? $imagePath.$unameData->logo : ""; 
+						}
     					if($checkpwd){
     						$resultData = array('status'=>true,'message'=>'service provider login available','result'=>$userData);
     					}else{
@@ -957,7 +985,12 @@ class WebServiceController extends Controller
 					$arrayData[$index]['id'] = $row->id;
 					$arrayData[$index]['category_name'] = ($row->category_name) ? $row->category_name : "";
 					$arrayData[$index]['description'] = ($row->description) ? $row->description : "";
-					$arrayData[$index]['category_image'] = ($row->category_image) ? $imagePath.$row->category_image : '';
+					// To get the image form the Amazon s3 account
+					if (Storage::disk('s3')->exists('uploads/category/'.$row->category_image)) {
+						$arrayData[$index]['category_image'] = \Storage::disk('s3')->url('uploads/category/'.$row->category_image);
+					} else {
+						$arrayData[$index]['category_image'] = ($row->category_image) ? $imagePath.$row->category_image : '';
+					}
 					$arrayData[$index]['order_by'] = ($row->order_by) ? $row->order_by : "";
 					$arrayData[$index]['category_services'] = $serviceArray;
 				}
@@ -992,7 +1025,12 @@ class WebServiceController extends Controller
 						$arrayData['id'] = $spData->id;
 						$arrayData['category'] = ($spData->category_id) ? Category::getCategoryNameById($spData->category_id) : "";
 						$arrayData['name'] = ($spData->name_sp) ? $spData->name_sp : "";
-						$arrayData['logo'] = ($spData->logo) ? $imagePath.$spData->logo : "";
+						// To get the image form the Amazon s3 account
+						if (Storage::disk('s3')->exists('uploads/provider/'.$spData->logo)) {
+							$arrayData['logo'] = \Storage::disk('s3')->url('uploads/provider/'.$spData->logo);
+						} else {
+							$arrayData['logo'] = ($spData->logo) ? $imagePath.$spData->logo : "";
+						}
 						$arrayData['address'] = ($spData->address) ? $spData->address : "";
 						$arrayData['phone'] = ($spData->phone) ? $spData->phone : "";
 						$arrayData['website_link'] = ($spData->website_link) ? $spData->website_link : "";
@@ -1032,7 +1070,12 @@ class WebServiceController extends Controller
 						$arrayData['id'] = $reviewDetails['id'];
 						$arrayData['service_provider_name'] = ($reviewDetails['service_provider_id']) ? ServiceProvider::getServiceNameById($reviewDetails['service_provider_id']) : "";
 						$arrayData['user'] = ($reviewDetails['user_id']) ? User::getUserNameById($reviewDetails['user_id']) : "";
-						$arrayData['user_image'] = $imagePath.$user->profile_picture;
+						// To get the image form the Amazon s3 account
+						if (Storage::disk('s3')->exists('uploads/user/'.$user->profile_picture)) {
+							$arrayData['user_image'] = \Storage::disk('s3')->url('uploads/user/'.$user->profile_picture);
+						} else {
+							$arrayData['user_image'] = $imagePath.$user->profile_picture;
+						}
 						$arrayData['reviews'] = ($reviewDetails['reviews']) ? $reviewDetails['reviews'] : "";
 						$arrayData['ratings'] = ($reviewDetails['rating']) ? $reviewDetails['rating'] : "";
 						$arrayData['posted_on'] = ($reviewDetails['postted_on']) ? KranHelper::formatDate($reviewDetails['postted_on']) : "";
@@ -1182,7 +1225,12 @@ class WebServiceController extends Controller
 						$arrayData[$index]['service_provider_name'] = ($value['service_provider_id']) ? ServiceProvider::getServiceNameById($value['service_provider_id']) : "";
 						$arrayData[$index]['user_id'] = $value['user_id'];
 						$arrayData[$index]['user'] = ($value['user_id']) ? User::getUserNameById($value['user_id']) : "";
-						$arrayData[$index]['user_image'] = $imagePath.$user->profile_picture;
+						// To get the image form the Amazon s3 account
+						if (Storage::disk('s3')->exists('uploads/user/'.$user->profile_picture)) {
+							$arrayData[$index]['user_image'] = \Storage::disk('s3')->url('uploads/user/'.$user->profile_picture);
+						} else {
+							$arrayData[$index]['user_image'] = $imagePath.$user->profile_picture;
+						}
 						$arrayData[$index]['reviews'] = ($value['reviews']) ? $value['reviews'] : "";
 						$arrayData[$index]['ratings'] = ($value['rating']) ? $value['rating'] : "";
 						$arrayData[$index]['posted_on'] = ($value['postted_on']) ? KranHelper::formatDate($value['postted_on']) : "";
@@ -1231,7 +1279,12 @@ class WebServiceController extends Controller
 					foreach ($userDetails as $index => $users) {
 						$arrayData[$index]['id'] = $users['id'];
 						$arrayData[$index]['fullname'] = ($users['fullname']) ? $users['fullname'] : "";
-						$arrayData[$index]['profile_picture'] = ($users['profile_picture']) ? $imagePath . $users['profile_picture'] : "";
+						// To get the image form the Amazon s3 account
+						if (Storage::disk('s3')->exists('uploads/user/'.$users['profile_picture'])) {
+							$arrayData[$index]['profile_picture'] = \Storage::disk('s3')->url('uploads/user/'.$users['profile_picture']);
+						} else {
+							$arrayData[$index]['profile_picture'] = ($users['profile_picture']) ? $imagePath . $users['profile_picture'] : "";
+						}
 						$arrayData[$index]['address'] = ($users['address']) ? $users['address'] : "";
 						$arrayData[$index]['mobile'] = ($users['mobile']) ? $users['mobile'] : "";
 						$arrayData[$index]['email'] = ($users['email']) ? $users['email'] : "";
@@ -1281,7 +1334,12 @@ class WebServiceController extends Controller
 					if ($userData) {
 						$arrayData['id'] = $userData['id'];
 						$arrayData['fullname'] = ($userData['fullname']) ? $userData['fullname'] : "";
-						$arrayData['profile_picture'] = ($userData['profile_picture']) ? $imagePath . $userData['profile_picture'] : "";
+						// To get the image form the Amazon s3 account
+						if (Storage::disk('s3')->exists('uploads/user/'.$userData['profile_picture'])) {
+							$arrayData['profile_picture'] = \Storage::disk('s3')->url('uploads/user/'.$userData['profile_picture']);
+						} else {
+							$arrayData['profile_picture'] = ($userData['profile_picture']) ? $imagePath . $userData['profile_picture'] : "";
+						}
 						$arrayData['address'] = ($userData['address']) ? $userData['address'] : "";
 						$arrayData['mobile'] = ($userData['mobile']) ? $userData['mobile'] : "";
 						$arrayData['email'] = ($userData['email']) ? $userData['email'] : "";
@@ -1535,7 +1593,12 @@ class WebServiceController extends Controller
 								$arrayData[$index]['id'] = $value['id'];
 								$arrayData[$index]['service_provider_id'] = $value['service_provider_id'];
 								$arrayData[$index]['name'] = ($value['service_provider_id']) ? ServiceProvider::getServiceNameById($value['service_provider_id']) : "";
-								$arrayData[$index]['image'] = ($sp->logo) ? $imagePath.$sp->logo : "";
+								// To get the image form the Amazon s3 account
+								if (Storage::disk('s3')->exists('uploads/provider/'.$sp->logo)) {
+									$arrayData[$index]['image'] = \Storage::disk('s3')->url('uploads/provider/'.$sp->logo);
+								} else {
+									$arrayData[$index]['image'] = ($sp->logo) ? $imagePath.$sp->logo : "";
+								}
 							//$arrayData[$index]['user'] = ($value['user_id']) ? User::getUserNameById($value['user_id']) : "";
 								$arrayData[$index]['reviews'] = ($value['reviews']) ? $value['reviews'] : "";
 								$arrayData[$index]['ratings'] = ($value['rating']) ? $value['rating'] : "";
@@ -1593,7 +1656,12 @@ class WebServiceController extends Controller
 							//$arrayData[$index]['service_provider_name'] = ($value['service_provider_id']) ? ServiceProvider::getServiceNameById($value['service_provider_id']) : "";
 							
 								$arrayData[$index]['name'] = ($value->user_id) ? User::getUserNameById($value->user_id) : "";
-								$arrayData[$index]['image'] = $imagePath.$user->profile_picture;
+								// To get the image form the Amazon s3 account
+								if (Storage::disk('s3')->exists('uploads/user/'.$user->profile_picture)) {
+									$arrayData[$index]['image'] = \Storage::disk('s3')->url('uploads/user/'.$user->profile_picture);
+								} else {
+									$arrayData[$index]['image'] = $imagePath.$user->profile_picture;
+								}
 								$arrayData[$index]['reviews'] = ($value->reviews) ? $value->reviews : "";
 								$arrayData[$index]['ratings'] = ($value->rating) ? $value->rating : "";
 								$arrayData[$index]['posted_on'] = ($value->postted_on) ? KranHelper::formatDate($value->postted_on) : "";

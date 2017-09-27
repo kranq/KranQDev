@@ -1585,7 +1585,7 @@ class WebServiceController extends Controller
 						//$end = $recordLimit;
 						//$reviewDetails = Review::where('status','Active')->where('user_id',$data['id'])->skip($page)->take($recordLimit)->get();
 						$reviewDetails = Review::where('status','Active')->where('user_id',$data['id'])->get();
-						if ($reviewDetails) {
+						if (count($reviewDetails) > 0) {
 							$basePath = URL::to('/').'/..';
 							$imagePath = $basePath.trans('main.provider_path');	
 							foreach ($reviewDetails as $index => $value) {
@@ -1599,12 +1599,12 @@ class WebServiceController extends Controller
 								} else {
 									$arrayData[$index]['image'] = ($sp->logo) ? $imagePath.$sp->logo : "";
 								}
-							//$arrayData[$index]['user'] = ($value['user_id']) ? User::getUserNameById($value['user_id']) : "";
+								//$arrayData[$index]['user'] = ($value['user_id']) ? User::getUserNameById($value['user_id']) : "";
 								$arrayData[$index]['reviews'] = ($value['reviews']) ? $value['reviews'] : "";
 								$arrayData[$index]['ratings'] = ($value['rating']) ? $value['rating'] : "";
 								$arrayData[$index]['posted_on'] = ($value['postted_on']) ? KranHelper::formatDate($value['postted_on']) : "";
 							}
-						//$data['reviews_list'] = $arrayData;
+							//$data['reviews_list'] = $arrayData;
 							$resultData = array('status'=>true,'message'=>'request success','result'=>$arrayData);	
 						} else{
 							$resultData = array('status'=>false,'message'=>'No Records Found','result'=>'');

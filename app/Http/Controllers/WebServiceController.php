@@ -700,14 +700,12 @@ class WebServiceController extends Controller
 					if(isset($data['image'])){
 						$imageData = base64_decode($data['image']);
 						$data['image'] = KranHelper::convertStringToImage($data['image'],'serviceprovider'.$data['service_provider_id'],$serviceImagePath);
-					    $photo = @imagecreatefromstring($imageData);
+					    //$photo = @imagecreatefromstring($imageData);
 						$imageName = KranHelper::convertString('serviceprovider');
 						$dateval = date('Ymdhis');
-						if ($photo) {
-							$file = $imageName.  '-' . $dateval . '.jpg';
-						}
+						$file = $imageName.  '-' . $dateval . '.jpg';
 						// To upload the images into Amazon S3
-        				$amazonImgUpload = Storage::disk('s3')->put('/uploads/service_provider_details/'.$file, $photo, 'public');
+        				$amazonImgUpload = Storage::disk('s3')->put('/uploads/service_provider_details/'.$file, $imageData, 'public');
 						
 					} else {
 						$data['image'] = '';

@@ -1483,7 +1483,7 @@ class WebServiceController extends Controller
 						$data['location_id']		= ($serviceProvider->location_id) ? $serviceProvider->location_id : "";
 						$data['locality']		= ($serviceProvider->locality->locality_name) ? $serviceProvider->locality->locality_name : "";
 						$data['name_sp']			= ($serviceProvider->name_sp) ? $serviceProvider->name_sp : "";
-						$data['logo']			= ($serviceProvider->logo) ? $ .$serviceProvider->logo : "";
+						$data['logo']			= ($serviceProvider->logo) ? $imagePath.$serviceProvider->logo : "";
 						$data['city_id']			= ($serviceProvider->city) ? $serviceProvider->city : "";
 						$data['city_name']			= ($serviceProvider->city) ? $serviceProvider->cities->city_name : "";
 						$data['address']			= ($serviceProvider->address) ? $serviceProvider->address : "";				

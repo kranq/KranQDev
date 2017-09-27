@@ -5426,7 +5426,6 @@ div.tagsinput span.tag {
 	position:absolute;
 	pointer-events:none;
 }
-.pull-right{ float:left !important;}
 .pull-right.top-menu .dropdown-menu:after {
 	border-color:rgba(255,255,255,0);
 	border-bottom-color:#ffffff;

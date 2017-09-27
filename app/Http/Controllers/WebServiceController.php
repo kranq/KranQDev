@@ -1574,7 +1574,7 @@ class WebServiceController extends Controller
 			if ($data) {
 				if (isset($data['id'])) {
 					$sp = ServiceProvider::find($data['id']);
-					if(count($sp)){
+					if(count($sp) > 0){
 						//$page = (isset($data['page'])) ? $data['page'] : "0";	
 						//$recordLimit = (isset($data['limit'])) ? $data['limit'] : "20";	
 						//$page = ($page > 0) ? $page - 1 : 0;
@@ -1591,6 +1591,7 @@ class WebServiceController extends Controller
 								$arrayData[$index]['id'] = $value->id;
 								$arrayData[$index]['user_id'] = $value->user_id;
 							//$arrayData[$index]['service_provider_name'] = ($value['service_provider_id']) ? ServiceProvider::getServiceNameById($value['service_provider_id']) : "";
+							
 								$arrayData[$index]['name'] = ($value->user_id) ? User::getUserNameById($value->user_id) : "";
 								$arrayData[$index]['image'] = $imagePath.$user->profile_picture;
 								$arrayData[$index]['reviews'] = ($value->reviews) ? $value->reviews : "";

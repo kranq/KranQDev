@@ -692,8 +692,16 @@ class WebServiceController extends Controller
 			if($data){
 				if($data['service_provider_id'] && $data['image']){
 					$serviceImagePath = '/uploads/service_provider_details/';
+					// To create a directory if not exists
+					if (!(Storage::disk('s3')->exists('/uploads/service_provider_details')))
+					{
+						Storage::disk('s3')->makeDirectory('/uploads/service_provider_details/');
+					}
 					if(isset($data['image'])){
 						$data['image'] = KranHelper::convertStringToImage($data['image'],'serviceprovider'.$data['service_provider_id'],$serviceImagePath);
+						// To upload the images into Amazon S3
+        				$amazonImgUpload = Storage::disk('s3')->put('/uploads/service_provider_details/'.$data['image'], file_get_contents($data['image']), 'public');
+						
 					} else {
 						$data['image'] = '';
 					}
@@ -807,11 +815,18 @@ class WebServiceController extends Controller
     					$insertData['created_at'] = date('Y-m-d H:i:s');
 
     					$insertData['password'] = bcrypt($data['password']);
-
+						// Local storage
     					$logoPath = trans('main.provider_path');
     					if(isset($data['logo'])){
             				//$insertData['logo'] = ServiceProvider::upload_file($request, 'logo');
     						$insertData['logo'] = KranHelper::convertStringToImage($data['logo'],$data['name'],$logoPath);
+							// To create a directory if not exists
+							if (!(Storage::disk('s3')->exists('/uploads/provider')))
+							{
+								Storage::disk('s3')->makeDirectory('/uploads/provider/');
+							}
+							// To upload the images into Amazon S3
+							$amazonImgUpload = Storage::disk('s3')->put('/uploads/provider/'.$insertData['logo'], file_get_contents($insertData['logo']), 'public');	
     					} 
 
     					

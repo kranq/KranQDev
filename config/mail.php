@@ -57,8 +57,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'mail.php@boscoits.com'),
-        'name' => env('MAIL_FROM_NAME', 'PHP'),
+        'address' => env('MAIL_FROM_ADDRESS', 'customercare.kranq@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'Kranq'),
     ],
 
     /*
@@ -85,9 +85,10 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME', 'mail.php@boscoits.com'),
-
-    'password' => env('MAIL_PASSWORD', 'php!#nets15'),
+    //'username' => env('MAIL_USERNAME', 'mail.php@boscoits.com'),
+	'username' => env('MAIL_USERNAME', 'customercare.kranq@gmail.com'),
+    //'password' => env('MAIL_PASSWORD', 'php!#nets15'),
+    'password' => env('MAIL_PASSWORD', 'MLtech@2017'),
 
     /*
     |--------------------------------------------------------------------------

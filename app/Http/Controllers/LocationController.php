@@ -17,14 +17,16 @@ use Response;
 use Redirect;
 use App\Models\City;
 use App\Models\Location;
+use App\Models\ServiceProvider;
 use Rafwell\Simplegrid\Grid;
 use App\Http\Requests\LocationRequest;
-use Illuminate\Support\ServiceProvider;
+//use Illuminate\Support\ServiceProvider;
 
 class LocationController extends Controller
 {
 
     protected $error = 'error';
+    protected $warning = 'warning';
     protected $success = 'success';
     protected $route = 'main.location.index';
     protected $title = 'main.location.title';
@@ -146,11 +148,12 @@ class LocationController extends Controller
     public function destroy($id)
     {
         $location = Location::findorFail($id);
-        if (count($location->city_id) > 0) {
-            return Redirect::route($this->route)->with($this->success, trans($this->referencemsg));  
+		$serviceProvider = ServiceProvider::where('location_id','=',$id)->get();
+        if (count($serviceProvider) > 0) {
+            return Redirect::route($this->route)->with($this->warning, trans($this->referencemsg));  
         } else {
             $location->delete();
-            return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));  
+            return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));  
         }
       
     }

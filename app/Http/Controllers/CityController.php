@@ -25,6 +25,7 @@ use Illuminate\Support\ServiceProvider;
 class CityController extends Controller
 {
     protected $error = 'error';
+    protected $warning = 'warning';
     protected $success = 'success';
     protected $route = 'main.city.index';
     protected $title = 'main.city.title';
@@ -143,11 +144,11 @@ class CityController extends Controller
     {
         $locality = Location::where('city_id', '=', $id)->get();
         if (count($locality) > 0) {
-            return Redirect::route($this->route)->with($this->success, trans($this->referencemsg));
+            return Redirect::route($this->route)->with($this->warning, trans($this->referencemsg));
         } else {
             $city = City::findorFail($id);
             $city->delete();
-            return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));   
+            return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));   
         }
     }
 }

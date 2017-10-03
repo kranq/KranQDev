@@ -19,13 +19,16 @@ use App\User;
 use App\Models\Service;
 use App\Models\Location;
 use Rafwell\Simplegrid\Grid;
+use App\Models\CategoryService;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Requests\ServiceRequest;
+use App\Models\ServiceProviderCategoryService;
 
 class ServiceController extends Controller
 {
     
     protected $error = 'error';
+    protected $warning = 'warning';
     protected $success = 'success';
     protected $route = 'main.service.index';
     protected $title = 'main.service.title';
@@ -137,15 +140,38 @@ class ServiceController extends Controller
      * @param  \App\Service  $service
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Service $service)
+    public function destroy($id)
     {
-      /* $locality = Service::where('city_id', '=', $id)->get();
-       if (count($locality) > 0) {
-           return Redirect::route($this->route)->with($this->success, trans($this->referencemsg));
-       } else {
-           $city = City::findorFail($id);
-           $city->delete();
-           return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));   
-       }*/
+		$service = Service::findorfail($id);
+		$serviceExists = 0;
+		$servicePoviderExists = 0;
+		// To check the Category services
+		$categoryService = CategoryService::select('service_id')->orderBy('id', 'desc')->get();
+		for ($i=0;$i<count($categoryService);$i++) {
+				$serviceNo = explode(',',$categoryService[$i]->service_id);
+				foreach($serviceNo as $services) {
+					if ($services == $id) {
+						$serviceExists = 1;
+					}
+				}
+		}
+		// To check the Services Provider Category Service
+		$serviceProviderCategoryService = ServiceProviderCategoryService::select('service_id')->orderBy('id', 'desc')->get();
+		for ($i=0;$i<count($serviceProviderCategoryService);$i++) {
+				$serviceProviderCategoryNumbers = explode(',',$serviceProviderCategoryService[$i]->service_id);
+				foreach($serviceProviderCategoryNumbers as $serviceProviders) {
+					if ($serviceProviders == $id) {
+						$servicePoviderExists = 1;
+					}
+				}
+		}
+		if (isset($serviceExists) || isset($servicePoviderExists)) {		
+		   if ($serviceExists == 1 || $servicePoviderExists == 1) { 
+			   return Redirect::route($this->route)->with($this->warning, trans($this->referencemsg));
+		   } else {
+			   $service->delete();
+			   return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));   
+		   }
+		}
     }
 }

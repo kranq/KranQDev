@@ -34,6 +34,7 @@ class CategoryRequest extends FormRequest
         $rules['order_by'] = 'required';
         $rules['status'] = 'required';
         $rules['service_id'] = 'required';
+		$rules['category_image'] = 'image|mimes:jpeg,png,jpg,gif,svg|max:2048';
         //$rules['description'] = 'max:1000';
         switch ($this->method()) {
             case 'GET':

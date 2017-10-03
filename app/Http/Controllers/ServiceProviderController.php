@@ -45,14 +45,15 @@ class ServiceProviderController extends Controller
     public function index()
     {
         // To get the records details from the table
-        $providers = ServiceProvider::join('categories','category_id','=','categories.id')->join('localities','location_id','=','localities.id')->join('cities','city','=','cities.id')->orderBy('id', 'DESC');
+		$providers = ServiceProvider::join('categories','category_id','=','categories.id')->join('localities','location_id','=','localities.id')->join('cities',"city",'=',"cities.id")->orderBy('id', 'desc');
+        //$providers = ServiceProvider::join('categories','category_id','=','categories.id')->join('localities','location_id','=','localities.id')->join('cities','city','=','cities.id')->orderBy('id', 'DESC');
         $Grid = new Grid($providers,'');
         // To have header for the values
             $Grid->fields([
                   'name_sp'=>'Service Provider',
                   'category_name'=>'Category Name',
                  'locality_name'=>'Locality',
-                 'city_name'=>'City',
+                 //'city_name'=>'City',
                  'service_providers.created_at' => 'Submitted On',
                  'service_providers.status'=>'Status'
             ])
@@ -124,7 +125,6 @@ class ServiceProviderController extends Controller
         }*/
         $input['slug'] = KranHelper::convertString($input['name_sp']);
         $input['password'] = bcrypt($input['password']);
-        //echo '<pre>';print_r($input);exit;
         $last = ServiceProvider::create($input);
         // To get the Last Insert id and insert the value in the Service Provider Table by email
         $lastRecord = ServiceProvider::where('email','=' ,$last->email)->get();
@@ -231,7 +231,11 @@ class ServiceProviderController extends Controller
         if (!empty($input['service_id'])) {
             $serviceProviderStatus = ServiceProviderCategoryService::where('service_provider_id','=' ,$id)->get();
             if (count($serviceProviderStatus) > 0) {
-                $result =  DB::statement('UPDATE service_provider_category_services set service_id="'.$serviceProviderInputs.'" where category_id='.$input['category_id'].' AND service_provider_id='.$id);   
+				// To update the service provider category services
+				$result = DB::table('service_provider_category_services')
+									->where(array('category_id'=>$input['category_id'],'service_provider_id'=>$id))  // find your user by their email
+									->limit(1)  // optional - to ensure only one record is updated.
+									->update(array('service_id' => $serviceProviderInputs));  // update the record in the DB. 
             } else {
                 $serviceProviderInput['service_provider_id'] = $id;
                 $serviceProviderInput['category_id'] = $input['category_id'];
@@ -261,7 +265,7 @@ class ServiceProviderController extends Controller
 			}
 		}
         $postData->delete();
-        return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));  
+        return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));  
     }
 
 

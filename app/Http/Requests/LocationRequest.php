@@ -2,9 +2,9 @@
 
 /*
   ------------------------------------------------------------------------------------------------
-  Project              : KRQ 1.0.0
-  Created By       : Loganathan N
-  Created Date    : 20.07.2017
+  Project          	: KRQ 1.0.0
+  Created By       	: Loganathan N
+  Created Date    	: 20.07.2017
   Purpose           : To handle Location validation
   ------------------------------------------------------------------------------------------------
  */
@@ -30,19 +30,15 @@ class LocationRequest extends FormRequest {
      */
     public function rules() {
         $rules['city_id'] = 'required';
-        $rules['locality_name'] = 'required';
         $rules['status'] = 'required';
-        
         switch ($this->method()) {
             case 'GET':
             case 'DELETE': {
                     return [];
                 }
                 break;
-            case 'POST': {
-                    $rules['city_id'] = 'required';                    
-                    $rules['locality_name'] = 'required|min:3|max:100|unique:localities,locality_name, city_id';                    
-                    $rules['status'] = 'required';
+            case 'POST': {                 
+                    $rules['locality_name'] = 'required|min:3|max:100|unique:localities,locality_name';                    
                 }
             case 'PUT':
             case 'PATCH': {

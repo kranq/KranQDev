@@ -46,7 +46,7 @@
                                     <div class="col-lg-6">
 										@if (@$s3image)
 										<img src="{{ @$s3image }}">
-                                    	@elseif(!empty(@$user->profile_picture))
+                                    	@elseif (!empty(@$user->profile_picture))
                                         <img src="{{ URL::to('../uploads/user') }}/{!! @$user->profile_picture !!}">
                                         @else
                                         <img src="{{ URL::to('/images') }}/noimage.jpg }}">

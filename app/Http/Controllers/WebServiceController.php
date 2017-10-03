@@ -638,6 +638,8 @@ class WebServiceController extends Controller
 		}
 		return $resultData;
 	}
+
+	
 	/**
 	 * To get the feedback data from mobile end and send feedback mail
 	 *
@@ -656,8 +658,8 @@ class WebServiceController extends Controller
 					//$input['feedbackMessage'] = $data['feedbackMessage'];
 					Mail::send('email.feedback', ['data' => $data], function($message)
 					{
-						$message->to('logu@boscosofttech.com', 'Loganathan')->subject('Feedback');
-						//$message->to('joanbritto18@gmail.com', 'Loganathan')->subject('Feedback');
+						//$message->to('logu@boscosofttech.com', 'Loganathan')->subject('Feedback');
+						$message->to('joanbritto18@gmail.com', 'Loganathan')->subject('Feedback');
 					});
 					$feedbackStatus = Feedback::create($data);
 					if($feedbackStatus){
@@ -819,6 +821,7 @@ class WebServiceController extends Controller
 						// Local storage
     					$logoPath = trans('main.provider_path');
     					if(isset($data['logo'])){
+    						$imageData = base64_decode($data['logo']);
             				//$insertData['logo'] = ServiceProvider::upload_file($request, 'logo');
     						$insertData['logo'] = KranHelper::convertStringToImage($data['logo'],$data['name'],$logoPath);
 							// To create a directory if not exists
@@ -827,7 +830,7 @@ class WebServiceController extends Controller
 								Storage::disk('s3')->makeDirectory('/uploads/provider/');
 							}
 							// To upload the images into Amazon S3
-							$amazonImgUpload = Storage::disk('s3')->put('/uploads/provider/'.$insertData['logo'], file_get_contents($insertData['logo']), 'public');	
+							$amazonImgUpload = Storage::disk('s3')->put('/uploads/provider/'.$insertData['logo'], $imageData, 'public');	
     					} 
 
     					
@@ -839,6 +842,11 @@ class WebServiceController extends Controller
 								foreach ($data['service_provider_images'] as $row_photo) {
 						            $file = $row_photo['image_no'] . '.jpg';
 						            $dir = trans('main.provider_path') . $id . '/'; //file upload path  
+						            // To check the object is exists or not
+									if (Storage::disk('s3')->exists('uploads/provider/'.$row_photo['name'])) {
+										// To delete the object from Amazon S3 repository
+										Storage::disk('s3')->delete('uploads/provider/'.$row_photo['name']);
+									}
 						            $checkImageExist = ServiceProviderImages::where('service_provider_id',$id)->where('image_name',$file)->count();
 						            if($checkImageExist == 0){
 						                if (!filter_var($row_photo['name'], FILTER_VALIDATE_URL)) {
@@ -851,6 +859,9 @@ class WebServiceController extends Controller
 						                        }
 						                        $insert_data['service_provider_id'] = $id;
 						                        $insert_data['image_name'] = KranHelper::uploadSPImage($row_photo['name'],$file,$dir);
+						                        // To upload the object to the particular path with the permission as (Public)
+	        											$amazonImgUpload = Storage::disk('s3')->put('uploads/provider/'.$insert_data['image_name'], $imageData, 'public');
+	        						
 						                        $insert_photos = ServiceProviderImages::create($insert_data);
 						                       
 						                    }
@@ -864,7 +875,12 @@ class WebServiceController extends Controller
 							$userData['name'] = $insertData['name_sp'];
 							$userData['email'] = $insertData['email'];
 							$userData['mobile'] = $insertData['phone'];
-							$userData['logo'] = ($insertData['logo']) ? $imagePath.$insertData['logo'] : ""; 
+							// To get the image form the Amazon s3 account
+							if (Storage::disk('s3')->exists('uploads/provider/'.$insertData['logo'])) {
+								$userData['logo'] = \Storage::disk('s3')->url('uploads/provider/'.$insertData['logo']);
+							} else {
+								$userData['logo'] = ($insertData['logo']) ? $imagePath.$insertData['logo'] : ""; 
+							}
 							$resultData = array('status'=>true,'message'=>'registered successfully','result'=>$userData);	
     					} else {
     						$resultData = array('status'=>false,'message'=>'registration failed','result'=>'');
@@ -893,8 +909,9 @@ class WebServiceController extends Controller
 	public function spForgotPassword(Request $request)
 	{
 		try{
-			$data = $request->all();
-			if($data){
+			//$data = $request->all();
+			//if($data){
+				$data['email'] = 'test@gmail.com';
 				if($data['email']){	
 					$emailExists = ServiceProvider::get()->where('email',$data['email'])->count();
 					if($emailExists != 0){
@@ -902,6 +919,7 @@ class WebServiceController extends Controller
 						//$cryptedPassword = bcrypt($password);
 						//$updateQuery = ServiceProvider::where('email',$data['email'])->update(['password' => $cryptedPassword]);
 						$data['content'] = 'Click here to reset your password <a href="#">Reset Password</a>';
+						return view('email.forgot-password',['data' => $data]);
 						Mail::send('email.forgot-password', ['data' => $data], function($message) use ($data)
 						{
 							$message->to($data['email'])->subject('Feedback');
@@ -915,9 +933,9 @@ class WebServiceController extends Controller
 				}else{
 					$resultData = array('status'=>false,'message'=>'Invalid Input','result'=>'');
 				}
-			}else{
-				$resultData = array('status'=>false,'message'=>'invalid request','result'=>'');
-			}
+			//}else{
+			//	$resultData = array('status'=>false,'message'=>'invalid request','result'=>'');
+			//}
 		}catch(Exception $e){
 			$resultData = array('status'=>false,'message'=>'invalid request','result'=>'');
 		}
@@ -1153,6 +1171,12 @@ class WebServiceController extends Controller
 							if($provider->logo){
 								@unlink(base_path().$logoPath.'/'.$provider->logo);
 							}
+							// To check the object is exists or not
+							if (Storage::disk('s3')->exists('uploads/provider/'.$provider->logo)) {
+								// To delete the object from Amazon S3 repository
+								Storage::disk('s3')->delete('uploads/provider/'.$provider->logo);
+							}
+
 						}  	
 					}
 					if(isset($data['service_provider_images']) && $data['service_provider_images']){
@@ -1171,12 +1195,14 @@ class WebServiceController extends Controller
 										}
 										$insert_data['service_provider_id'] = $provider->id;
 										$insert_data['image_name'] = KranHelper::uploadSPImage($row_photo['name'],$file,$dir);
+										// To upload the object to the particular path with the permission as (Public)
+	        					$amazonImgUpload = Storage::disk('s3')->put('uploads/provider/'.$insert_data['image_name'], $imageData, 'public');
 										$insert_photos = ServiceProviderImages::create($insert_data);
 										 
 									}
 								}
 							}
-				        } 
+				    } 
 					}
 
 					if(isset($data['delete_provider_images']) && $data['delete_provider_images']){
@@ -1190,6 +1216,11 @@ class WebServiceController extends Controller
 									if (is_file($file_name)) {
 			            				unlink($file_name);
 				        			}
+				        	// To check the object is exists or not
+									if (Storage::disk('s3')->exists('uploads/provider/'. $provider->id . '/'. $spImages->image_name)) {
+										// To delete the object from Amazon S3 repository
+										Storage::disk('s3')->delete('uploads/provider/'. $provider->id . '/'. $spImages->image_name);
+									}
 								}	
 								$spImages->delete();
 							}
@@ -1399,10 +1430,10 @@ class WebServiceController extends Controller
 					$checkEmailCount = User::where('id','!=',$data['id'])->where('email',$data['email'])->count();
 					$checkEmail = User::where('id','!=',$data['id'])->where('email',$data['email'])->get();
 					if($checkEmailCount == 0){
-						if($data['mobile'] != $user->mobile){
+						/*if($data['mobile'] != $user->mobile){
 							$resultData = array('status'=>false,'message'=>'you are not allowed to modify the mobile number','result'=>'');
 							return $resultData;
-						}
+						}*/
 						$input['fullname'] = $data['fullname'];					
 						$input['address'] = $data['address'];
 						$input['mobile'] = $data['mobile'];
@@ -1483,7 +1514,12 @@ class WebServiceController extends Controller
 						$data['location_id']		= ($serviceProvider->location_id) ? $serviceProvider->location_id : "";
 						$data['locality']		= ($serviceProvider->locality->locality_name) ? $serviceProvider->locality->locality_name : "";
 						$data['name_sp']			= ($serviceProvider->name_sp) ? $serviceProvider->name_sp : "";
-						$data['logo']			= ($serviceProvider->logo) ? $imagePath.$serviceProvider->logo : "";
+						// To get the image form the Amazon s3 account
+						if (Storage::disk('s3')->exists('uploads/provider/'.$serviceProvider->logo)) {
+							$data['logo'] = \Storage::disk('s3')->url('uploads/provider/'.$serviceProvider->logo);
+						} else {
+							$data['logo']			= ($serviceProvider->logo) ? $imagePath.$serviceProvider->logo : "";
+						}
 						$data['city_id']			= ($serviceProvider->city) ? $serviceProvider->city : "";
 						$data['city_name']			= ($serviceProvider->city) ? $serviceProvider->cities->city_name : "";
 						$data['address']			= ($serviceProvider->address) ? $serviceProvider->address : "";				
@@ -1510,12 +1546,16 @@ class WebServiceController extends Controller
 				        if($spImagesCount != 0){
 				        	$spImages = ServiceProviderImages::where('service_provider_id',$serviceProvider->id)->get();
 							foreach ($spImages as $index => $row) {
-								$basePath = URL::to('/').'/..';
-								$imagePath = $basePath.trans('main.provider_path');	
-								
-					            $file = $imagePath.$row['service_provider_id'].'/'.$row['image_name'];
-					            $arrayData[$index]['image_no'] = $row['id'];
-					            $arrayData[$index]['name'] = $file;
+									$basePath = URL::to('/').'/..';
+									$imagePath = $basePath.trans('main.provider_path');	
+									// To get the image form the Amazon s3 account
+									if (Storage::disk('s3')->exists('uploads/provider/'.$row['service_provider_id'].'/'.$row['image_name'])) {
+										$file = \Storage::disk('s3')->url('uploads/provider/'.$row['service_provider_id'].'/'.$row['image_name']);
+									} else {
+			            	$file = $imagePath.$row['service_provider_id'].'/'.$row['image_name'];
+			            }
+			            $arrayData[$index]['image_no'] = $row['id'];
+			            $arrayData[$index]['name'] = $file;
 					        } 
 					    }
 					    $data['service_provider_images'] = $arrayData;

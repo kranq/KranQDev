@@ -181,7 +181,7 @@ class KranHelper
 	*/
 	public static function convertStringToImage($imageString,$imageName,$path){
 		$imageData = base64_decode($imageString);
-    $photo = imagecreatefromstring($imageData);
+    $photo = @imagecreatefromstring($imageData);
 		$dateval = date('Ymdhis');
     $imageName = KranHelper::convertString($imageName);
         if ($photo) {

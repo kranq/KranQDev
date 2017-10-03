@@ -61,7 +61,6 @@ class User extends Model
      **/
     public static function getUserNameById($id) {
         $userDetails = User::where('id', '=', $id)->first();
-		$username = ($userDetails) ? $userDetails->fullname : "";
-        return $username;
+        return $userDetails->fullname;
     }
 }

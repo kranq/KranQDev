@@ -25,6 +25,11 @@
                             {{ Form::file('category_image', array('class' => '', 'accept' => trans('main.file_extension'))) }}
                             {{-- Form::file('logo',array('class'=>'default')) --}}
                             </span>
+							@if ($errors->has('category_image'))
+								<span class="help-block">
+									<strong>{{ $errors->first('category_image') }}</strong>
+								</span>
+							@endif
                             <span class="fileupload-preview" style="margin-left:5px;"></span>
                             <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
                         </div>

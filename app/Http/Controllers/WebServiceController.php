@@ -658,8 +658,8 @@ class WebServiceController extends Controller
 					//$input['feedbackMessage'] = $data['feedbackMessage'];
 					Mail::send('email.feedback', ['data' => $data], function($message)
 					{
-						//$message->to('logu@boscosofttech.com', 'Loganathan')->subject('Feedback');
-						$message->to('joanbritto18@gmail.com', 'Loganathan')->subject('Feedback');
+						$message->to('customercare.kranq@gmail.com', 'Kranq Admin')->subject('Feedback');
+						//$message->to('joanbritto18@gmail.com', 'Loganathan')->subject('Feedback');
 					});
 					$feedbackStatus = Feedback::create($data);
 					if($feedbackStatus){
@@ -1461,7 +1461,7 @@ class WebServiceController extends Controller
 									Storage::disk('s3')->delete('uploads/user/'.$user->profile_picture);
 								}
 								// To upload the object to the particular path with the permission as (Public)
-								$amazonImgUpload = Storage::disk('s3')->put('uploads/user/'.$input['profile_picture'], imageData, 'public');
+								$amazonImgUpload = Storage::disk('s3')->put('uploads/user/'.$input['profile_picture'], $imageData, 'public');
 								if($user->profile_picture){
 									@unlink(base_path().$logoPath.'/'.$user->profile_picture);
 								}

@@ -1460,7 +1460,7 @@ class WebServiceController extends Controller
 									Storage::disk('s3')->delete('uploads/user/'.$user->profile_picture);
 								}
 								// To upload the object to the particular path with the permission as (Public)
-								$amazonImgUpload = Storage::disk('s3')->put('uploads/user/'.$input['profile_picture'], imageData, 'public');
+								$amazonImgUpload = Storage::disk('s3')->put('uploads/user/'.$input['profile_picture'], $imageData, 'public');
 								if($user->profile_picture){
 									@unlink(base_path().$logoPath.'/'.$user->profile_picture);
 								}

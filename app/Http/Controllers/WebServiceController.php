@@ -657,7 +657,7 @@ class WebServiceController extends Controller
 					//$input['feedbackMessage'] = $data['feedbackMessage'];
 					Mail::send('email.feedback', ['data' => $data], function($message)
 					{
-						$message->to('logu@boscosofttech.com', 'Loganathan')->subject('Feedback');
+						$message->to('customercare.kranq@gmail.com', 'Kranq')->subject('Feedback');
 						//$message->to('joanbritto18@gmail.com', 'Loganathan')->subject('Feedback');
 					});
 					$feedbackStatus = Feedback::create($data);

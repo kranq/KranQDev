@@ -639,25 +639,13 @@ class WebServiceController extends Controller
 		return $resultData;
 	}
 
-	public function sendFeedback(Request $request)
-	{
-		$data['email']  = 'joanbritto18@gmail.com';
-		$data['title']  = 'test';
-		$data['feedbackMessage'] = 'test feedbackMessage';
-		Mail::send('email.feedback', ['data' => $data], function($message)
-		{
-			//$message->to('logu@boscosofttech.com', 'Loganathan')->subject('Feedback');
-			$message->to('joanbritto18@gmail.com', 'Loganathan')->subject('Feedback');
-		});
-	}
-
 	/**
 	 * To get the feedback data from mobile end and send feedback mail
 	 *
 	 * @param array
 	 * @return array
 	 */
-	public function sendFeedback1(Request $request)
+	public function sendFeedback(Request $request)
 	{
 		try{
 			$data = $request->all();
@@ -669,8 +657,8 @@ class WebServiceController extends Controller
 					//$input['feedbackMessage'] = $data['feedbackMessage'];
 					Mail::send('email.feedback', ['data' => $data], function($message)
 					{
-						//$message->to('logu@boscosofttech.com', 'Loganathan')->subject('Feedback');
-						$message->to('joanbritto18@gmail.com', 'Loganathan')->subject('Feedback');
+						$message->to('logu@boscosofttech.com', 'Loganathan')->subject('Feedback');
+						//$message->to('joanbritto18@gmail.com', 'Loganathan')->subject('Feedback');
 					});
 					$feedbackStatus = Feedback::create($data);
 					if($feedbackStatus){

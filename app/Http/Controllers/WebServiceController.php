@@ -164,10 +164,11 @@ class WebServiceController extends Controller
 								if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) { 
 									$input['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'],$data['fullname'],$logoPath);		
 									$userData['image'] = $imagePath.$input['profile_picture'];
-								}
-								// To upload the images into Amazon S3
-								$amazonImgUpload = Storage::disk('s3')->put('/uploads/user/'.$input['profile_picture'], file_get_contents($input['profile_picture']), 'public');
-
+                                                                        // To upload the images into Amazon S3
+                                                                        $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/'.$input['profile_picture'], file_get_contents($input['profile_picture']), 'public');
+                                                                        
+                                                                }
+								
 							}
 							
 							$registerStatus = User::create($data);
@@ -241,7 +242,7 @@ class WebServiceController extends Controller
 									
 									$userData['image'] = $imagePath.$data['profile_picture'];	
 									// To upload the images into Amazon S3
-									$amazonImgUpload = Storage::disk('s3')->put('/uploads/user/'.$input['profile_picture'], file_get_contents($input['profile_picture']), 'public');
+									$amazonImgUpload = Storage::disk('s3')->put('/uploads/user/'.$data['profile_picture'], file_get_contents($data['profile_picture']), 'public');
 								}	
 							}
 

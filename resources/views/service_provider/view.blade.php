@@ -43,13 +43,13 @@
                         </div>
                         <div class="form cmxform form-horizontal">
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.name') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.name') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->name_sp }}</p>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.logo') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.logo') }}</label>
                                 <div class="col-lg-6">
 									@if (@$s3image)
 										<img src="{{ @$s3image }}">
@@ -61,25 +61,25 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.category') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.category') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->category_id }}</p>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.phone') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.phone') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->phone }}</p>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.city') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.city') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->city }}</p>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.locality') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.locality') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->location_id }}</p>
                                 </div>
@@ -91,32 +91,32 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.status_owner_manager') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.status_owner_manager') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->status_owner_manager }}</p>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.open_close_hours') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.open_close_hours') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->opening_hrs }} to
                                      {{ @$provider->closing_hrs }}</p>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.working_days') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.working_days') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->working_days }}</p>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.phone') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.phone') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->phone }}</p>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.website_link') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.website_link') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->website_link }}</p>
                                 </div>
@@ -131,7 +131,7 @@
                                 <h2>{!! trans('main.provider.accountdetails') !!}</h2>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.email') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.email') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$provider->email }}</p>
                                 </div>
@@ -149,7 +149,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3">{{ trans('main.status') }}</label>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.status') }}</label>
                                 <div class="col-lg-6">
                                     <p class="form-control-static">
                                         @if ( @$provider->status == '1' )

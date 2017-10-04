@@ -98,15 +98,15 @@ class CategoryController extends Controller
         $input = $request->all();
         $input = $request->except('_token');
 
-		// To create a directory if not exists
-		if (!(Storage::disk('s3')->exists('/uploads/category')))
-		{
-			Storage::disk('s3')->makeDirectory('/uploads/category/');
-		}
-        // To upload the images into Amazon S3
-        $amazonImgUpload = Storage::disk('s3')->put('/uploads/category/'.$request->file('category_image')->getClientOriginalName(), file_get_contents($request->file('category_image')), 'public');
+    		// To create a directory if not exists
+    		if (!(Storage::disk('s3')->exists('/uploads/category')))
+    		{
+    			Storage::disk('s3')->makeDirectory('/uploads/category/');
+    		}
         if($request->hasFile('category_image')){
            $input['category_image'] = Category::upload_file($request, 'category_image');
+           // To upload the images into Amazon S3
+           $amazonImgUpload = Storage::disk('s3')->put('/uploads/category/'.$request->file('category_image')->getClientOriginalName(), file_get_contents($request->file('category_image')), 'public');
         }
         $last = Category::create($input);
         // To get the Last Insert id and insert the value in the Category Service Table by Category Name
@@ -126,16 +126,17 @@ class CategoryController extends Controller
     public function show($id)
     {
         $data['category'] = Category::findorFail($id);
-        if ($data['category']->service_id) {
-            $service = explode(',',$data['category']->service_id);
+        $data['service'] = CategoryService::select('service_id')->where('category_id',$id)->first();
+        if ($data['service']->service_id) {
+            $services = explode(',',$data['service']->service_id);
         }
 	      // To get the image form the Amazon s3 account
 				if (Storage::disk('s3')->exists('uploads/category/'.$data['category']->category_image)) {
 					 $data['s3image']= \Storage::disk('s3')->url('uploads/category/'.$data['category']->category_image);
 				}
-        if (!empty($service)) {
-            foreach ($service as $value) {
-                $data['services'][] = Service::where('id',$value)->pluck('service_name');
+        if (!empty($services)) {
+            foreach ($services as $value) {
+                $data['services'] = Service::where('id',$value)->pluck('service_name');
             }
         }
         //$data['services'] = Service::orderBy('service_name', 'asc')->pluck('service_name', 'id')->all();

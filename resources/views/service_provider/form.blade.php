@@ -181,19 +181,19 @@
                 <div class="form-group">
                     {!! Form::label('owner_name',trans('main.provider.owner_name'),array('class'=>'control-label col-lg-3')) !!}
                     <div  class="col-lg-6" >
-                          {{ Form::text('owner_name', @$provider->owner_name, ['class' => 'form-control',]) }}
+                          {{ Form::text('owner_name', @$provider->owner_name, ['class' => 'form-control','maxlength' => '100']) }}
                     </div>
                 </div>
                 <div class="form-group">
                     {!! Form::label('owner_designation',trans('main.provider.owner_designation'),array('class'=>'control-label col-lg-3')) !!}
-                    <div  class="col-lg-6" >
-                          {{ Form::text('owner_designation', @$provider->owner_designation, ['class' => 'form-control',]) }}
+                    <div  class="col-lg-6">
+                          {{ Form::text('owner_designation', @$provider->owner_designation, ['class' => 'form-control','maxlength' => '100']) }}
                     </div>
                 </div>
                 <div class="form-group">
                     {!! Form::label('owner_phone',trans('main.provider.owner_phone'),array('class'=>'control-label col-lg-3')) !!}
                     <div  class="col-lg-6" >
-                          {{ Form::text('owner_phone', @$provider->owner_phone, ['class' => 'form-control',]) }}
+                          {{ Form::text('owner_phone', @$provider->owner_phone, ['class' => 'form-control','maxlength' => '30', 'onkeypress'=>'checkAlphaNumericWithComma(event)']) }}
                     </div>
                 </div>
                 </div>
@@ -271,7 +271,7 @@
                     <div class="form-group">
                         {!! Form::label('phone',trans('main.provider.phone'),array('class'=>'control-label col-sm-3 custom_required')) !!}
                             <div class="col-lg-6">
-                                {!! Form::text('phone', @$provider->phone, array('class'=>'form-control', 'placeholder' => __(trans('main.placeholder'),['name' => trans('main.provider.phone')]))) !!}
+                                {!! Form::text('phone', @$provider->phone, array('class'=>'form-control', 'onkeypress'=>'checkAlphaNumericWithComma(event)', 'placeholder' => __(trans('main.placeholder'),['name' => trans('main.provider.phone')]))) !!}
                                 @if ($errors->has('phone'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('phone') }}</strong>

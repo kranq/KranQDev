@@ -147,8 +147,9 @@ class UserController extends Controller
     public function edit($id)
     {
         $data['user'] = User::findorfail($id);
-		if ($data['user']->profile_picture) {
-            $data['amazonImgUpload'] = \Storage::disk('s3')->url('uploads/user/'.$data['user']->profile_picture);
+        // To get the image form the Amazon s3 account
+        if (Storage::disk('s3')->exists('uploads/user/'.$data['user']->profile_picture)) {
+          $data['amazonImgUpload'] = \Storage::disk('s3')->url('uploads/user/'.$data['user']->profile_picture);
         }
         $data['status'] = DropdownHelper::where('group_code', '001')->orderBy('key_code', 'asc')->pluck('value', 'key_code');
         $data['registered_mode'] = DropdownHelper::where('group_code', '002')->orderBy('key_code', 'asc')->pluck('value', 'key_code');

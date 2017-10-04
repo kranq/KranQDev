@@ -21,10 +21,6 @@
 				<label class=" col-sm-3 control-label">{!! trans('main.category.category_image') !!}</label>
 				<div class="col-lg-6">
 					<p class="form-control-static">
-					@php
-							//print_r($s3image);exit;
-							//print_r(\Storage::disk('s3')->url('uploads/category/'.$category->category_image));exit;
-					@endphp
 					@if (@$s3image)
 						<img src="{{ @$s3image }}"/>
 					@elseif(file_exists(URL::to('../uploads/category/').$category->category_image))
@@ -41,7 +37,7 @@
 					<p class="form-control-static">
 					@if (isset($services))
 						@foreach(@$services as $service)
-							@php echo $service[0].',';@endphp
+							@php echo $service.',';@endphp
 						@endforeach
 					@endif
 					</p>

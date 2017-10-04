@@ -47,7 +47,7 @@
                             </a>
                         </div>
                     </div>
-                    @elseif (@$user->profile_picture)
+                    @elseif (file_exists(URL::to('../uploads/user/').@$user->profile_picture))
                     <div class="form-group">
                         <div class="col-lg-3 ">
                         </div>
@@ -55,6 +55,16 @@
                             <a href="#" >
                                 <img src="{!! URL::to('../uploads/user') !!}/{!! @$user->profile_picture !!}"  alt="{!! @$user->profile_picture !!}" width="50px" height="50px" title="{!! @$user->profile_picture !!}" />
                             </a>
+                        </div>
+                    </div>
+										@else
+										<div class="form-group">
+                        <div class="col-lg-3 ">
+                        </div>
+                        <div class="col-lg-6">
+                            <a href="#" >
+														</a>
+                                <img src="{{ URL::to('/images') }}/noimage.jpg">
                         </div>
                     </div>
                     @endif

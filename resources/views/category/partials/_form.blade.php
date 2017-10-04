@@ -5,7 +5,7 @@
         <div class="form-group">
             {!! Form::label('category_name',trans('main.category.category_name'),array('class'=>'control-label col-lg-3 custom_required')) !!}
             <div class="col-lg-6">
-                {!! Form::text('category_name', @$category->category_name, array('class'=>'form-control', 'placeholder' => 'Enter Category Name', 'maxlength'=>'200')) !!}
+                {!! Form::text('category_name', @$category->category_name, array('class'=>'form-control', 'placeholder' => 'Enter Category Name', 'maxlength'=>'200', 'id' => 'CategoryNameId')) !!}
                 @if ($errors->has('category_name'))
                 <span class="help-block">
                     <strong>{{ $errors->first('category_name') }}</strong>
@@ -50,13 +50,13 @@
 					</a>
 				</div>
 			</div>
-        @elseif (@$category->category_image)
+        @else
         <div class="form-group">
             <div class="col-lg-3 ">
             </div>
             <div class="col-lg-6">
                 <a href="#" >
-                @if($category->category_image)
+                @if(@$category->category_image)
                     <img src="{!! URL::to('../uploads/category') !!}/{!! @$category->category_image !!}"  alt="{!! @$category->category_image !!}" title="{!! @$category->category_image !!}" />
                 @endif
                 </a>
@@ -107,3 +107,15 @@
 	</div>
 </section>
 <!--main content end-->
+@section('page_js')
+<script type="text/javascript">
+	$('#CategoryNameId').on('keypress', function (event) {
+	    var regex = new RegExp("^[a-zA-Z0-9]+$");
+	    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+	    if (!regex.test(key)) {
+	       event.preventDefault();
+	       return false;
+	    }
+	});
+	</script>
+@endsection

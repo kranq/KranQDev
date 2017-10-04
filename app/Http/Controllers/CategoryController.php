@@ -197,7 +197,7 @@ class CategoryController extends Controller
         if (!empty($service)) {
             $categoryService = CategoryService::where('category_id', '=', $id)->get();
             if (count($categoryService) > 0) {
-                $result =  DB::statement('UPDATE category_services set service_id="'.$service.'" where category_id='.$id);
+                $result =  DB::statement("UPDATE category_services set service_id='".$service."' where category_id=".$id);
             } else {
                 $categoryInput['category_id'] = $id;
                 $categoryInput['service_id'] = $service;

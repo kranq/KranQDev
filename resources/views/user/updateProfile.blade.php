@@ -100,19 +100,19 @@
                                 <img src="{!! URL::to('../uploads/userProfile') !!}/{!! @$user->profile_picture !!}"  alt="{!! @$user->profile_picture !!}" title="{!! @$user->profile_picture !!}" />
                             @endif
                             </a>
-                        </div>    
+                        </div>
                         <div class="col-lg-3">
                         </div>
 	                </div>
 	            @endif
 				<div class="form-group">
 					<div class="col-lg-offset-3 col-lg-6">
-							<button type="submit" class="btn btn-primary">{!! trans('main.save') !!}</button>
-							<a href="{!! URL::to('/'); !!}" class="btn btn-default">{!! trans('main.back') !!}</a>
+							<button type="submit" class="btn btn-primary" title="{!! trans('main.save') !!}">{!! trans('main.save') !!}</button>
+							<a href="{!! URL::to('/'); !!}" class="btn btn-default" title="{!! trans('main.back') !!}">{!! trans('main.back') !!}</a>
 					</div>
 				</div>
 			{!! Form::close() !!}
 		</div>
 	</div>
-</section>					
+</section>
 @stop

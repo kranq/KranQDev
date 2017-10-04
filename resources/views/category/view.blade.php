@@ -20,18 +20,18 @@
 			<div class="form-group">
 				<label class=" col-sm-3 control-label">{!! trans('main.category.category_image') !!}</label>
 				<div class="col-lg-6">
-					<p class="form-control-static"> 
-					@php 
-							//print_r($s3image);exit; 
-							//print_r(\Storage::disk('s3')->url('uploads/category/'.$category->category_image));exit; 
+					<p class="form-control-static">
+					@php
+							//print_r($s3image);exit;
+							//print_r(\Storage::disk('s3')->url('uploads/category/'.$category->category_image));exit;
 					@endphp
-					@if (@$s3image) 
+					@if (@$s3image)
 						<img src="{{ @$s3image }}"/>
-					@elseif($category->category_image)				
-                        <img src="{!! URL::to('../uploads/category') !!}/{!! @$category->category_image !!}"  alt="{!! @$category->category_image !!}" title="{!! @$category->category_image !!}" />    
-					@else				
-                    	<img src="{!! URL::to('images') !!}/noimage.jpg"  alt="No Image" width="150px" height="150px" title="No Image" />
-                    @endif
+					@elseif(file_exists(URL::to('../uploads/category/').$category->category_image))
+              <img src="{!! URL::to('../uploads/category') !!}/{!! @$category->category_image !!}"  alt="{!! @$category->category_image !!}" title="{!! @$category->category_image !!}" />
+					@else
+              <img src="{!! URL::to('images') !!}/noimage.jpg"  alt="No Image" width="150px" height="150px" title="No Image" />
+          @endif
 					</p>
 				</div>
 			</div>
@@ -67,5 +67,5 @@
 		</div>
 	</div>
 </section>
-						
+
 @stop

@@ -26,7 +26,7 @@
                     {{ trans('main.user.reviews') }}
                 </a>
             </li>
-           
+
         </ul>
     </header>
     <div class="panel-body">
@@ -46,10 +46,10 @@
                                     <div class="col-lg-6">
 										@if (@$s3image)
 										<img src="{{ @$s3image }}">
-                                    	@elseif (!empty(@$user->profile_picture))
+                                    	@elseif(file_exists(URL::to('../uploads/user/').$user->profile_picture))
                                         <img src="{{ URL::to('../uploads/user') }}/{!! @$user->profile_picture !!}">
                                         @else
-                                        <img src="{{ URL::to('/images') }}/noimage.jpg }}">
+                                        <img src="{{ URL::to('/images') }}/noimage.jpg">
                                         @endif
                                     </div>
                             </div>
@@ -88,7 +88,7 @@
                                 <div class="col-lg-6">
                                     <p class="form-control-static">{{ @$user->status }}</p>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
                                             <td>{{ $review->postted_on }}</td>
                                         </tr>
                                     @endforeach
-                                @else 
+                                @else
                                     <tr>
                                         <td colspan="4">{{ trans('main.norecords') }}</td>
                                     </tr>
@@ -147,7 +147,7 @@
                     </div>
                     </div>
                 </div>
-            
+
             <div class="form-group">
                 <div class="col-lg-offset-3 col-lg-6">
                         <a href="{!! route('main.user.index') !!}" class="btn btn-default">{!! trans('main.back') !!}</a>
@@ -155,5 +155,5 @@
             </div>
         </div>
     </div>
-</section>					
+</section>
 @stop

@@ -27,7 +27,6 @@ use App\Http\Requests\UserRequest;
 class UserController extends Controller
 {
     protected $error = 'error';
-	protected $warning = 'warning';
     protected $success = 'success';
     protected $route = 'main.user.index';
     protected $title = 'main.user.title';
@@ -59,7 +58,7 @@ class UserController extends Controller
               'registered_on' => 'Registered On'
         ])
         ->actionFields([
-           'id' //The fields used for process actions. those not are showed 
+           'id' //The fields used for process actions. those not are showed
         ])
         // To convert the date format
         ->processLine(function($row){
@@ -103,23 +102,17 @@ class UserController extends Controller
         $input = $request->all();
         $input = $request->except('_token');
         $input['password'] = bcrypt($input['password']);
-		
+
 		// To create a directory if not exists
-		if (!(Storage::disk('s3')->exists('/uploads/user'))) {
+		if (!(Storage::disk('s3')->exists('/uploads/user')))
+		{
 			Storage::disk('s3')->makeDirectory('/uploads/user/');
 		}
-		if ($request->hasFile('profile_picture')) {
-			// To upload the images into Amazon S3
-			$amazonImgUpload = Storage::disk('s3')->put('/uploads/user/'.$request->file('profile_picture')->getClientOriginalName(), file_get_contents($request->file('profile_picture')), 'public');
-           	// To upload the file into local storage
-           	$input['profile_picture'] = User::fileUpload($request, 'profile_picture');
+		// To upload the images into Amazon S3
+        $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/'.$request->file('profile_picture')->getClientOriginalName(), file_get_contents($request->file('profile_picture')), 'public');
+        if($request->hasFile('profile_picture')){
+           $input['profile_picture'] = User::fileUpload($request, 'profile_picture');
         }
-		// To check the status value
-		if ($input['status'] == 1) {
-			$input['status'] = "Active";
-		} elseif ($input['status'] == 2) {
-			$input['status'] = "Inactive";
-		}	
         User::create($input);
         return Redirect::route($this->route)->with($this->success, trans($this->createmsg));
     }
@@ -133,11 +126,10 @@ class UserController extends Controller
     public function show($id)
     {
         $data['user'] = User::findorfail($id);
-		//echo '<pre>';print_r(Storage::disk('s3')->exists('uploads/user/'.$data['user']->profile_picture));exit;
 		// To get the image form the Amazon s3 account
-		if (Storage::disk('s3')->exists('uploads/user/'.$data['user']->profile_picture)) {
-			$data['s3image']= \Storage::disk('s3')->url('uploads/user/'.$data['user']->profile_picture);
-		}		
+    if (Storage::disk('s3')->exists('uploads/user/'.$data['user']->profile_picture)) {
+        $data['s3image']= \Storage::disk('s3')->url('uploads/user/'.$data['user']->profile_picture);
+    }
         $data['user']->registered_on = KranHelper::dateTime($data['user']->registered_on);
         $data['reviews'] = Review::getReviewDetails($id);
         $data['bookmarks'] = Bookmark::getBookMarkDetails($id);
@@ -176,7 +168,7 @@ class UserController extends Controller
         $userData = User::findorfail($id);
         $input = $request->all();
         if (empty($input['password'])) {
-            $input['password'] = $userData->password;   
+            $input['password'] = $userData->password;
         } else {
             $input['password'] = bcrypt($input['password']);
         }
@@ -187,19 +179,13 @@ class UserController extends Controller
 			}
 	        $amazonImgUpload = Storage::disk('s3')->put('uploads/user/'.$request->file('profile_picture')->getClientOriginalName(), file_get_contents($request->file('profile_picture')), 'public');
 		}
-		
+
         if($request->hasFile('profile_picture')){
            $input['profile_picture'] = User::fileUpload($request, 'profile_picture');
         }
-		// To check the status value
-		if ($input['status'] == 1) {
-			$input['status'] = "Active";
-		} elseif ($input['status'] == 2) {
-			$input['status'] = "Inactive";
-		}	
         $userData->fill($input);
         $userData->save();
-        return Redirect::route($this->route)->with($this->success, trans($this->updatemsg));   
+        return Redirect::route($this->route)->with($this->success, trans($this->updatemsg));
     }
 
     /**
@@ -212,7 +198,7 @@ class UserController extends Controller
     {
         $bookMarks = Bookmark::where('user_id', '=', $id)->get();
         if (count($bookMarks) > 0) {
-            return Redirect::route($this->route)->with($this->warning, trans($this->referencemsg));
+            return Redirect::route($this->route)->with($this->success, trans($this->referencemsg));
         } else {
             $user = User::findorFail($id);
 			// To delete the image from the Amazon S3 account
@@ -222,8 +208,8 @@ class UserController extends Controller
 				}
 			}
             $user->delete();
-            return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));
+            return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));
         }
     }
-    
+
 }

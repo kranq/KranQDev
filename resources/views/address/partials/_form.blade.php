@@ -37,8 +37,8 @@
         </div>
 		<div class="form-group">
 			<div class="col-lg-offset-3 col-lg-6">
-				<button type="submit" class="btn btn-primary">{!! @$btn !!}</button>
-                <a href="{!! route('main.address.index') !!}" class="btn btn-default">
+				<button type="submit" class="btn btn-primary" title="{!! @$btn !!}">{!! @$btn !!}</button>
+                <a href="{!! route('main.address.index') !!}" class="btn btn-default" title="{!! trans('main.cancel') !!}">
                 {!! trans('main.cancel') !!}
                 </a>
 			</div>

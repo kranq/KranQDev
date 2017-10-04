@@ -34,7 +34,6 @@ class CategoryRequest extends FormRequest
         $rules['order_by'] = 'required';
         $rules['status'] = 'required';
         $rules['service_id'] = 'required';
-		$rules['category_image'] = 'image|mimes:jpeg,png,jpg,gif,svg|max:2048';
         //$rules['description'] = 'max:1000';
         switch ($this->method()) {
             case 'GET':
@@ -45,16 +44,16 @@ class CategoryRequest extends FormRequest
             break;
             case 'POST':
             {
-                $rules['category_name'] = 'required|unique:categories,category_name';
+                $rules['category_name'] = 'required|unique:categories,category_name|min:3|max:200';
                 //$rules['slug'] = 'required';
                 $rules['status'] = 'required';
-                $rules['order_by'] = 'required';          
+                $rules['order_by'] = 'required';
             }
             case 'PUT':
             case 'PATCH':
             {
                 if(FormRequest::segment(2)){
-                    $rules['category_name'] = 'required|unique:categories,category_name,' . FormRequest::segment(2) . ',id'; 
+                    $rules['category_name'] = 'required|unique:categories,category_name,' . FormRequest::segment(2) . ',id';
                 }
             }
             break;

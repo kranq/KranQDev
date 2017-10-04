@@ -3,7 +3,7 @@
 			<header class="panel-heading">{!! trans('main.country.title') !!}</header>
 			<div class="panel-body">
 					<div class="position-left">
-            
+
           <div class="form-group">
                         <div class="col-sm-3 control-label">
                             {!! Form::label('country_code',trans('main.country.country_code'),array('class'=>'custom_required')) !!}
@@ -45,8 +45,8 @@
                 </div>
 							<div class="form-group">
 									<div class="col-lg-offset-3 col-lg-6">
-											<button type="submit" class="btn btn-primary">{!! @$btn !!}</button>
-                      <a href="{!! route('main.country.index') !!}" class="btn btn-default" tabidex='19'>{!! trans('main.cancel') !!}</a>
+											<button type="submit" class="btn btn-primary" title="{!! @$btn !!}">{!! @$btn !!}</button>
+                      <a href="{!! route('main.country.index') !!}" class="btn btn-default" tabidex='19' title="{!! trans('main.cancel') !!}">{!! trans('main.cancel') !!}</a>
 									</div>
 							</div>
 					</div>

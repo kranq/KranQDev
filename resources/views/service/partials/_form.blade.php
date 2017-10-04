@@ -1,7 +1,7 @@
 <section class="panel form-horizontal">
     <header class="panel-heading">{!! @$add.' '.trans('main.service.title') !!}</header>
     <div class="panel-body">
-        <div class="position-left">            
+        <div class="position-left">
 
             <div class="form-group">
                 <div class="col-sm-3 control-label">
@@ -31,8 +31,8 @@
             </div>
             <div class="form-group">
                 <div class="col-lg-offset-3 col-lg-6">
-                    <button type="submit" class="btn btn-primary">{!! @$btn !!}</button>
-                    <a href="{!! route('main.service.index') !!}" class="btn btn-default" tabidex='19'>{!! trans('main.cancel') !!}</a>
+                    <button type="submit" class="btn btn-primary" title="{!! @$btn !!}">{!! @$btn !!}</button>
+                    <a href="{!! route('main.service.index') !!}" class="btn btn-default" tabidex='19' title="{!! trans('main.cancel') !!}">{!! trans('main.cancel') !!}</a>
                 </div>
             </div>
         </div>

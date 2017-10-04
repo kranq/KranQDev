@@ -1,10 +1,10 @@
 <!--main content start-->
 <section class="panel">
     <header class="panel-heading">{!! @$add.' '.trans('main.location.title') !!}</header>
-    <div class="panel-body">            
+    <div class="panel-body">
         <div class="form-group">
             {!! Form::label('city_name',trans('main.city.city_name'),array('class'=>'control-label col-lg-3 custom_required')) !!}
-            <div class="col-lg-6">      
+            <div class="col-lg-6">
              {!!Form::select('city_id', $cities, @$location->city_id, ['class' => 'form-control', 'placeholder' => 'Select'])!!}
                 @if ($errors->has('city_id'))
                 <span class="help-block">
@@ -37,8 +37,8 @@
         </div>
         <div class="form-group">
             <div class="col-lg-offset-3 col-lg-6">
-                <button type="submit" class="btn btn-primary">{!! @$btn !!}</button>
-                <a href="{!! route('main.location.index') !!}" class="btn btn-default">{!! trans('main.cancel') !!}</a>
+                <button type="submit" class="btn btn-primary" title="{!! @$btn !!}">{!! @$btn !!}</button>
+                <a href="{!! route('main.location.index') !!}" class="btn btn-default" title="{!! trans('main.cancel') !!}">{!! trans('main.cancel') !!}</a>
             </div>
         </div>
     </div>

@@ -13,7 +13,7 @@
         <header class="panel-heading"><b>{{ trans('main.user.title') }}</b>
             <span class="tools pull-right">
               <div class="form-group btn-toolbar">
-                  <a class="btn btn-primary" href="{{ route('main.user.create') }}">
+                  <a class="btn btn-primary" href="{{ route('main.user.create') }}" title="{!! trans('main.add').' '.trans('main.user.user') !!}">
                   	<i class="visible-xs glyphicon glyphicon-plus"></i>
 					             <div class="hidden-xs"></i>{!! trans('main.add').' '.trans('main.user.user') !!}
                        </div>

@@ -51,9 +51,9 @@
                             <div class="form-group">
                                 <label for="cname" class="control-label col-lg-3">{{ trans('main.provider.logo') }}</label>
                                 <div class="col-lg-6">
-									@if (@$s3image) 
+									@if (@$s3image)
 										<img src="{{ @$s3image }}">
-                                    @elseif (!empty(@$provider->logo))
+                                    @elseif (file_exists(URL::to('../uploads/provider/').$provider->logo))
                                         <img src="{{ URL::to('../uploads/provider') }}/{!! @$provider->logo !!}">
                                     @else
                                         <img src="{{ URL::to('/images/noimage.jpg') }}">
@@ -158,7 +158,7 @@
                                             @php echo 'Approved'; @endphp
                                         @elseif ( @$provider->status == '3' )
                                             @php echo 'Rejected'; @endphp
-                                        @else 
+                                        @else
                                             @php echo 'Nil'; @endphp
                                         @endif
                                     </p>
@@ -257,13 +257,13 @@
                                             <p>{{ @$users[$review->user_id] }}</p>
                                         </td>
                                         <td>
-                                            {{ @$review->rating }} 
+                                            {{ @$review->rating }}
                                             <?php /*for ($i=0;$i < round($rating->rating_value); $i++)
                                                  echo '&#9733;'; */
                                             ?>
                                         </td>
                                     </tr>
-                                @endforeach    
+                                @endforeach
                             @endif
                         </tbody>
                     </table>
@@ -276,5 +276,5 @@
             </div>
         </div>
     </div>
-</section>                  
+</section>
 @stop

@@ -53,8 +53,8 @@
 		        </div>
   				<div class="form-group">
     					<div class="col-lg-offset-3 col-lg-6">
-    						<button type="submit" class="btn btn-primary">{!! trans('main.save') !!}</button>
-    						<a href="{!! URL::to('/'); !!}" class="btn btn-default">{!! trans('main.back') !!}</a>
+    						<button type="submit" class="btn btn-primary" title="{!! trans('main.save') !!}">{!! trans('main.save') !!}</button>
+    						<a href="{!! URL::to('/'); !!}" class="btn btn-default" title="{!! trans('main.back') !!}">{!! trans('main.back') !!}</a>
     					</div>
   				</div>
 			{!! Form::close() !!}

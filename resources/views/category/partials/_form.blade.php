@@ -5,7 +5,7 @@
         <div class="form-group">
             {!! Form::label('category_name',trans('main.category.category_name'),array('class'=>'control-label col-lg-3 custom_required')) !!}
             <div class="col-lg-6">
-                {!! Form::text('category_name', @$category->category_name, array('class'=>'form-control', 'placeholder' => 'Enter Category Name')) !!}
+                {!! Form::text('category_name', @$category->category_name, array('class'=>'form-control', 'placeholder' => 'Enter Category Name', 'maxlength'=>'200')) !!}
                 @if ($errors->has('category_name'))
                 <span class="help-block">
                     <strong>{{ $errors->first('category_name') }}</strong>
@@ -40,7 +40,7 @@
                 <i  data-original-title="{!! trans('main.image_upload_notes_title') !!}" data-content="{!! trans('main.image_upload_notes') !!}" data-placement="right" data-trigger="hover" class="fa fa-info-circle popovers" aria-hidden="true" data-html="true"></i>
             </div>
         </div>
-		@if (@$amazonImgUpload) 
+		@if (@$amazonImgUpload)
 			<div class="form-group">
 				<div class="col-lg-3 ">
 				</div>
@@ -48,7 +48,7 @@
 					<a href="#" >
 						<img src="{!! $amazonImgUpload !!}" />
 					</a>
-				</div>    
+				</div>
 			</div>
         @elseif (@$category->category_image)
         <div class="form-group">
@@ -60,7 +60,7 @@
                     <img src="{!! URL::to('../uploads/category') !!}/{!! @$category->category_image !!}"  alt="{!! @$category->category_image !!}" title="{!! @$category->category_image !!}" />
                 @endif
                 </a>
-            </div>    
+            </div>
         </div>
         @endif
         <div class="form-group">
@@ -98,8 +98,8 @@
         </div>
 		<div class="form-group">
 			<div class="col-lg-offset-3 col-lg-6">
-				<button type="submit" class="btn btn-primary">{!! @$btn !!}</button>
-                <a href="{!! route('main.category.index') !!}" class="btn btn-default">
+				<button type="submit" class="btn btn-primary" title="{!! @$btn !!}">{!! @$btn !!}</button>
+                <a href="{!! route('main.category.index') !!}" class="btn btn-default" title="{!! trans('main.cancel') !!}">
                 {!! trans('main.cancel') !!}
                 </a>
 			</div>

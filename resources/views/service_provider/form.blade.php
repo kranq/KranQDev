@@ -181,19 +181,19 @@
                 <div class="form-group">
                     {!! Form::label('owner_name',trans('main.provider.owner_name'),array('class'=>'control-label col-lg-3')) !!}
                     <div  class="col-lg-6" >
-                          {{ Form::text('owner_name', @$provider->owner_name, ['class' => 'form-control',]) }} 
+                          {{ Form::text('owner_name', @$provider->owner_name, ['class' => 'form-control',]) }}
                     </div>
                 </div>
                 <div class="form-group">
                     {!! Form::label('owner_designation',trans('main.provider.owner_designation'),array('class'=>'control-label col-lg-3')) !!}
                     <div  class="col-lg-6" >
-                          {{ Form::text('owner_designation', @$provider->owner_designation, ['class' => 'form-control',]) }} 
+                          {{ Form::text('owner_designation', @$provider->owner_designation, ['class' => 'form-control',]) }}
                     </div>
                 </div>
                 <div class="form-group">
                     {!! Form::label('owner_phone',trans('main.provider.owner_phone'),array('class'=>'control-label col-lg-3')) !!}
                     <div  class="col-lg-6" >
-                          {{ Form::text('owner_phone', @$provider->owner_phone, ['class' => 'form-control',]) }} 
+                          {{ Form::text('owner_phone', @$provider->owner_phone, ['class' => 'form-control',]) }}
                     </div>
                 </div>
                 </div>
@@ -210,7 +210,7 @@
                                  <!--label class="checkbox-inline"></label-->
                             {{ Form::checkbox('working_days', '1', @$selected_working_days,['class' => 'checkbox_type']) }} <?php echo 'Mon to Fri'; ?>
                             {{-- Form::checkbox('working_days[]', @$key, in_array(@$key, @$selected_working_days), ['class' => 'checkbox_type']) --}}
-                            <?php //echo $row; ?> 
+                            <?php //echo $row; ?>
                             <?php //endforeach; ?>
                          </div>
                          <div class="col-sm-4 check1 checkbox checkbox_type">
@@ -228,7 +228,7 @@
                 </div>
                 <div class="form-group">
                       {!! Form::label('open_close_hours	',trans('main.provider.open_close_hours'),array('class'=>'control-label col-lg-3 custom_required')) !!}
-                      
+
                       <div class="col-lg-9 zero">
                       <div class="row">
                         <div class="col-md-4 padding_zero">
@@ -366,12 +366,12 @@
             type: "POST",
             url: "{{ URL::to('provider/cagetoryservices') }}",
             data: {
-                    '_token': token, 
+                    '_token': token,
                     'id' : category_id,
                 },
             success: function (response) {
                 $("#e9").html(response);
-               // you will get response from your php page (what you echo or print)                 
+               // you will get response from your php page (what you echo or print)
             },
             error: function(jqXHR, textStatus, errorThrown) {
                console.log(textStatus, errorThrown);

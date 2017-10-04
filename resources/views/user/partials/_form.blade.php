@@ -45,7 +45,7 @@
                             <a href="#" >
                                 <img src="{!! @$amazonImgUpload !!}" />
                             </a>
-                        </div>    
+                        </div>
                     </div>
                     @elseif (@$user->profile_picture)
                     <div class="form-group">
@@ -55,7 +55,7 @@
                             <a href="#" >
                                 <img src="{!! URL::to('../uploads/user') !!}/{!! @$user->profile_picture !!}"  alt="{!! @$user->profile_picture !!}" width="50px" height="50px" title="{!! @$user->profile_picture !!}" />
                             </a>
-                        </div>    
+                        </div>
                     </div>
                     @endif
                     <div class="form-group">
@@ -126,8 +126,8 @@
                     </div>
 					<div class="form-group">
 						<div class="col-lg-offset-3 col-lg-6">
-							<button type="submit" class="btn btn-primary">{!! @$btn !!}</button>
-                            <a href="{!! route('main.user.index') !!}" class="btn btn-default">{!! trans('main.cancel') !!}</a>
+							<button type="submit" class="btn btn-primary" title="{!! @$btn !!}">{!! @$btn !!}</button>
+                            <a href="{!! route('main.user.index') !!}" class="btn btn-default" title="{!! trans('main.cancel') !!}">{!! trans('main.cancel') !!}</a>
 						</div>
 					</div>
 				</div>

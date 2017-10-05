@@ -26,7 +26,7 @@ use App\Models\ServiceProviderCategoryService;
 
 class ServiceController extends Controller
 {
-    
+
     protected $error = 'error';
     protected $warning = 'warning';
     protected $success = 'success';
@@ -37,7 +37,7 @@ class ServiceController extends Controller
     protected $updatemsg = 'main.service.updatesuccess';
     protected $deletemsg = 'main.service.deletesuccess';
     protected $referencemsg = 'main.referencesuccess';
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -49,12 +49,12 @@ class ServiceController extends Controller
         $Grid = new Grid(Service::query()->orderBy('id', 'DESC'), 'Services');
 
         // To have header for the values
-        $Grid->fields([                
+        $Grid->fields([
                 'service_name'=>'Service Name',
                 'status'=>'Status',
         ])
         ->actionFields([
-            'id' //The fields used for process actions. those not are showed 
+            'id' //The fields used for process actions. those not are showed
         ]);
         // To have actions for the records
            // $Grid->action('View', URL::to('service/show/{id}'))
@@ -165,12 +165,12 @@ class ServiceController extends Controller
 					}
 				}
 		}
-		if (isset($serviceExists) || isset($servicePoviderExists)) {		
-		   if ($serviceExists == 1 || $servicePoviderExists == 1) { 
+		if (isset($serviceExists) || isset($servicePoviderExists)) {
+		   if ($serviceExists == 1 || $servicePoviderExists == 1) {
 			   return Redirect::route($this->route)->with($this->warning, trans($this->referencemsg));
 		   } else {
 			   $service->delete();
-			   return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));   
+			   return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));
 		   }
 		}
     }

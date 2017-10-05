@@ -43,7 +43,7 @@ class CategoryRequest extends FormRequest
             break;
             case 'POST':
             {
-                $rules['category_name'] = 'required|unique:categories,category_name,null,id,deleted_at,null|min:3|max:200';
+                $rules['category_name'] = 'required|unique:categories,category_name|min:3|max:200';
                 $rules['status'] = 'required';
                 $rules['order_by'] = 'required';
             }
@@ -51,7 +51,7 @@ class CategoryRequest extends FormRequest
             case 'PATCH':
             {
                 if(FormRequest::segment(2)){
-                    $rules['category_name'] = 'required|unique:categories,category_name,' . FormRequest::segment(2) . ',id,deleted_at,null';
+                    $rules['category_name'] = 'required|unique:categories,category_name,' . FormRequest::segment(2) . ',id';
                 }
             }
             break;

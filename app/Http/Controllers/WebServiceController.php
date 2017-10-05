@@ -1720,11 +1720,15 @@ class WebServiceController extends Controller
 							//$arrayData[$index]['service_provider_name'] = ($value['service_provider_id']) ? ServiceProvider::getServiceNameById($value['service_provider_id']) : "";
 
 								$arrayData[$index]['name'] = ($value->user_id) ? User::getUserNameById($value->user_id) : "";
-								// To get the image form the Amazon s3 account
-								if (Storage::disk('s3')->exists('uploads/user/'.$user->profile_picture)) {
-									$arrayData[$index]['image'] = \Storage::disk('s3')->url('uploads/user/'.$user->profile_picture);
-								} else {
-									$arrayData[$index]['image'] = $imagePath.$user->profile_picture;
+								if($user){
+									// To get the image form the Amazon s3 account
+									if (Storage::disk('s3')->exists('uploads/user/'.$user->profile_picture)) {
+										$arrayData[$index]['image'] = \Storage::disk('s3')->url('uploads/user/'.$user->profile_picture);
+									} else {
+										$arrayData[$index]['image'] = $imagePath.$user->profile_picture;
+									}
+								}else{
+									$arrayData[$index]['image'] = "";
 								}
 								$arrayData[$index]['reviews'] = ($value->reviews) ? $value->reviews : "";
 								$arrayData[$index]['ratings'] = ($value->rating) ? $value->rating : "";

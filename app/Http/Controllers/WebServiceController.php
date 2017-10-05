@@ -1148,7 +1148,7 @@ class WebServiceController extends Controller
 					$input['slug'] = KranHelper::convertString($input['name_sp']);
 					$input['city'] = $data['city'];
 					$input['address'] = $data['address'];
-					$input['short_description'] = (isset($data['short_description']) && $data['short_description'])$data['short_description'] : "";
+					$input['short_description'] = (isset($data['short_description']) && $data['short_description']) ? $data['short_description'] : "";
 					$input['status_owner_manager'] = (isset($data['status_owner_manager']) && $data['status_owner_manager']) ? $data['status_owner_manager'] : "";
 					$input['owner_name'] = (isset($data['owner_name']) && $data['owner_name']) ? $data['owner_name'] : "";
 					$input['owner_phone'] = (isset($data['owner_phone']) && $data['owner_phone']) ? $data['owner_phone'] : "";

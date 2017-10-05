@@ -41,7 +41,7 @@ class ServiceProviderRequest extends FormRequest
         $rules['closing_hrs'] = 'required';
         $rules['working_days'] = 'required';
         //$rules['phone'] = 'required|max:20';
-        $rules['website_link']   = 'required|active_url';
+        $rules['website_link']   = 'url';
         switch ($this->method()) {
             case 'GET':
             case 'DELETE':
@@ -53,12 +53,9 @@ class ServiceProviderRequest extends FormRequest
             {
                 $rules['logo'] = 'required';
                 $rules['password'] = 'required|max:64';
-                $rules['name_sp'] = 'required|unique:service_providers,name_sp,null,id,deleted_at,null';
+                $rules['name_sp'] = 'required|unique:service_providers,name_sp';
                 $rules['email'] = 'required|unique:service_providers,email';
                 //$rules['phone'] = 'phone_number|regex:/(01)[0-9]{9}/';
-                $rules['owner_name'] = 'min:3|max:100';
-                $rules['owner_designation'] = 'min:3|max:100';
-                $rules['owner_phone'] = 'phone_number|min:10|max:30';
                 $rules['phone'] = 'required|phone_number';
             }
             case 'PUT':

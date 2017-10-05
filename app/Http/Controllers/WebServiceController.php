@@ -564,9 +564,9 @@ class WebServiceController extends Controller
 						foreach($serviceProviderResult as $index => $serviceProvider){
 							$serviceProviderData[$index]['id']				= $serviceProvider->id;
 							$serviceProviderData[$index]['location_id']		= $serviceProvider->location_id;
-							$serviceProviderData[$index]['locality']		= $serviceProvider->locality->locality_name;
+							$serviceProviderData[$index]['locality']		= ($serviceProvider->location_id) ? $serviceProvider->locality->locality_name : "";
 							$serviceProviderData[$index]['name_sp']			= $serviceProvider->name_sp;
-							$serviceProviderData[$index]['city']			= $serviceProvider->cities->city_name;
+							$serviceProviderData[$index]['city']			= ($serviceProvider->city) ? $serviceProvider->cities->city_name : "";
 							// To get the image form the Amazon s3 account
 							if (Storage::disk('s3')->exists('uploads/provider/'.$serviceProvider->logo)) {
 								$serviceProviderData[$index]['logo'] = \Storage::disk('s3')->url('uploads/provider/'.$serviceProvider->logo);
@@ -918,7 +918,6 @@ class WebServiceController extends Controller
 						//$cryptedPassword = bcrypt($password);
 						//$updateQuery = ServiceProvider::where('email',$data['email'])->update(['password' => $cryptedPassword]);
 						$data['content'] = 'Click here to reset your password <a href="#">Reset Password</a>';
-						return view('email.forgot-password',['data' => $data]);
 						Mail::send('email.forgot-password', ['data' => $data], function($message) use ($data)
 						{
 							$message->to($data['email'])->subject('Feedback');

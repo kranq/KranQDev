@@ -34,13 +34,13 @@ class CityRequest extends FormRequest
                 break;
                 case 'POST':
                 {
-                   $rules['city_name'] = 'required|unique:cities,city_name';
+                   $rules['city_name'] = 'required|unique:cities,city_name,null,id,deleted_at,null';
                 }
                 case 'PUT':
                 case 'PATCH':
                 {
                   if(FormRequest::segment(2)){
-                    $rules['city_name'] = 'required|unique:cities,city_name,' . FormRequest::segment(2) . ',id';
+                    $rules['city_name'] = 'required|unique:cities,city_name,' . FormRequest::segment(2) . ',id,deleted_at,null';
                 }
             }
             break;

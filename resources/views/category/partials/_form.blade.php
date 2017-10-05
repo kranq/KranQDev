@@ -22,14 +22,14 @@
                             <span class="btn btn-white btn-file">
                             <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select file</span>
                             <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                            {{ Form::file('category_image', array('class' => '', 'accept' => trans('main.file_extension'))) }}
+                            {{ Form::file('category_image', array('class' => '', 'accept' => trans('main.image_file_extension'))) }}
                             {{-- Form::file('logo',array('class'=>'default')) --}}
                             </span>
-							@if ($errors->has('category_image'))
-								<span class="help-block">
-									<strong>{{ $errors->first('category_image') }}</strong>
-								</span>
-							@endif
+														@if ($errors->has('category_image'))
+						                     <span class="help-block">
+						                         <strong>{{ $errors->first('category_image') }}</strong>
+						                     </span>
+						                 @endif
                             <span class="fileupload-preview" style="margin-left:5px;"></span>
                             <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
                         </div>

@@ -43,6 +43,7 @@ $lang['warning'] = 'Warning :';
 $lang['sign'] = 'Login';
 $lang['dashboard'] = 'Dashboard';
 $lang['file_extension'] = "application/pdf,image/x-png, image/gif, image/jpeg";
+$lang['image_file_extension'] = "image/x-png, image/jpeg";
 $lang['category'] = 'Category';
 $lang['serviceprovider'] = 'Service Provider';
 $lang['reviews'] = 'Reviews';
@@ -234,7 +235,7 @@ $lang['default_image_path'] = 'http://www.placehold.it/200x150/EFEFEF/AAAAAA&tex
 
 $lang['provider_path'] = '/uploads/provider/';
 
-// Service provider details 
+// Service provider details
 $lang['serviceproviderdetails.approvelsuccess'] = 'Service Provider Approved successfully';
 $lang['serviceproviderdetails.rejectedsuccess'] = 'Service Provider Rejected successfully';
 $lang['serviceproviderdetails.approvelcancelsuccess'] = 'Service Provider Approvel Rejected successfully';
@@ -255,4 +256,3 @@ $lang['category_path'] = '/uploads/category/';
 $lang['user_path'] = '/uploads/user/';
 
 return $lang;
-

@@ -78,7 +78,7 @@
 	                                <span class="btn btn-white btn-file">
 	                                <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select file</span>
 	                                <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-	                                {{ Form::file('updateprofile',array('class'=>'default')) }}
+	                                {{ Form::file('updateprofile',array('class'=>'default', 'accept' => trans('main.image_file_extension'))) }}
 	                                </span>
 	                                <span class="fileupload-preview" style="margin-left:5px;"></span>
 	                                <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>

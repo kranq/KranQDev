@@ -113,6 +113,11 @@ class UserController extends Controller
         if($request->hasFile('profile_picture')){
            $input['profile_picture'] = User::fileUpload($request, 'profile_picture');
         }
+        if ($input['status'] == 1) {
+    			$input['status'] = "Active";
+    		} elseif ($input['status'] == 2) {
+    			$input['status'] = "Inactive";
+    		}
         User::create($input);
         return Redirect::route($this->route)->with($this->success, trans($this->createmsg));
     }
@@ -184,6 +189,11 @@ class UserController extends Controller
         if($request->hasFile('profile_picture')){
            $input['profile_picture'] = User::fileUpload($request, 'profile_picture');
         }
+        if ($input['status'] == 1) {
+    			$input['status'] = "Active";
+    		} elseif ($input['status'] == 2) {
+    			$input['status'] = "Inactive";
+    		}	
         $userData->fill($input);
         $userData->save();
         return Redirect::route($this->route)->with($this->success, trans($this->updatemsg));

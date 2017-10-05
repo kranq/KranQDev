@@ -34,13 +34,13 @@ class ServiceRequest extends FormRequest
                 break;
                 case 'POST':
                 {
-                   $rules['service_name'] = 'required|unique:services,service_name';
+                   $rules['service_name'] = 'required|unique:services,service_name,null,id,deleted_at,null';
                 }
                 case 'PUT':
                 case 'PATCH':
                 {
-                  if(FormRequest::segment(2)){
-                    $rules['service_name'] = 'required|unique:services,service_name,' . FormRequest::segment(2) . ',id';
+                  if(FormRequest::scategory_nameegment(2)){
+                    $rules['service_name'] = 'required|unique:services,service_name,' . FormRequest::segment(2) . ',id,deleted_at,null';
                 }
             }
             break;

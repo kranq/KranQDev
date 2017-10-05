@@ -53,7 +53,7 @@ class ServiceProviderRequest extends FormRequest
             {
                 $rules['logo'] = 'required';
                 $rules['password'] = 'required|max:64';
-                $rules['name_sp'] = 'required|unique:service_providers,name_sp';
+                $rules['name_sp'] = 'required|unique:service_providers,name_sp,null,id,deleted_at,null';
                 $rules['email'] = 'required|unique:service_providers,email';
                 //$rules['phone'] = 'phone_number|regex:/(01)[0-9]{9}/';
                 $rules['owner_name'] = 'min:3|max:100';

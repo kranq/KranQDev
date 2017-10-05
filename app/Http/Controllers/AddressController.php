@@ -26,7 +26,7 @@ class AddressController extends Controller
     protected $createmsg = 'main.address.createsuccess';
     protected $updatemsg = 'main.address.updatesuccess';
     protected $deletemsg = 'main.address.deletesuccess';
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -47,7 +47,7 @@ class AddressController extends Controller
 
         ])
         ->actionFields([
-            'id' //The fields used for process actions. those not are showed 
+            'id' //The fields used for process actions. those not are showed
         ]);
         // To have actions for the records
             $Grid->action('View', URL::to('address/show/{id}'), ['class'=>'fa fa-eye'])
@@ -105,7 +105,7 @@ class AddressController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    { 
+    {
         $data['address'] = Address::findorFail($id);
         $data['add'] = trans('main.edit');
         return view('address.edit', $data);

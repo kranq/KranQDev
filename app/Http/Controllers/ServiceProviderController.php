@@ -233,7 +233,12 @@ class ServiceProviderController extends Controller
         if (!empty($input['service_id'])) {
             $serviceProviderStatus = ServiceProviderCategoryService::where('service_provider_id','=' ,$id)->get();
             if (count($serviceProviderStatus) > 0) {
-                $result =  DB::statement('UPDATE service_provider_category_services set service_id="'.$serviceProviderInputs.'" where category_id='.$input['category_id'].' AND service_provider_id='.$id);
+                // To update the service provider category services
+                $result = DB::table('service_provider_category_services')
+                      ->where(array('category_id'=>$input['category_id'],'service_provider_id'=>$id))  // find your user by their email
+                      ->limit(1)  // optional - to ensure only one record is updated.
+                      ->update(array('service_id' => $serviceProviderInputs));  // update the record in the DB.
+                //$result =  DB::statement('UPDATE service_provider_category_services set service_id="'.$serviceProviderInputs.'" where category_id='.$input['category_id'].' AND service_provider_id='.$id);
             } else {
                 $serviceProviderInput['service_provider_id'] = $id;
                 $serviceProviderInput['category_id'] = $input['category_id'];

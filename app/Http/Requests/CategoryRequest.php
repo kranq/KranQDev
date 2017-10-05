@@ -30,11 +30,10 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
-        //$rules['slug'] = 'required';
         $rules['order_by'] = 'required';
         $rules['status'] = 'required';
         $rules['service_id'] = 'required';
-        //$rules['description'] = 'max:1000';
+        $rules['category_image'] = "image|mimes:jpeg,png,jpg|max:2048";
         switch ($this->method()) {
             case 'GET':
             case 'DELETE':
@@ -44,8 +43,7 @@ class CategoryRequest extends FormRequest
             break;
             case 'POST':
             {
-                $rules['category_name'] = 'required|unique:categories,category_name|min:3|max:200';
-                //$rules['slug'] = 'required';
+                $rules['category_name'] = 'required|unique:categories,category_name,null,id,deleted_at,null|min:3|max:200';
                 $rules['status'] = 'required';
                 $rules['order_by'] = 'required';
             }
@@ -53,7 +51,7 @@ class CategoryRequest extends FormRequest
             case 'PATCH':
             {
                 if(FormRequest::segment(2)){
-                    $rules['category_name'] = 'required|unique:categories,category_name,' . FormRequest::segment(2) . ',id';
+                    $rules['category_name'] = 'required|unique:categories,category_name,' . FormRequest::segment(2) . ',id,deleted_at,null';
                 }
             }
             break;

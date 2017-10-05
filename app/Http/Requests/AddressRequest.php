@@ -22,7 +22,7 @@ class AddressRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {   
+    {
         $rules['address'] = 'required';
         $rules['phone_no'] = 'required';
         switch ($this->method()) {
@@ -34,13 +34,13 @@ class AddressRequest extends FormRequest
                 break;
                 case 'POST':
                 {
-                   $rules['email'] = 'required|unique:contact_details,email';
+                   $rules['email'] = 'required|unique:contact_details,email,null,id,deleted_at,null';
                 }
                 case 'PUT':
                 case 'PATCH':
                 {
                   if(FormRequest::segment(2)){
-                    $rules['email'] = 'required|unique:contact_details,email,' . FormRequest::segment(2) . ',id';
+                    $rules['email'] = 'required|unique:contact_details,email,' . FormRequest::segment(2) . ',id,deleted_at,null';
                 }
             }
             break;

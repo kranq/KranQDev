@@ -159,8 +159,8 @@ class WebServiceController extends Controller
 							//$data['been_there_status'] = ($data['been_there_status']=='Yes') ? 1 : 2;
 							$data['registered_on'] = date('Y-m-d H:i:s');
 							$data['status'] = 'Active';
-							$imageData = base64_decode($data['profile_url']);
 							if(isset($data['profile_url']) && $data['profile_url']){
+								$imageData = base64_decode($data['profile_url']);
 								if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {
 									$input['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'],$data['fullname'],$logoPath);
 									$userData['image'] = $imagePath.$input['profile_picture'];

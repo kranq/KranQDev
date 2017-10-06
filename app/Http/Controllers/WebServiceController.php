@@ -910,14 +910,15 @@ class WebServiceController extends Controller
 		try{
 			$data = $request->all();
 			if($data){
-				//$data['email'] = 'test@gmail.com';
 				if($data['email']){
-					$emailExists = ServiceProvider::get()->where('email',$data['email'])->count();
-					if($emailExists != 0){
+					//$emailExists = ServiceProvider::get()->where('email',$data['email'])->count();
+					$emailExists = ServiceProvider::where('email',$data['email'])->first();
+					if(count($emailExists) != 0){
 						//$password = KranHelper::generate_random_string(8);
 						//$cryptedPassword = bcrypt($password);
 						//$updateQuery = ServiceProvider::where('email',$data['email'])->update(['password' => $cryptedPassword]);
-						$data['content'] = 'Click here to reset your password <a href="#">Reset Password</a>';
+						$data['content'] = 'Click here to reset your password <a href="'.URL::to("reset-password").'/'.$emailExists->id.'">Reset Password</a>';
+						//print_r($data['content']);exit;
 						Mail::send('email.forgot-password', ['data' => $data], function($message) use ($data)
 						{
 							$message->to($data['email'])->subject('Feedback');

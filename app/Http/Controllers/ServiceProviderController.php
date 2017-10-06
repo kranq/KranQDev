@@ -25,6 +25,7 @@ use App\Models\CategoryService;
 use App\Http\Requests\UserRequest;
 use App\Models\ServiceProviderDetails;
 use App\Models\ServiceProviderCategoryService;
+use App\Http\Requests\UserValidatePasswordRequest;
 
 class ServiceProviderController extends Controller
 {
@@ -36,6 +37,7 @@ class ServiceProviderController extends Controller
   protected $createmsg = 'main.provider.createsuccess';
   protected $updatemsg = 'main.provider.updatesuccess';
   protected $deletemsg = 'main.provider.deletesuccess';
+  protected $pwdupdatemsg = 'main.provider.pwdupdatesuccess';
 
     /**
      * Display a listing of the resource.
@@ -295,4 +297,26 @@ class ServiceProviderController extends Controller
             }
         }
     }
+
+    /**
+     * To reset the Password
+     **/
+     public function resetPassword($id)
+     {
+       $data['serviceProvider'] = ServiceProvider::findorfail($id);
+       return view('service_provider.reset-password', $data);
+     }
+
+     /**
+      * To update the Service Provider Password
+      */
+      public function UpdateServicePassword(UserValidatePasswordRequest $request, $id)
+      {
+        $input = $request->all();
+        $serviceProvider = ServiceProvider::findorfail($id);
+        $user['password'] = bcrypt($input['password']);
+        $serviceProvider->fill($user);
+        $serviceProvider->save();
+        return Redirect::to('login')->with($this->success, trans($this->pwdupdatemsg));
+      }
 }

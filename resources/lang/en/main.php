@@ -22,6 +22,7 @@ $lang['generate_password'] = "Click here to generate password";
 $lang['status'] = 'Status';
 $lang['logoutsuccessmsg'] = 'Logged out successfully.';
 $lang['404'] = '404 - Page Not Found';
+$lang['changepassword'] = "Change Password";
 
 // Common
 $lang['site_name'] = 'KranQ';
@@ -39,7 +40,6 @@ $lang['selected'] = 'Select';
 $lang['view'] = 'View';
 $lang['back'] = 'Back';
 $lang['error'] = 'Error :';
-$lang['warning'] = 'Warning :';
 $lang['sign'] = 'Login';
 $lang['dashboard'] = 'Dashboard';
 $lang['file_extension'] = "application/pdf,image/x-png, image/gif, image/jpeg";
@@ -214,6 +214,7 @@ $lang['provider.name'] = 'Name of the Service Provider';
 $lang['provider.createsuccess'] = 'Service Provider has been created successfully';
 $lang['provider.updatesuccess'] = 'Service Provider has been updated successfully';
 $lang['provider.deletesuccess'] = 'Service Provider has been deleted successfully';
+$lang['provider.pwdupdatesuccess'] = 'Service Provider password has been updated successfully';
 $lang['provider.basicdetails'] = 'Basic Details';
 $lang['provider.services'] = 'Services';
 $lang['provider.photos'] = 'Photos';

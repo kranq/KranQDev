@@ -564,9 +564,9 @@ class WebServiceController extends Controller
 						foreach($serviceProviderResult as $index => $serviceProvider){
 							$serviceProviderData[$index]['id']				= $serviceProvider->id;
 							$serviceProviderData[$index]['location_id']		= $serviceProvider->location_id;
-							$serviceProviderData[$index]['locality']		= ($serviceProvider->location_id) ? $serviceProvider->locality->locality_name : "";
+							$serviceProviderData[$index]['locality']		= ($serviceProvider->location_id) ? $serviceProvider->locality['locality_name'] : "";
 							$serviceProviderData[$index]['name_sp']			= $serviceProvider->name_sp;
-							$serviceProviderData[$index]['city']			= ($serviceProvider->city) ? $serviceProvider->cities->city_name : "";
+							$serviceProviderData[$index]['city']			= ($serviceProvider->city) ? $serviceProvider->cities['city_name'] : "";
 							// To get the image form the Amazon s3 account
 							if (Storage::disk('s3')->exists('uploads/provider/'.$serviceProvider->logo)) {
 								$serviceProviderData[$index]['logo'] = \Storage::disk('s3')->url('uploads/provider/'.$serviceProvider->logo);
@@ -908,9 +908,9 @@ class WebServiceController extends Controller
 	public function spForgotPassword(Request $request)
 	{
 		try{
-			//$data = $request->all();
-			//if($data){
-				$data['email'] = 'test@gmail.com';
+			$data = $request->all();
+			if($data){
+				//$data['email'] = 'test@gmail.com';
 				if($data['email']){
 					$emailExists = ServiceProvider::get()->where('email',$data['email'])->count();
 					if($emailExists != 0){
@@ -931,9 +931,9 @@ class WebServiceController extends Controller
 				}else{
 					$resultData = array('status'=>false,'message'=>'Invalid Input','result'=>'');
 				}
-			//}else{
-			//	$resultData = array('status'=>false,'message'=>'invalid request','result'=>'');
-			//}
+			}else{
+				$resultData = array('status'=>false,'message'=>'invalid request','result'=>'');
+			}
 		}catch(Exception $e){
 			$resultData = array('status'=>false,'message'=>'invalid request','result'=>'');
 		}

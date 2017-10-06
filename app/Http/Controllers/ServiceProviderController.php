@@ -109,14 +109,15 @@ class ServiceProviderController extends Controller
     {
         $input = $request->all();
         $input = $request->except('_token');
-		// To create a directory if not exists
-		if (!(Storage::disk('s3')->exists('/uploads/provider')))
-		{
-			Storage::disk('s3')->makeDirectory('/uploads/provider/');
-		}
-		// To upload the images into Amazon S3
-        $amazonImgUpload = Storage::disk('s3')->put('/uploads/provider/'.$request->file('logo')->getClientOriginalName(), file_get_contents($request->file('logo')), 'public');
+    		// To create a directory if not exists
+    		if (!(Storage::disk('s3')->exists('/uploads/provider')))
+    		{
+    			Storage::disk('s3')->makeDirectory('/uploads/provider/');
+    		}
         if($request->hasFile('logo')){
+          // To upload the images into Amazon S3
+            $amazonImgUpload = Storage::disk('s3')->put('/uploads/provider/'.$request->file('logo')->getClientOriginalName(), file_get_contents($request->file('logo')), 'public');
+          // To upload the image in local
             $input['logo'] = ServiceProvider::upload_file($request, 'logo');
         }
         /*if(!empty($input['working_days'])){
@@ -124,7 +125,6 @@ class ServiceProviderController extends Controller
         }*/
         $input['slug'] = KranHelper::convertString($input['name_sp']);
         $input['password'] = bcrypt($input['password']);
-        //echo '<pre>';print_r($input);exit;
         $last = ServiceProvider::create($input);
         // To get the Last Insert id and insert the value in the Service Provider Table by email
         $lastRecord = ServiceProvider::where('email','=' ,$last->email)->get();
@@ -210,12 +210,12 @@ class ServiceProviderController extends Controller
     {
         $input = $request->all();
         $provider  = ServiceProvider::findorFail($id);
-		if ($request->file('logo')) {
-			if (Storage::disk('s3')->exists('uploads/provider/'.$provider->logo)) {
-				Storage::disk('s3')->delete('uploads/provider/'.$provider->logo);
-			}
-	        $amazonImgUpload = Storage::disk('s3')->put('uploads/provider/'.$request->file('logo')->getClientOriginalName(), file_get_contents($request->file('logo')), 'public');
-		}
+    		if ($request->file('logo')) {
+    			if (Storage::disk('s3')->exists('uploads/provider/'.$provider->logo)) {
+    				Storage::disk('s3')->delete('uploads/provider/'.$provider->logo);
+    			}
+    	        $amazonImgUpload = Storage::disk('s3')->put('uploads/provider/'.$request->file('logo')->getClientOriginalName(), file_get_contents($request->file('logo')), 'public');
+    		}
         if($request->hasFile('logo')){
             $input['logo'] = ServiceProvider::upload_file($request, 'logo');
         }

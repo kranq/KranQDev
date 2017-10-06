@@ -38,12 +38,12 @@ class LocationRequest extends FormRequest {
                 }
                 break;
             case 'POST': {
-                    $rules['locality_name'] = 'required|min:3|max:100|unique:localities,locality_name,null,id,deleted_at,null';
+                    $rules['locality_name'] = 'required|min:3|max:100|unique:localities,locality_name';
                 }
             case 'PUT':
             case 'PATCH': {
                     if (FormRequest::segment(2)) {
-                        $rules['locality_name'] = 'required|unique:localities,locality_name,' . FormRequest::segment(2) . ',id,deleted_at,null';
+                        $rules['locality_name'] = 'required|unique:localities,locality_name,' . FormRequest::segment(2) . ',id';
                     }
                 }
                 break;

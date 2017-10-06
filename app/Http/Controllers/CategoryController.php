@@ -103,9 +103,10 @@ class CategoryController extends Controller
     			Storage::disk('s3')->makeDirectory('/uploads/category/');
     		}
         if($request->hasFile('category_image')){
-           $input['category_image'] = Category::upload_file($request, 'category_image');
-           // To upload the images into Amazon S3
-           $amazonImgUpload = Storage::disk('s3')->put('/uploads/category/'.$request->file('category_image')->getClientOriginalName(), file_get_contents($request->file('category_image')), 'public');
+          // To upload the images into Amazon S3
+            $amazonImgUpload = Storage::disk('s3')->put('/uploads/category/'.$request->file('category_image')->getClientOriginalName(), file_get_contents($request->file('category_image')), 'public');
+          // To upload the image to local
+            $input['category_image'] = Category::upload_file($request, 'category_image');
         }
         if ($input['status'] == 1) {
           $input['status'] = 'Active';

@@ -302,7 +302,6 @@ class WebServiceController extends Controller
 			$basePath = URL::to('/').'/..';
 			$categoryPath = $basePath.trans('main.category_path');
 			if($categoryData){
-				//$i = 0;
 				foreach($categoryData as $index => $row){
 					$arrayData[$index] = $row;
 					// To get the image form the Amazon s3 account
@@ -311,7 +310,6 @@ class WebServiceController extends Controller
 					} else {
 						$arrayData[$index]['category_image'] = ($categoryPath.$row->category_image) ? $categoryPath.$row->category_image : "";
 					}
-					//$i++;
 				}
 			}
 			$i = 0;
@@ -326,7 +324,7 @@ class WebServiceController extends Controller
 
 			$data['categoryData']			= $arrayData;
 			$data['cityData']				= $cityData;
-			$data['localityData']			= $localityArrayData;
+			$data['localityData']			= json_encode($localityArrayData);
 			$data['weekDaysData']			= $this->workingDaysList();
 			$data['hours'] 					= $this->getTimeDropDown();
 			$data['contactDetailsData']		= $contactData;

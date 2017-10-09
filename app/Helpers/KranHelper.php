@@ -20,6 +20,8 @@ class KranHelper
 {
     /**
      * To convert given base64 image to JPEG format
+     * 
+     * @param string $base64_string 
      * @return array
      */
     public static function base64_to_jpeg($base64_string)
@@ -36,7 +38,9 @@ class KranHelper
 
     /**
      * To convert time to hours format
-     * @return array
+     * 
+     * @param int $hour 
+     * @return string $hour
      */
     public static function format_hours($hour) {
         if($hour) {
@@ -52,10 +56,10 @@ class KranHelper
 
 
     /**
-     *  To formate the date given
-     * @param type $date
-     * @param type $format
-     * @return type
+     *  To format the date given
+     * @param string $date
+     * @param string $format
+     * @return string $date
      */
     public static function formatDate($date,$format = 'd-m-Y') {
         if($date) {
@@ -69,6 +73,8 @@ class KranHelper
 
     /**
      * To set the string limit
+     * 
+     * @param array $row 
      * @return array
      */
     public static function reviewStringLimit($row) {
@@ -76,7 +82,9 @@ class KranHelper
     }
 
     /**
-     * To make list of array
+     * To make list of provider status array
+     * 
+     * @param array $row 
      * @return array
      */
     public static function getProviderStatus($row) {
@@ -87,6 +95,8 @@ class KranHelper
 
     /**
      * To convert Date time format 
+     * 
+     * @param string $date 
      * @return array
      */
     public static function dateTime($date = false) {
@@ -95,6 +105,8 @@ class KranHelper
 
     /**
      * To convert Date time format
+     * 
+     * @param array $date 
      * @return array
      */
     public static function dateTimeFormat($date = false) {
@@ -103,6 +115,7 @@ class KranHelper
 
     /**
      * To get all the the provider status for dropdown
+     * 
      * @return array
      */
     public static function getProviderStatusDropdown() {
@@ -112,6 +125,9 @@ class KranHelper
 
     /**
      * Returns the time in 12 Hours Format in dropdown
+     * 
+     * @param int $start 
+     * @param int $end 
      * @return array
      */
     public static function getTimeDropDown($start=FALSE, $end=FALSE){
@@ -136,9 +152,10 @@ class KranHelper
 
     /**
      * Returns the weekdays
+     * 
      * @return array
      */
-    public static function getAllWeekDays($start=FALSE, $end=FALSE){
+    public static function getAllWeekDays(){
       $dayNames = [
             'Sunday',
             'Monday',
@@ -153,9 +170,10 @@ class KranHelper
 
     /**
      * Returns the weekdays
+     * 
      * @return array
      */
-    public static function getWeekDays($start=FALSE, $end=FALSE){
+    public static function getWeekDays(){
       $dayNames = [
             '1'=>'Mon to Fri',
             '2'=>'Saturday',
@@ -166,7 +184,9 @@ class KranHelper
 
     /**
      * Convert string to lower
-     * @return array
+     * 
+     * @param string $str 
+     * @return string
      */
     public static function convertString($str){
       return str_replace(' ', '-', strtolower($str));
@@ -177,31 +197,35 @@ class KranHelper
 	*
 	* @param string $imageString
 	* @param string $imageName
+        * @param string $path 
 	* @return string 
 	*/
 	public static function convertStringToImage($imageString,$imageName,$path){
-		$imageData = base64_decode($imageString);
-    $photo = @imagecreatefromstring($imageData);
-		$dateval = date('Ymdhis');
-    $imageName = KranHelper::convertString($imageName);
-        if ($photo) {
-			$file = $imageName.  '-' . $dateval . '.jpg';
-            $path = base_path() . $path; //file upload path
-            //$data['profile_picture'] = $path . $imageName. '-' . $dateval . '.jpg';
-            if (!is_dir($path)) {
-                @mkdir($path);
-            }
-            if (imagejpeg($photo, $path . $file, 100)) {
-				return $file;
-            } else {
-				return '';
-			}
+            $imageData = base64_decode($imageString);
+            $photo = @imagecreatefromstring($imageData);
+            $dateval = date('Ymdhis');
+            $imageName = KranHelper::convertString($imageName);
+            if ($photo) {
+                $file = $imageName.  '-' . $dateval . '.jpg';
+                $path = base_path() . $path; //file upload path
+                //$data['profile_picture'] = $path . $imageName. '-' . $dateval . '.jpg';
+                if (!is_dir($path)) {
+                    @mkdir($path);
+                }
+                if (imagejpeg($photo, $path . $file, 100)) {
+                    return $file;
+                } else {
+                    return '';
 		}
+            }
             
 	}
 	
 	/**
 	 * To get the active menu
+         * 
+         * @param array $urlList 
+         * @return string 
 	 */
 	public static function getActiveMenu($urlList){
 		$currentUrl = explode('/',Route::getFacadeRoot()->current()->uri());
@@ -212,6 +236,9 @@ class KranHelper
 	
 	/**
 	 * To get the active sub menu
+         * 
+         * @param array $urlList 
+         * @return string
 	 */
 	public static function getActiveSubMenu($urlList){
 		$currentUrl = Route::getFacadeRoot()->current()->uri();
@@ -221,6 +248,9 @@ class KranHelper
 	
 	/**
 	 * To get the active sub settings menu
+         * 
+         * @param array $urlList 
+         * @return string
 	 */
 	public static function getActiveSubMenuDefault($urlList){
 		$currentUrl = explode('/',Route::getFacadeRoot()->current()->uri());
@@ -230,6 +260,10 @@ class KranHelper
 	
     /**
      * To Common Upload for Amazon s3
+     * 
+     * @param array $request
+     * @param string $filename
+     * @return boolean
      */
     public static function imageUploadS3($request, $filename)
     {
@@ -241,8 +275,9 @@ class KranHelper
 
     /**
      * Handles to generate random chars
-     * @param file_name
-     * @return results 
+     *
+     * @param int $length
+     * @return string 
      */
     public static function generate_random_string($length = false) {
         $length = ($length) ? $length : 6;
@@ -252,13 +287,14 @@ class KranHelper
         for ($i = 0; $i < $length; $i++) {
             $result .= $characters[mt_rand(0, 61)];
         }
-
         return $result;
     }
 
     /**
      * Returns the time in 12 Hours Format to view
-     * @return array
+     * 
+     * @param int $hours
+     * @return string
      **/
         public static function getFormattedTime($hours){
       $time = '';
@@ -279,7 +315,8 @@ class KranHelper
     * To upload service provider image 
     *
     * @param string $imageString
-    * @param string $imageName
+    * @param string $file
+    * @param string $path
     * @return string 
     */
     public static function uploadSPImage($imageString,$file,$path){

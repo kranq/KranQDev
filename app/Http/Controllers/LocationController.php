@@ -76,7 +76,7 @@ class LocationController extends Controller
      */
     public function create()
     {
-        $data = array();       
+        $data = array();
         $data['cities'] = City::orderBy('city_name','asc')->pluck('city_name', 'id');
         $data['add'] = trans('main.add');
         return view('location.form', $data);
@@ -90,7 +90,7 @@ class LocationController extends Controller
      */
     public function store(LocationRequest $request)
     {
-        $input = $request->all();       
+        $input = $request->all();
         $input = $request->except('_token');
         Location::create($input);
         return Redirect::route($this->route)->with($this->success, trans($this->createmsg));
@@ -98,18 +98,18 @@ class LocationController extends Controller
 
   /**
    * Display the specified resource.
-   * 
+   *
    * @param type $id
    * @return type
    */
     public function show($id)
     {
-        $data['location'] = Location::findorFail($id);      
-        $cityId = $data['location']->city_id;        
-        $data['cities'] = City::where('id', '=', $cityId)->get();        
+        $data['location'] = Location::findorFail($id);
+        $cityId = $data['location']->city_id;
+        $data['cities'] = City::where('id', '=', $cityId)->get();
         return view('location.view', $data);
     }
-       
+
     /**
      * Show the form for editing the specified resource.
      * @param type $id
@@ -123,7 +123,7 @@ class LocationController extends Controller
         return view('location.edit', $data);
     }
 
-  
+
     /**
      * Update the specified resource in storage.
      * @param \App\Http\Controllers\Request $request
@@ -133,13 +133,13 @@ class LocationController extends Controller
     public function update(LocationRequest $request, $id)
     {
         $input = $request->all();
-        $location  = Location::findorFail($id);        
+        $location  = Location::findorFail($id);
         $location->fill($input);
         $location->save();
         return Redirect::route($this->route)->with($this->success, trans($this->updatemsg));
     }
 
-       
+
     /**
      * Remove the specified resource from storage.
      * @param type $id
@@ -150,11 +150,11 @@ class LocationController extends Controller
         $location = Location::findorFail($id);
 		$serviceProvider = ServiceProvider::where('location_id','=',$id)->get();
         if (count($serviceProvider) > 0) {
-            return Redirect::route($this->route)->with($this->warning, trans($this->referencemsg));  
+            return Redirect::route($this->route)->with($this->warning, trans($this->referencemsg));
         } else {
-            $location->delete();
-            return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));  
+            $location->forceDelete();
+            return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));
         }
-      
+
     }
 }

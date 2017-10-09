@@ -54,7 +54,7 @@ class CityController extends Controller
 
         ])
         ->actionFields([
-            'id' //The fields used for process actions. those not are showed 
+            'id' //The fields used for process actions. those not are showed
         ]);
         // To have actions for the records
             $Grid->action('View', URL::to('city/show/{id}'), ['class'=>'fa fa-eye'])
@@ -147,8 +147,8 @@ class CityController extends Controller
             return Redirect::route($this->route)->with($this->warning, trans($this->referencemsg));
         } else {
             $city = City::findorFail($id);
-            $city->delete();
-            return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));   
+            $city->forceDelete();
+            return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));
         }
     }
 }

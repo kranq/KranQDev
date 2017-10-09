@@ -41,11 +41,11 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        // To get the records details from the table        
+        // To get the records details from the table
         $serviceProvider=Review::join('service_providers','service_provider_id','=','service_providers.id')->orderBy('id', 'DESC');
         $Grid = new Grid($serviceProvider, 'reviews');
         // To have header for the values
-        $Grid->fields([              
+        $Grid->fields([
 			  'reviews'=>'Reviews',
 			  'reviews.rating'=>'Rating',
               'name_sp'=>'Service Provider',
@@ -58,7 +58,7 @@ class ReviewController extends Controller
             $row['reviews'] = KranHelper::reviewStringLimit($row);
 			$row['postted_on'] = KranHelper::dateTimeFormat($row);
             //Do more you need on this row
-            return $row; 
+            return $row;
             //Do not forget to return the row
         });
         $Grid->actionFields([
@@ -109,9 +109,9 @@ class ReviewController extends Controller
         $data['review'] = Review::findorFail($id);
         $data['review']->postted_on = KranHelper::dateTime($data['review']->postted_on);
         $serviceProviderId = $data['review']->service_provider_id;
-        $user = $data['review']->user_id;        
-        $data['service_providers'] = ServiceProvider::where('id', '=', $serviceProviderId)->get();      
-        $userData['user'] = User::where('id', '=', $user)->get();       
+        $user = $data['review']->user_id;
+        $data['service_providers'] = ServiceProvider::where('id', '=', $serviceProviderId)->get();
+        $userData['user'] = User::where('id', '=', $user)->get();
         return view('review.view', $data,$userData);
     }
 
@@ -135,7 +135,7 @@ class ReviewController extends Controller
             $data->save();
             return Redirect::back()->with($this->success, trans($this->activemsg));
         }
-       
+
     }
 
     /**
@@ -161,12 +161,12 @@ class ReviewController extends Controller
         $review = Review::findorFail($id);
         $serviceProvider = ServiceProvider::where('id', '=', $review->service_provider_id)->get();
         if (count($serviceProvider)) {
-            return Redirect::back()->with($this->success, trans($this->referencemsg));    
+            return Redirect::back()->with($this->success, trans($this->referencemsg));
         } else {
-            $review->delete();
-            return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));    
+            $review->forceDelete();
+            return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));
         }
-        
+
     }
 
 

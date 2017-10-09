@@ -263,13 +263,13 @@ class ServiceProviderController extends Controller
     public function destroy($id)
     {
         $postData = ServiceProvider::findorfail($id);
-		// To delete the image from the Amazon S3 account
-		if (!empty($postData->logo)) {
-			if (Storage::disk('s3')->exists('uploads/provider/'.$postData->logo)) {
-				Storage::disk('s3')->delete('uploads/provider/'.$postData->logo);
-			}
-		}
-        $postData->delete();
+    		// To delete the image from the Amazon S3 account
+    		if (!empty($postData->logo)) {
+    			if (Storage::disk('s3')->exists('uploads/provider/'.$postData->logo)) {
+    				Storage::disk('s3')->delete('uploads/provider/'.$postData->logo);
+    			}
+    		}
+        $postData->forceDelete();
         return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));
     }
 

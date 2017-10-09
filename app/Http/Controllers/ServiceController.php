@@ -169,7 +169,7 @@ class ServiceController extends Controller
 		   if ($serviceExists == 1 || $servicePoviderExists == 1) {
 			   return Redirect::route($this->route)->with($this->warning, trans($this->referencemsg));
 		   } else {
-			   $service->delete();
+			   $service->forceDelete();
 			   return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));
 		   }
 		}

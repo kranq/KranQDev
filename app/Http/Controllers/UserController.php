@@ -215,7 +215,7 @@ class UserController extends Controller
 					Storage::disk('s3')->delete('uploads/user/'.$user->profile_picture);
 				}
 			}
-            $user->delete();
+            $user->forceDelete();
             return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));
         }
     }

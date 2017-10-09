@@ -244,7 +244,7 @@ class CategoryController extends Controller
 					Storage::disk('s3')->delete('uploads/category/'.$category->category_image);
 				}
 			}
-            $category->delete();
+            $category->forceDelete();
             return Redirect::route($this->route)->with($this->success, trans($this->deletemsg));
         }
     }

@@ -314,9 +314,19 @@ class WebServiceController extends Controller
 					//$i++;
 				}
 			}
+			$i = 0;
+			if ($localityData) {
+				foreach ($localityData as $key => $value) {
+					$localityArrayData[$i] = $value;
+					$i++;
+				}
+			} else {
+				$localityArrayData = "";
+			}
+
 			$data['categoryData']			= $arrayData;
 			$data['cityData']				= $cityData;
-			$data['localityData']			= $localityData;
+			$data['localityData']			= $localityArrayData;
 			$data['weekDaysData']			= $this->workingDaysList();
 			$data['hours'] 					= $this->getTimeDropDown();
 			$data['contactDetailsData']		= $contactData;

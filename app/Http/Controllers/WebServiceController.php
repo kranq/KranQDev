@@ -324,7 +324,7 @@ class WebServiceController extends Controller
 
 			$data['categoryData']			= $arrayData;
 			$data['cityData']				= $cityData;
-			$data['localityData']			= json_encode($localityArrayData);
+			$data['localityData']			= $localityArrayData;
 			$data['weekDaysData']			= $this->workingDaysList();
 			$data['hours'] 					= $this->getTimeDropDown();
 			$data['contactDetailsData']		= $contactData;
@@ -334,10 +334,10 @@ class WebServiceController extends Controller
 			$data['privacyPolicyData']		= $privacyPolicyData;
 			$data['termsConditionsData']	= $termsConditionsData;
 			$resultData = array('status'=>true,'message'=>'request success','result'=>$data);
-		} catch(Exception $e){
+		} catch(Exception $e) {
 			$resultData = array('status'=>false,'message'=>'invalid request','result'=>'');
 		}
-		return $resultData;
+		return json_encode($resultData);
 	}
 
 	/**

@@ -291,7 +291,6 @@ class WebServiceController extends Controller
 			$categoryData 			= Category::get()->where('status','Active');
 			$cityData 				= City::get()->where('status','Active');
 			$localityData 			= Location::get()->where('status','Active');
-
 			$aboutusData 			= CmsPages::getCmsData('about-us');
 			$whatisKranqData 		= CmsPages::getCmsData('what-is-kranq');
 			$howitWorksData 		= CmsPages::getCmsData('how-does-it-work');
@@ -303,6 +302,7 @@ class WebServiceController extends Controller
 			$basePath = URL::to('/').'/..';
 			$categoryPath = $basePath.trans('main.category_path');
 			if($categoryData){
+				//$i = 0;
 				foreach($categoryData as $index => $row){
 					$arrayData[$index] = $row;
 					// To get the image form the Amazon s3 account
@@ -311,6 +311,7 @@ class WebServiceController extends Controller
 					} else {
 						$arrayData[$index]['category_image'] = ($categoryPath.$row->category_image) ? $categoryPath.$row->category_image : "";
 					}
+					//$i++;
 				}
 			}
 			$data['categoryData']			= $arrayData;
@@ -792,7 +793,7 @@ class WebServiceController extends Controller
     		if($data){
 				//check if the required fields are filled out
     			if($data['email'] && $data['password'] && $data['category_id'] && $data['location_id'] && $data['name'] && $data['logo'] && $data['city'] && $data['short_description'] && $data['status_owner_manager'] && $data['opening_hrs'] && $data['closing_hrs'] && $data['working_days'] && $data['phone']){
-					//check if the email is already exist
+						//check if the email is already exist
     				$emailExists = ServiceProvider::get()->where('email',$data['email'])->count();
     				if($emailExists == 0){
     					$insertData['category_id'] = $data['category_id'];
@@ -831,8 +832,6 @@ class WebServiceController extends Controller
 							// To upload the images into Amazon S3
 							$amazonImgUpload = Storage::disk('s3')->put('/uploads/provider/'.$insertData['logo'], $imageData, 'public');
     					}
-
-
 
     					$registerStatus = ServiceProvider::create($insertData);
     					if($registerStatus){

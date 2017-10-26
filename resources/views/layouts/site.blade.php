@@ -8,9 +8,11 @@
 			<div class="slider zerogrid">
 		   		<div class="rslides_container">
 					<ul class="rslides" id="slider">
-						<li><img src="{{ URL::to('/')}}/site/images/slider-1.jpeg" alt="" /></li>
-						<li><img src="{{ URL::to('/')}}/site/images/slider-2.jpeg" alt="" /></li>
+						<li><img src="{{ URL::to('/')}}/site/images/slider-1.jpg" alt="" /></li>
+						<li><img src="{{ URL::to('/')}}/site/images/slider-2.jpg" alt="" /></li>
 						<li><img src="{{ URL::to('/')}}/site/images/slider-3.jpg" alt="" /></li>
+						<li><img src="{{ URL::to('/')}}/site/images/slider-5.jpg" alt="" /></li>
+						<li><img src="{{ URL::to('/')}}/site/images/slider-6.jpg" alt="" /></li>
 					</ul>
 				</div>
 		    </div>

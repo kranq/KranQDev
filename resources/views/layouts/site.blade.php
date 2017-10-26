@@ -1,4 +1,5 @@
 @include('layouts.site_header')
+
 <body id="page1">
 	<!--==============================header=================================-->
 	<header>
@@ -11,8 +12,7 @@
 						<li><img src="{{ URL::to('/')}}/site/images/slider-1.jpg" alt="" /></li>
 						<li><img src="{{ URL::to('/')}}/site/images/slider-2.jpg" alt="" /></li>
 						<li><img src="{{ URL::to('/')}}/site/images/slider-3.jpg" alt="" /></li>
-						<li><img src="{{ URL::to('/')}}/site/images/slider-5.jpg" alt="" /></li>
-						<li><img src="{{ URL::to('/')}}/site/images/slider-6.jpg" alt="" /></li>
+						<li><img src="{{ URL::to('/')}}/site/images/slider-4.jpg" alt="" /></li>
 					</ul>
 				</div>
 		    </div>

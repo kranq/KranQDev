@@ -10,9 +10,17 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
+/*Route::get('/', function () {
     return Redirect::to('login');
-});
+});*/
+//Route::get('/', function () {
+  //  return view('site.index');
+    //return Redirect::to('Site/index');
+//});
+
+Route::get('/', 'SiteController@index');
+
+
 Route::get('/clear-cache', function() {
     $clearCache = Artisan::call('cache:clear');
     $clearConfig = Artisan::call('config:clear');
@@ -40,7 +48,7 @@ Route::group(['middleware' => 'auth', 'as' => 'main.'], function (){
             'provider' => 'ServiceProviderController',
             'review' => 'ReviewController',
 			'cms' => 'CmsPagesController',
-            'address' => 'AddressController'
+            'address' => 'AddressController',
 		);
 	foreach ($controllers as $key => $controller){
         //Will generates Crud functions (index,create, edit, delete, update, store)
@@ -148,9 +156,20 @@ Route::post('webservice/review-update', array('as' => 'webservice.review-update'
 Route::get('reset-password/{id}', array('as' => 'provider.reset-password', 'uses' => 'ServiceProviderController@resetPassword'));
 Route::post('update-sppassword/{id}', array('as' => 'provider.update-sppassword', 'uses' => 'ServiceProviderController@UpdateServicePassword'));
 
+// Frontend
+//Route::resource('Site', 'SiteController');
+//Route::resource('site', 'SiteController@index');
+Route::get('services', 'SiteController@getServices');
+Route::get('contact', 'SiteController@getContact');
+//Route::post('contact/contact_store', array('as' => 'webservice.contact_store', 'uses' => 'WebServiceController@contactStore'));
+Route::post('contact_store', 'SiteController@contactStore');
 // Route::post('store', 'EmployeeController@store');
 Route::get('/logout', 'Auth\LoginController@logout');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+//Route::resource('site','SiteController');
+Route::get('site/index','SiteController@index');
+Route::resource('site','SiteController');
+//Route::get('site/show','SiteController@show');

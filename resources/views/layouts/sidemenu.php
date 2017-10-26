@@ -22,7 +22,7 @@ use App\Helpers\KranHelper;
                         <li class="<?php echo KranHelper::getActiveSubMenu('category'); ?>"><a href="<?php echo URL::to('category'); ?>">List</a></li>
                     </ul>
                 </li>
-				  
+
 				<li class="sub-menu dcjq-parent-li">
                     <a href="javascript:;" class="<?php echo KranHelper::getActiveMenu(array('provider')); ?>">
                         <i class="fa fa-plus-square"></i>
@@ -34,7 +34,7 @@ use App\Helpers\KranHelper;
                         <li class="<?php echo KranHelper::getActiveSubMenu('provider'); ?>"><a href="<?php echo URL::to('provider'); ?>">List</a></li>
                     </ul>
                 </li>
-				
+
 			 	<li class="sub-menu">
                     <a href="javascript:;" class="<?php echo KranHelper::getActiveMenu(array('review')); ?>">
                         <i class="fa fa-comments"></i>
@@ -43,8 +43,8 @@ use App\Helpers\KranHelper;
                     <ul class="sub">
                         <li class="<?php echo KranHelper::getActiveSubMenu('review'); ?>"><a href="<?php echo URL::to('review'); ?>">List</a></li>
                     </ul>
-                </li>				
-				
+                </li>
+
                 <!--li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-bookmark" aria-hidden="true"></i>
@@ -54,7 +54,7 @@ use App\Helpers\KranHelper;
                         <li><a href="<?php //echo URL::to('bookmark'); ?>">List</a></li>
                     </ul>
                 </li-->
-				
+
 				<li class="sub-menu">
                     <a href="javascript:;" class="<?php echo KranHelper::getActiveMenu(array('user')); ?>">
                         <i class="fa fa-users"></i>
@@ -65,7 +65,7 @@ use App\Helpers\KranHelper;
                         <li class="<?php echo KranHelper::getActiveSubMenu('user'); ?>"><a href="<?php echo URL::to('user'); ?>">List</a></li>
                     </ul>
                 </li>
-				
+
 				<li class="sub-menu">
                     <a href="javascript:;" class="<?php echo KranHelper::getActiveMenu(array('city','location','cms','service','address')); ?>">
                         <i class="fa fa-cogs"></i>
@@ -76,7 +76,7 @@ use App\Helpers\KranHelper;
                         <li class="<?php echo KranHelper::getActiveSubMenuDefault('location'); ?>"><a href="<?php echo URL::to('location/'); ?>">Locality</a></li>
                         <li class="<?php echo KranHelper::getActiveSubMenuDefault('cms'); ?>"><a href="<?php echo URL::to('cms/'); ?>">CMS</a></li>
                         <li class="<?php echo KranHelper::getActiveSubMenuDefault('service'); ?>"><a href="<?php echo URL::to('service/'); ?>">Services</a></li>
-                        <li class="<?php echo KranHelper::getActiveSubMenuDefault('address'); ?>"><a href="<?php echo URL::to('address/'); ?>">Address</a></li>            
+                        <li class="<?php echo KranHelper::getActiveSubMenuDefault('address'); ?>"><a href="<?php echo URL::to('address/'); ?>">Address</a></li>
                     </ul>
                 </li>
             </ul>

@@ -196,8 +196,11 @@ class ServiceProviderController extends Controller
             $service = explode(',',$services[0]->service_id);
         }
         $data['services'] = Service::orderBy('service_name', 'asc')->pluck('service_name', 'id')->all();
-        $data['service'] = Service::whereIn('id',$service)->pluck('id');
-        //echo '<pre>';print_r($data['selected_working_days']);exit;
+        if ($service) {
+            $data['service'] = Service::whereIn('id',$service)->pluck('id');
+        } else {
+            $data['service'] = '';
+        }
         return view('service_provider.edit', $data);
     }
 

@@ -14,7 +14,7 @@
     {!! Html::style('css/bootstrap-fileupload.css') !!}
     {!! Html::style('css/style.css') !!}
     {!! Html::style('css/style-responsive.css') !!}
-    
+
     <!-- Multi select css -->
     {!! Html::style('js/select2/select2.css') !!}
     <!-- Multi select css End's here-->
@@ -54,7 +54,7 @@
                     <!-- <img alt="" src="assets/images/admin.png" width="34px" height="34px"> -->
                     <span class="username">{{ Auth::user()->first_name }}</span>
                     <b class="caret"></b>
-                @else 
+                @else
                     <img src="{!! URL::to('/') !!}/images/admin.png" width="34px" height="34px" alt="KranQ">
                     <!-- <img alt="" src="assets/images/admin.png" width="34px" height="34px"> -->
                     <span class="username">{{ Auth::user()->first_name }}</span>
@@ -112,7 +112,7 @@
     {!! Html::script('js/select2/select2.js') !!}
     {!! Html::script('js/select-init.js') !!}
     <!-- Multi select js End's here -->
-    
+
     <!-- Js Starts here-->
     <!-- ONLY INCLUDE IF YOU NOT HAVE THOSE DEPENDENCIES -->
     <!-- <script src="vendor/rafwell/simple-grid/moment/moment.js"></script> -->

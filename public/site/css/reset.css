@@ -44,3 +44,6 @@ img {
 embed { 
 	vertical-align:top;
 }
+.alert-success {
+    background-color: #00989d;
+}

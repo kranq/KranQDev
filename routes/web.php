@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth', 'as' => 'main.'], function (){
             'review' => 'ReviewController',
 			'cms' => 'CmsPagesController',
             'address' => 'AddressController',
+            'site' => 'SiteController',
 		);
 	foreach ($controllers as $key => $controller){
         //Will generates Crud functions (index,create, edit, delete, update, store)
@@ -171,5 +172,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 //Route::resource('site','SiteController');
 Route::get('site/index','SiteController@index');
+Route::post('site/contact-mail','SiteController@contactMail');
 Route::resource('site','SiteController');
 //Route::get('site/show','SiteController@show');

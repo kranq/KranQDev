@@ -8,30 +8,48 @@
 <p>{!!trans('main.area.help') !!}</p>
 @stop
 @section('content')
+@if ( Session::has('success') )
+<div class="alert alert-success alert-dismissible" role="alert">
+    <!--button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button-->
+    <strong>{!! trans('main.message') !!}</strong> {{ Session::get('success') }}
+</div>
+@endif
 	<section id="content">
 		<div class="main">
 			<div class="zerogrid">
 				<div class="wrapper">
 					<article class="col-2-3"><div class="wrap-col">
 						<h3>Contact Form</h3>
-						{{-- Form::open(array('route' => 'contact_store','method'=>'POST', 'class' => 'form', 'id'=>'contact-form', 'accept-charset'=>'utf-8')) --}}
-						<form method="post" id="contact-form">
+					 {{-- Form::open(array('route' => 'site.mail','method'=>'POST', 'class' => 'form', 'id'=>'contact-form', 'accept-charset'=>'utf-8')) --}} 
+
+						{{-- Form::open( array('route' => 'site.contact-mail','method'=>'POST','class'=>'form', 'id'=>'contact-form', 'accept-charset'=>'utf-8', 'enctype' => 'multipart/form-data')) --}}
+
+						<form method="post" id="contact-form" action="{{ URL::to('site/contact-mail') }}" accept-charset="UTF-8">
+							{!! csrf_field() !!}
 							<fieldset>
-								  <label><span class="text-form">Name:</span><input name="name" type="text" class="form-control" /></label>
-								  <label><span class="text-form">Email:</span><input name="email" type="text" class="form-control" /></label>
-								  <label><span class="text-form">Phone:</span><input name="phone" type="text" class="form-control" /></label>
-								  <div class="wrapper">
-									<div class="text-form">Message:</div>
+								  <label><span class="text-form">Name <span class="required">*</span></span><input name="name" id="name" type="text" class="form-control" required/></label>
+
+								  <label><span class="text-form">Email <span class="required">*</span></span><input name="email" id="email" type="Email" class="form-control"  required /></label>
+								  
+
+								  <label><span class="text-form">Subject <span class="required">*</span></span><input name="subject" id="subject" type="text" class="form-control" required /></label>
+
+								  	 <div class="wrapper">
+									<div class="text-form">Message<span class="required">*</span></div>
 									<div class="extra-wrap">
-										<textarea cols="15" rows="5"></textarea>
+										<textarea cols="15" rows="5" name="message" id="message" required></textarea>
 										<div class="clear"></div>
-										<div class="buttons">
-											<a href="#" onClick="document.getElementById('contact-form').reset()" class="btn btn-default">Clear</a>
-											<a href="#" onClick="document.getElementById('contact-form').submit()" class="btn btn-primary">Send</a>
 										</div>
-									</div>
 								  </div>
-							</fieldset>
+							</fieldset>	
+							<div class="form-group">
+		                	<div class="button-btn">
+		                    <button type="submit" title="Save" class="btn btn-primary">{!! trans('main.save') !!}</button>
+		                    <button type="reset" title="Cancel" class="btn btn-default">{!! trans('main.cancel') !!}</button>
+		                </div>
+			            </div>
+
+							
 							<form>
 						{{-- Form::close() --}}
 					</div></article>

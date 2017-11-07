@@ -40,8 +40,8 @@ class ServiceProviderRequest extends FormRequest
         $rules['opening_hrs'] = 'required';
         $rules['closing_hrs'] = 'required';
         $rules['working_days'] = 'required';
+		$rules['website_link'] = 'url';
         //$rules['phone'] = 'required|max:20';
-        $rules['website_link']   = 'url';
         switch ($this->method()) {
             case 'GET':
             case 'DELETE':

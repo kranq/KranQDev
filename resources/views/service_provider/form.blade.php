@@ -280,14 +280,9 @@
                             </div>
                     </div>
                         <div class="form-group">
-                            {!! Form::label('website_link',trans('main.provider.website_link'),array('class'=>'control-label col-sm-3 custom_required')) !!}
+                            {!! Form::label('website_link',trans('main.provider.website_link'),array('class'=>'control-label col-sm-3')) !!}
                             <div class="col-lg-6">
-                                {!! Form::text('website_link', @$provider->website_link, array('class'=>'form-control', 'placeholder' => __(trans('main.placeholder'),['name' => trans('main.provider.website_link')]))) !!}
-                                @if ($errors->has('website_link'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('website_link') }}</strong>
-                                </span>
-                                @endif
+                                {!! Form::url('website_link', @$provider->website_link, array('class'=>'form-control','onchange'=> 'is_valid_url(event)', 'id' => 'serviceProviderId','placeholder' => __(trans('main.placeholder'),['name' => trans('main.provider.website_link')]))) !!}
                             </div>
                         </div>
                         <div class="prf-contacts sttng">
@@ -329,7 +324,7 @@
 
             <div class="form-group">
                 <div class="col-lg-offset-3 col-lg-6">
-                    <button type="submit" class="btn btn-primary">{!! @$btn !!}</button>
+                    <button type="submit" class="btn btn-primary" id="serviceProvider">{!! @$btn !!}</button>
                     <a href="{!! route('main.provider.index') !!}" class="btn btn-default">{!! trans('main.cancel') !!}</a>
                 </div>
             </div>
@@ -346,6 +341,7 @@
     /*$("#selecctall").change(function () {
         $("input:checkbox").prop('checked', $(this).prop("checked"));
     });*/
+	
     $('#WorkingSaturday').on('change', function(){
         $('#WorkingSaturdayHours').toggle();
     });
@@ -378,5 +374,6 @@
             }
         });
     });
+	
 </script>
 @endsection

@@ -23,7 +23,7 @@ class ServiceProvider extends Model
 
   use SoftDeletes;
 
-  protected $fillable = array('id','category_id', 'short_description','owner_name', 'owner_designation', 'location_id', 'name_sp','slug','logo','city','address','status_owner_manager','opening_hrs','closing_hrs','working_days','phone','website_link','googlemap_latitude','googlemap_longitude','email','password','	order_by','	status', 'owner_phone', 'working_saturdays', 'working_sundays', 'saturday_opening_hrs', 'saturday_closing_hrs', 'sunday_opening_hrs', 'sunday_closing_hrs');
+  protected $fillable = array('id','category_id', 'short_description','owner_name', 'owner_designation', 'location_id', 'name_sp','slug','logo','city','address','status_owner_manager','opening_hrs','closing_hrs','working_days','phone','website_link','googlemap_latitude','googlemap_longitude','email','password', 'order_by', 'status', 'owner_phone', 'working_saturdays', 'working_sundays', 'saturday_opening_hrs', 'saturday_closing_hrs', 'sunday_opening_hrs', 'sunday_closing_hrs');
 
   /**
    * Get the category that owns the service provider.

@@ -47,7 +47,8 @@ class ServiceProviderController extends Controller
     public function index()
     {
         // To get the records details from the table
-        $providers = ServiceProvider::join('categories','category_id','=','categories.id')->join('localities','location_id','=','localities.id')->join('cities','city','=','cities.id')->orderBy('id', 'DESC');
+        $providers = ServiceProvider::join('categories','category_id','=','categories.id')->
+join('localities','location_id','=','localities.id')->join('cities','city','=','cities.id')->orderBy('id', 'DESC');
         $Grid = new Grid($providers,'');
         // To have header for the values
             $Grid->fields([
@@ -111,14 +112,14 @@ class ServiceProviderController extends Controller
     {
         $input = $request->all();
         $input = $request->except('_token');
-    		// To create a directory if not exists
-    		if (!(Storage::disk('s3')->exists('/uploads/provider')))
-    		{
-    			Storage::disk('s3')->makeDirectory('/uploads/provider/');
-    		}
+    		 //To create a directory if not exists
+    		 if (!(Storage::disk('s3')->exists('/uploads/provider')))
+    		 {
+    		 	Storage::disk('s3')->makeDirectory('/uploads/provider/');
+    		 }
         if($request->hasFile('logo')){
-          // To upload the images into Amazon S3
-            $amazonImgUpload = Storage::disk('s3')->put('/uploads/provider/'.$request->file('logo')->getClientOriginalName(), file_get_contents($request->file('logo')), 'public');
+           //To upload the images into Amazon S3
+             $amazonImgUpload = Storage::disk('s3')->put('/uploads/provider/'.$request->file('logo')->getClientOriginalName(), file_get_contents($request->file('logo')), 'public');
           // To upload the image in local
             $input['logo'] = ServiceProvider::upload_file($request, 'logo');
         }
@@ -147,15 +148,21 @@ class ServiceProviderController extends Controller
     public function show($id)
     {
         $data['provider'] = ServiceProvider::findorfail($id);
-		    // To get the image form the Amazon s3 account
-        if (Storage::disk('s3')->exists('uploads/provider/'.$data['provider']->logo)) {
-            $data['s3image']= \Storage::disk('s3')->url('uploads/provider/'.$data['provider']->logo);
-        }
+		 // To get the image form the Amazon s3 account
+         if (Storage::disk('s3')->exists('uploads/provider/'.$data['provider']->logo)) {
+             $data['s3image']= \Storage::disk('s3')->url('uploads/provider/'.$data['provider']->logo);
+         }
         $created_at = $data['provider']->created_at;
         $data['provider']->created_date = Carbon::parse($created_at)->format('d/m/Y, h.i a');
         $data['provider']->category_id = Category::getCategoryNameById($data['provider']->category_id);
         $data['provider']->city = City::getCityNameById($data['provider']->city);
         $data['provider']->location_id = Location::getLocationNameById($data['provider']->location_id);
+        $data['provider']->opening_hrs = KranHelper::getFormattedTime($data['provider']->opening_hrs);
+        $data['provider']->closing_hrs = KranHelper::getFormattedTime($data['provider']->closing_hrs);
+        $data['provider']->saturday_opening_hrs = KranHelper::getFormattedTime($data['provider']->saturday_opening_hrs);
+        $data['provider']->saturday_closing_hrs = KranHelper::getFormattedTime($data['provider']->saturday_closing_hrs);
+        $data['provider']->sunday_opening_hrs = KranHelper::getFormattedTime($data['provider']->sunday_opening_hrs);
+        $data['provider']->sunday_closing_hrs = KranHelper::getFormattedTime($data['provider']->sunday_closing_hrs);
         //$data['ratings'] = Rating::where('service_provider_id', '=', $id)->get();
         $data['users'] = User::orderBy('fullname', 'asc')->pluck('fullname', 'id');
         $data['reviews'] = Review::getServiceProviderReviewDetails($id);
@@ -185,18 +192,19 @@ class ServiceProviderController extends Controller
         $data['selected_working_days'] = $data['provider']->working_days;
         $data['selected_working_saturdays'] = ($data['provider']->working_saturdays) ? 1 : 0;
         $data['selected_working_sundays'] = ($data['provider']->working_sundays) ? 1 : 0;
-        //echo '<pre>';print_r($data['provider']->working_sundays);exit;
+
         /*if($data['selected_working_days']){
             $data['selected_working_days'] = explode(',',$data['selected_working_days']);
             //echo '<pre>';print_r($data['selected_working_days']);exit;
-        }*/
+        }*/ 
         $services = ServiceProviderCategoryService::where('service_provider_id','=' ,$id)->get();
         $service[] = '';
         if (count($services) > 0) {
             $service = explode(',',$services[0]->service_id);
         }
         $data['services'] = Service::orderBy('service_name', 'asc')->pluck('service_name', 'id')->all();
-        if ($service) {
+		
+        if (!empty(array_filter($service))) {
             $data['service'] = Service::whereIn('id',$service)->pluck('id');
         } else {
             $data['service'] = '';
@@ -215,12 +223,12 @@ class ServiceProviderController extends Controller
     {
         $input = $request->all();
         $provider  = ServiceProvider::findorFail($id);
-    		if ($request->file('logo')) {
-    			if (Storage::disk('s3')->exists('uploads/provider/'.$provider->logo)) {
-    				Storage::disk('s3')->delete('uploads/provider/'.$provider->logo);
-    			}
-    	        $amazonImgUpload = Storage::disk('s3')->put('uploads/provider/'.$request->file('logo')->getClientOriginalName(), file_get_contents($request->file('logo')), 'public');
-    		}
+		 if ($request->file('logo')) {
+			if (Storage::disk('s3')->exists('uploads/provider/'.$provider->logo)) {
+				Storage::disk('s3')->delete('uploads/provider/'.$provider->logo);
+			}
+			 $amazonImgUpload = Storage::disk('s3')->put('uploads/provider/'.$request->file('logo')->getClientOriginalName(), file_get_contents($request->file('logo')), 'public');
+		 }
         if($request->hasFile('logo')){
             $input['logo'] = ServiceProvider::upload_file($request, 'logo');
         }
@@ -322,4 +330,4 @@ class ServiceProviderController extends Controller
         $serviceProvider->save();
         return Redirect::to('login')->with($this->success, trans($this->pwdupdatemsg));
       }
-}
+} 

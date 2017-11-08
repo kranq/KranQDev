@@ -282,7 +282,7 @@
                         <div class="form-group">
                             {!! Form::label('website_link',trans('main.provider.website_link'),array('class'=>'control-label col-sm-3')) !!}
                             <div class="col-lg-6">
-                                {!! Form::url('website_link', @$provider->website_link, array('class'=>'form-control','onchange'=> 'is_valid_url(event)', 'id' => 'serviceProviderId','placeholder' => __(trans('main.placeholder'),['name' => trans('main.provider.website_link')]))) !!}
+                                {!! Form::url('website_link', @$provider->website_link, array('class'=>'form-control', 'placeholder' => __(trans('main.placeholder'),['name' => trans('main.provider.website_link')]))) !!}
                             </div>
                         </div>
                         <div class="prf-contacts sttng">
@@ -324,7 +324,7 @@
 
             <div class="form-group">
                 <div class="col-lg-offset-3 col-lg-6">
-                    <button type="submit" class="btn btn-primary" id="serviceProvider">{!! @$btn !!}</button>
+                    <button type="submit" class="btn btn-primary">{!! @$btn !!}</button>
                     <a href="{!! route('main.provider.index') !!}" class="btn btn-default">{!! trans('main.cancel') !!}</a>
                 </div>
             </div>
@@ -341,7 +341,6 @@
     /*$("#selecctall").change(function () {
         $("input:checkbox").prop('checked', $(this).prop("checked"));
     });*/
-	
     $('#WorkingSaturday').on('change', function(){
         $('#WorkingSaturdayHours').toggle();
     });
@@ -374,6 +373,45 @@
             }
         });
     });
-	
+
+    //To load the WorkingSaturday value
+    var setSaturday = $("#WorkingSaturday").val();
+    var boxesSaturday    = $('input[name=working_saturdays]:checked').length;
+       if (setSaturday == 2 && boxesSaturday > 0) {
+                 $("#WorkingSaturdayHours").show();
+            } else {
+                $("#WorkingSaturdayHours").hide();
+            }
+    // To Show and Hide the Open/closing hours for Saturday when click checkbox
+    $(function () {
+        $("#WorkingSaturday").click(function () {
+            var boxes_click  = $('input[name=working_saturdays]:checked').length;
+            if (setSaturday == 2 && boxes_click_saturday > 0) {
+                 $("#WorkingSaturdayHours").hide();
+            } else {
+                $("#WorkingSaturdayHours").show();
+            }
+        });
+    });
+
+    // To load the WorkingSunday value
+    var setSunday = $("#WorkingSunday").val();
+    var boxesSunday    = $('input[name=working_sundays]:checked').length;
+       if (setSunday == 3 && boxesSunday > 0) {
+                 $("#WorkingSundayHours").show();
+            } else {
+                $("#WorkingSundayHours").hide();
+            }
+    // To Show and Hide the Open/closing hours for Sunday when click checkbox
+    $(function () {
+        $("#WorkingSunday").click(function () {
+            var boxes_click_sunday  = $('input[name=working_sundays]:checked').length;
+            if (setSunday == 3 && boxes_click_sunday > 0) {
+                 $("#WorkingSundayHours").hide();
+            } else {
+                $("#WorkingSundayHours").show();
+            }
+        });
+    });
 </script>
 @endsection

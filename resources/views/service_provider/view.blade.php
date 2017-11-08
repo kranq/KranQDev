@@ -96,17 +96,39 @@
                                     <p class="form-control-static">{{ @$provider->status_owner_manager }}</p>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.open_close_hours') }}</label>
-                                <div class="col-lg-6">
-                                    <p class="form-control-static">{{ @$provider->opening_hrs }} to
-                                     {{ @$provider->closing_hrs }}</p>
+                             <div class="form-group">
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.working_days') }}</label>
+                               <div class="col-lg-2">
+                                    @if($provider->working_days==1)
+                                    <?php echo 'Mon to Fri'; ?>
+                                      @endif
+                                </div>
+                                <div class="col-lg-2">      
+                                       @if($provider->working_saturdays==2)
+                                         <?php echo 'Saturday'; ?>
+                                      @endif
+                                </div>
+                                 <div class="col-lg-2">
+                                      @if($provider->working_sundays==3)
+                                     <?php echo 'Sunday'; ?>
+                                      @endif
+                                
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.working_days') }}</label>
-                                <div class="col-lg-6">
-                                    <p class="form-control-static">{{ @$provider->working_days }}</p>
+                                <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.open_close_hours') }}</label>
+                                <div class="col-lg-2">
+                                    {{ @$provider->opening_hrs }} to
+                                     {{ @$provider->closing_hrs}}
+
+                                </div>
+                                <div class="col-lg-2">
+                                      {{ @$provider->saturday_opening_hrs }} to
+                                     {{ @$provider->saturday_closing_hrs }}
+                                </div>
+                                <div class="col-lg-2">
+                                     {{ @$provider->sunday_opening_hrs }} to
+                                     {{ @$provider->sunday_closing_hrs }}
                                 </div>
                             </div>
                             <div class="form-group">

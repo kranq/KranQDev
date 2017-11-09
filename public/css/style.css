@@ -5833,3 +5833,9 @@ right: -1px;
 	height:30px;
 	width:75px;
 }
+.error{
+    display: inline;
+    margin: 5px 0;
+    color: #B94A48;
+    font-weight: 400;
+}

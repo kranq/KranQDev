@@ -288,6 +288,11 @@ ul.sidebar-menu li a.active, ul.sidebar-menu li a:hover, ul.sidebar-menu li a:fo
 	-ms-transition:all 0.3s ease;
 	transition:all 0.3s ease;
 }
+
+
+.link-text{ }
+
+
 ul.sidebar-menu li a i {
 	font-size:15px;
 	padding-right:6px;
@@ -5426,6 +5431,7 @@ div.tagsinput span.tag {
 	position:absolute;
 	pointer-events:none;
 }
+.pull-right{ float:left !important;}
 .pull-right.top-menu .dropdown-menu:after {
 	border-color:rgba(255,255,255,0);
 	border-bottom-color:#ffffff;
@@ -5706,6 +5712,7 @@ div.tagsinput span.tag {
 .fa-info-circle {
 	font-size:1.7em;
 }
+
 @media (min-width: 375px) and (max-width: 1005px) {
 .dashboard-height {
 	height: 150px !important;
@@ -5760,6 +5767,8 @@ div.tagsinput span.tag {
 	width: 480px !important;
 }
 }
+
+
 [rel="popover"] {
  cursor: pointer;
  display:inline-block; /* chrome-fix */
@@ -5786,4 +5795,10 @@ div.tagsinput span.tag {
 }
 .sam{
 	line-height: 20px;
+}
+.error{
+    display: inline;
+    margin: 5px 0;
+    color: #B94A48;
+    font-weight: 400;
 }

@@ -9,11 +9,11 @@
                         {!! Form::label('fullname',trans('main.user.fullname'),array('class'=>'control-label col-lg-3 custom_required')) !!}
 						<div class="col-lg-6">
                             {!! Form::text('fullname', @$user->fullname, array('class'=>'form-control', 'placeholder' => trans('main.user.enterusername'))) !!}
-                            @if ($errors->has('fullname'))
+                           <!--  @if ($errors->has('fullname'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('fullname') }}</strong>
                             </span>
-                            @endif
+                            @endif -->
                         </div>
                     </div>
                     <div class="form-group">
@@ -64,66 +64,66 @@
                           {!! Form::label('address',trans('main.user.address'),array('class'=>'control-label col-lg-3')) !!}
     					<div class="col-lg-6">
                             {!! Form::textarea('address', @$user->address, array('class'=>'form-control textarea-height', 'placeholder' => trans('main.user.address'), 'rows' => '2', 'maxlength' => '1000')) !!}
-                            @if ($errors->has('address'))
+                           <!--  @if ($errors->has('address'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('address') }}</strong>
                                 </span>
-                                @endif
+                                @endif -->
 						</div>
                     </div>
                     <div class="form-group">
                         {!! Form::label('mobileno',trans('main.user.mobileno'),array('class'=>'control-label col-lg-3 custom_required')) !!}
 						<div class="col-lg-6">
                             {!! Form::text('mobile', @$user->mobile, array('class'=>'form-control', 'placeholder' => trans('main.user.mobileno'), 'maxlength' => '20', 'onkeypress'=>'checkAlphaNumericWithComma(event)')) !!}
-                            @if ($errors->has('mobile'))
+                            <!-- @if ($errors->has('mobile'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('mobile') }}</strong>
                                 </span>
-                            @endif
+                            @endif -->
                         </div>
                     </div>
                     <div class="form-group">
                             {!! Form::label('email',trans('main.user.email'),array('class'=>'control-label col-lg-3 custom_required')) !!}
                         <div class="col-lg-6">
                             {!! Form::email('email', @$user->email, array('class' => 'form-control dropdown-height', 'placeholder' => trans('main.user.email'))) !!}
-                            @if ($errors->has('email'))
+                            <!-- @if ($errors->has('email'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('email') }}</strong>
                                 </span>
-                            @endif
+                            @endif -->
                         </div>
                     </div>
                     <div class="form-group">
                             {!! Form::label('password',trans('main.user.password'),array('class'=>'control-label col-lg-3 custom_required')) !!}
                         <div class="col-lg-6">
                             {!! Form::password('password', array('class' => 'form-control', 'placeholder' => 'Enter Password')) !!}
-                            @if ($errors->has('password'))
+                           <!--  @if ($errors->has('password'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('password') }}</strong>
                                 </span>
-                            @endif
+                            @endif -->
                         </div>
                     </div>
                     <div class="form-group">
                             {!! Form::label('registermode',trans('main.user.registermode'),array('class'=>'control-label col-lg-3')) !!}
                         <div class="col-lg-6">
                             {!! Form::select('register_mode', @$registered_mode, @$user->register_mode, array('class' => 'form-control dropdown-height', 'placeholder' => trans('main.selected'))) !!}
-                            @if ($errors->has('registermode'))
+                            <!-- @if ($errors->has('registermode'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('registermode') }}</strong>
                                 </span>
-                            @endif
+                            @endif -->
                         </div>
                     </div>
                     <div class="form-group">
                             {!! Form::label('status',trans('main.user.status'),array('class'=>'control-label col-lg-3 custom_required')) !!}
 						<div class="col-lg-6">
                             {!! Form::select('status', @$status,@$user->status, array('class' => 'form-control dropdown-height')) !!}
-                            @if ($errors->has('status'))
+                           <!--  @if ($errors->has('status'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('status') }}</strong>
                                 </span>
-                            @endif
+                            @endif -->
 						</div>
                     </div>
 					<div class="form-group">
@@ -134,4 +134,42 @@
 					</div>
 				</div>
 	</section>
+
+    @section('page_js')
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+<script type="text/javascript">
+   
+   //To Show the client side validation
+     $("#form").validate({
+        ignore: ".ignore",
+        rules: {
+            fullname:"required",
+            mobile:"required",
+            email:"required",
+            password:"required",
+           
+        },
+        
+
+        messages:{
+            fullname:"Full Name field is required",
+            mobile:"Mobile No is required",
+            email:"Email field is required",
+            password:"Password field is required",
+                      
+        },
+          
+            //To check during tabing itself
+            onkeyup: function(element) {
+            this.element(element);
+            //console.log('onkeyup fired');
+            },
+            onfocusout: function(element) {
+            this.element(element);
+            //console.log('onfocusout fired');
+            }
+
+  });
+    </script>
+    @endsection
 <!--main content end-->

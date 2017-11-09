@@ -7,7 +7,7 @@
     <p class="lead">{{ trans('main.provider.title') }}</p>
 @stop
 @section('content')
-    {!! Form::open( array('route' => 'main.provider.store','class'=>'form-horizontal', 'accept-charset'=>'utf-8', 'enctype' => 'multipart/form-data')) !!}
+    {!! Form::open( array('route' => 'main.provider.store','class'=>'form-horizontal', 'accept-charset'=>'utf-8','id'=>'form', 'enctype' => 'multipart/form-data')) !!}
 	     @include('service_provider/form', ['submit_text' => trans('main.save') ,'btn'=> trans('main.save')])
     {!! Form::close() !!}
 @stop

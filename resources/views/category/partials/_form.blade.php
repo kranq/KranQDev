@@ -6,11 +6,11 @@
             {!! Form::label('category_name',trans('main.category.category_name'),array('class'=>'control-label col-lg-3 custom_required')) !!}
             <div class="col-lg-6">
                 {!! Form::text('category_name', @$category->category_name, array('class'=>'form-control', 'placeholder' => 'Enter Category Name', 'maxlength'=>'200', 'id' => 'CategoryNameId')) !!}
-                @if ($errors->has('category_name'))
+                <!-- @if ($errors->has('category_name'))
                 <span class="help-block">
                     <strong>{{ $errors->first('category_name') }}</strong>
                 </span>
-                @endif
+                @endif -->
             </div>
         </div>
         <div class="form-group">
@@ -25,11 +25,11 @@
                             {{ Form::file('category_image', array('class' => '', 'accept' => trans('main.image_file_extension'))) }}
                             {{-- Form::file('logo',array('class'=>'default')) --}}
                             </span>
-														@if ($errors->has('category_image'))
+														<!-- @if ($errors->has('category_image'))
 						                     <span class="help-block">
 						                         <strong>{{ $errors->first('category_image') }}</strong>
 						                     </span>
-						                 @endif
+						                 @endif -->
                             <span class="fileupload-preview" style="margin-left:5px;"></span>
                             <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
                         </div>
@@ -67,33 +67,33 @@
             {!! Form::label('service_id',trans('main.category.services'),array('class'=>'control-label col-lg-3 custom_required')) !!}
             <div class="col-lg-6">
                 {!! Form::select('service_id[]', @$services, @$service, array('class' => 'populate select2-offscreen', 'multiple' => 'true', 'id' => 'e9', 'style' => 'width:485px')) !!}
-               @if ($errors->has('service_id'))
+             <!--   @if ($errors->has('service_id'))
                     <span class="help-block">
                         <strong>{{ $errors->first('service_id') }}</strong>
                     </span>
-                @endif
+                @endif -->
             </div>
         </div>
         <div class="form-group">
             {!! Form::label('order_by',trans('main.category.order_by'),array('class'=>'control-label col-lg-3 custom_required')) !!}
             <div class="col-lg-6">
                 {!! Form::selectRange('order_by', 1, 10, @$category->order_by, array('class' => 'form-control dropdown-height', 'placeholder' => trans('main.selected'))) !!}
-                @if ($errors->has('order_by'))
+               <!--  @if ($errors->has('order_by'))
                     <span class="help-block">
                         <strong>{{ $errors->first('order_by') }}</strong>
                     </span>
-                @endif
+                @endif -->
             </div>
         </div>
 		<div class="form-group">
             {!! Form::label('status',trans('main.category.status'),array('class'=>'control-label col-lg-3 custom_required')) !!}
             <div class="col-lg-6">
                 {!! Form::select('status', @$status, @$category->status, array('class' => 'form-control dropdown-height')) !!}
-                @if ($errors->has('status'))
+               <!--  @if ($errors->has('status'))
                     <span class="help-block">
                         <strong>{{ $errors->first('status') }}</strong>
                     </span>
-                @endif
+                @endif -->
             </div>
         </div>
 		<div class="form-group">
@@ -108,6 +108,7 @@
 </section>
 <!--main content end-->
 @section('page_js')
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
 <script type="text/javascript">
 	$('#CategoryNameId').on('keypress', function (event) {
 	    var regex = new RegExp("^[a-zA-Z0-9]+$");
@@ -117,5 +118,37 @@
 	       return false;
 	    }
 	});
+
+    //To Show the client side validation
+     $("#form").validate({
+        ignore: ".ignore",
+        rules: {
+            category_name:"required",
+            services:"required",
+            order_by:"required",
+            'service_id[]':"required",
+           
+        },
+        
+
+        messages:{
+            category_name:"Category Name field is required",
+            services:"Choose service field is required",
+            order_by:"Select Order By field is required",
+            'service_id[]':"Choose service field is required",
+                      
+        },
+          
+            //To check during tabing itself
+            onkeyup: function(element) {
+            this.element(element);
+            //console.log('onkeyup fired');
+            },
+            onfocusout: function(element) {
+            this.element(element);
+            //console.log('onfocusout fired');
+            }
+
+  });
 	</script>
 @endsection

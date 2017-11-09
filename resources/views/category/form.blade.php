@@ -7,7 +7,7 @@
     <p class="lead">{{ trans('main.category.title') }}</p>
 @stop
 @section('content')
-    {!! Form::open( array('route' => 'main.category.store','class'=>'cmxform form-horizontal', 'accept-charset'=>'utf-8', 'enctype' => 'multipart/form-data')) !!}
+    {!! Form::open( array('route' => 'main.category.store','class'=>'cmxform form-horizontal', 'accept-charset'=>'utf-8','id'=>'form', 'enctype' => 'multipart/form-data')) !!}
 	     @include('category/partials/_form', ['submit_text' => trans('main.save') ,'btn'=> trans('main.save')])
     {!! Form::close() !!}
 @stop

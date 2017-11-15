@@ -118,17 +118,24 @@
                             <div class="form-group">
                                 <label for="cname" class="control-label col-lg-3 custom_required">{{ trans('main.provider.open_close_hours') }}</label>
                                 <div class="col-lg-2">
-                                    {{ @$provider->opening_hrs }} to
-                                     {{ @$provider->closing_hrs}}
+                                     @if($provider->opening_hrs && $provider->closing_hrs)
+                                        {{ @$provider->opening_hrs }} to
+                                        {{ @$provider->closing_hrs}}
+                                     @endif
 
                                 </div>
                                 <div class="col-lg-2">
-                                      {{ @$provider->saturday_opening_hrs }} to
-                                     {{ @$provider->saturday_closing_hrs }}
+                             
+                                     @if(!empty($provider->saturday_opening_hrs &&  @$provider->saturday_closing_hrs))
+                                          {{ @$provider->saturday_opening_hrs }} to
+                                          {{ @$provider->saturday_closing_hrs }}
+                                     @endif
                                 </div>
                                 <div class="col-lg-2">
-                                     {{ @$provider->sunday_opening_hrs }} to
-                                     {{ @$provider->sunday_closing_hrs }}
+                                      @if(!empty($provider->sunday_opening_hrs && $provider->sunday_closing_hrs))
+                                         {{ @$provider->sunday_opening_hrs }} to
+                                         {{ @$provider->sunday_closing_hrs }}
+                                      @endif
                                 </div>
                             </div>
                             <div class="form-group">

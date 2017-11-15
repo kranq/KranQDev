@@ -16,6 +16,7 @@ use Response;
 use Redirect;
 use App\Models\User;
 use App\Models\Review;
+use App\Models\Category;
 use App\Helpers\KranHelper;
 use Rafwell\Simplegrid\Grid;
 use App\Http\Requests\Request;
@@ -40,7 +41,8 @@ class ReviewController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {	
+		$row = 'fa fa-check';
         // To get the records details from the table
         $serviceProvider=Review::join('service_providers','service_provider_id','=','service_providers.id')->join('categories', 'service_providers.category_id', '=', 'categories.id')->orderBy('id', 'DESC');
         $Grid = new Grid($serviceProvider, 'reviews');
@@ -53,6 +55,17 @@ class ReviewController extends Controller
 			  'postted_on'=>'Posted On',
               'reviews.status'=>'Status'
         ])
+		->processLine(function($row){
+			//This function will be called for each row
+			if($row['status'] = "Active") {
+				$row = 'fa fa-times';
+			} else {
+				$row = 'fa fa-check';
+				}
+				echo $row;
+			//Do more you need on this row
+			//Do not forget to return the row
+		})
         ->processLine(function($row){
             //This function will be called for each row
             $row['reviews'] = KranHelper::reviewStringLimit($row);
@@ -66,7 +79,7 @@ class ReviewController extends Controller
         ]);
         // To have actions for the records
         $Grid->action('View', URL::to('review/show/{id}'), ['class'=>'fa fa-eye'])
-            ->action('Status', URL::to('review/edit/{id}'), ['class'=>'fa fa-edit'])
+            ->action('Status', URL::to('review/edit/{id}'), ['class'=> $row])
             ->action('Delete', URL::to('review/destroy/{id}'), [
           'confirm'=>'Are you sure to delete the record?',
           'method'=>'DELETE',
@@ -111,6 +124,7 @@ class ReviewController extends Controller
         $serviceProviderId = $data['review']->service_provider_id;
         $user = $data['review']->user_id;
         $data['service_providers'] = ServiceProvider::where('id', '=', $serviceProviderId)->get();
+		$data['category'] = Category::where('id', '=', $data['service_providers'][0]->category_id)->first();
         $userData['user'] = User::where('id', '=', $user)->get();
         return view('review.view', $data,$userData);
     }
@@ -159,14 +173,18 @@ class ReviewController extends Controller
     public function destroy($id)
     {
         $review = Review::findorFail($id);
-        $serviceProvider = ServiceProvider::where('id', '=', $review->service_provider_id)->get();
-        if (count($serviceProvider)) {
-            return Redirect::back()->with($this->success, trans($this->referencemsg));
-        } else {
+        if ($review->status == "Inactive") {
             $review->forceDelete();
             return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));
+        } else if ($review->status == "Active") {
+			$serviceProvider = ServiceProvider::where('id', '=', $review->service_provider_id)->first();
+			if (count($serviceProvider) > 0) {
+            	return Redirect::back()->with($this->success, trans($this->referencemsg));
+        	} else {
+            	$review->forceDelete();
+            	return Redirect::route($this->route)->with($this->error, trans($this->deletemsg));
+			}
         }
-
     }
 
 

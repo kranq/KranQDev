@@ -118,7 +118,7 @@
                     <div class="form-group">
                             {!! Form::label('status',trans('main.user.status'),array('class'=>'control-label col-lg-3 custom_required')) !!}
 						<div class="col-lg-6">
-                            {!! Form::select('status', @$status,@$user->status, array('class' => 'form-control dropdown-height')) !!}
+                            {!! Form::select('status', @$status, @$user->status, array('class' => 'form-control dropdown-height')) !!}
                            <!--  @if ($errors->has('status'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('status') }}</strong>

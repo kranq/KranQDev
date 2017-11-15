@@ -12,6 +12,12 @@
 	<div class="panel-body">
 		<div class="position-left">
 		<div class="form-group">
+				<div class="col-sm-3 control-label"> {!! trans('main.category.title') !!}</div>
+				<div class="col-lg-6">
+					<p class="form-control-static">{!! @$category->category_name; !!}</p>
+				</div>
+			</div>
+		<div class="form-group">
 				<div class="col-sm-3 control-label"> {!! trans('main.provider.name_sp') !!}</div>
 				<div class="col-lg-6">
 					<p class="form-control-static">{!! @$service_providers[0]->name_sp; !!}</p>

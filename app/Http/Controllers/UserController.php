@@ -156,7 +156,7 @@ class UserController extends Controller
         if (Storage::disk('s3')->exists('uploads/user/'.$data['user']->profile_picture)) {
           $data['amazonImgUpload'] = \Storage::disk('s3')->url('uploads/user/'.$data['user']->profile_picture);
         }
-        $data['status'] = DropdownHelper::where('group_code', '001')->orderBy('key_code', 'asc')->pluck('value', 'key_code');
+        $data['status'] = ['Active' => 'Active', 'Inactive' => 'Inactive'];
         $data['registered_mode'] = DropdownHelper::where('group_code', '002')->orderBy('key_code', 'asc')->pluck('value', 'key_code');
         $data['add'] = trans('main.edit');
         return view('user.edit', $data);

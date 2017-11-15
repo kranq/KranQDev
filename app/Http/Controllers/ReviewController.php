@@ -42,17 +42,17 @@ class ReviewController extends Controller
     public function index()
     {
         // To get the records details from the table
-        $serviceProvider=Review::join('service_providers','service_provider_id','=','service_providers.id')->orderBy('id', 'DESC');
+        $serviceProvider=Review::join('service_providers','service_provider_id','=','service_providers.id')->join('categories', 'service_providers.category_id', '=', 'categories.id')->orderBy('id', 'DESC');
         $Grid = new Grid($serviceProvider, 'reviews');
         // To have header for the values
         $Grid->fields([
 			  'reviews'=>'Reviews',
 			  'reviews.rating'=>'Rating',
+			  'category_name' => 'Category',
               'name_sp'=>'Service Provider',
 			  'postted_on'=>'Posted On',
               'reviews.status'=>'Status'
         ])
-
         ->processLine(function($row){
             //This function will be called for each row
             $row['reviews'] = KranHelper::reviewStringLimit($row);

@@ -86,7 +86,8 @@ class UserController extends Controller
     {
         $data = array();
         $data['status'] = DropdownHelper::where('group_code', '001')->orderBy('key_code', 'asc')->pluck('value', 'key_code');
-        $data['registered_mode'] = DropdownHelper::where('group_code', '002')->orderBy('key_code', 'asc')->pluck('value', 'key_code');
+        //$data['registered_mode'] = DropdownHelper::where('group_code', '002')->orderBy('key_code', 'asc')->pluck('value', 'key_code');
+		$data['registered_mode'] = ['1' => 'Email', '2' => 'Facebook'];
         $data['add'] = trans('main.add');
         return view('user.form', $data);
     }
@@ -157,7 +158,8 @@ class UserController extends Controller
           $data['amazonImgUpload'] = \Storage::disk('s3')->url('uploads/user/'.$data['user']->profile_picture);
         }
         $data['status'] = ['Active' => 'Active', 'Inactive' => 'Inactive'];
-        $data['registered_mode'] = DropdownHelper::where('group_code', '002')->orderBy('key_code', 'asc')->pluck('value', 'key_code');
+		$data['registered_mode'] = ['1' => 'Email', '2' => 'Facebook'];
+        //$data['registered_mode'] = DropdownHelper::where('group_code', '002')->orderBy('key_code', 'asc')->pluck('value', 'key_code');
         $data['add'] = trans('main.edit');
         return view('user.edit', $data);
     }

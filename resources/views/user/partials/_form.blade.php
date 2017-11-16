@@ -74,7 +74,7 @@
                     <div class="form-group">
                         {!! Form::label('mobileno',trans('main.user.mobileno'),array('class'=>'control-label col-lg-3 custom_required')) !!}
 						<div class="col-lg-6">
-                            {!! Form::text('mobile', @$user->mobile, array('class'=>'form-control', 'placeholder' => trans('main.user.mobileno'), 'maxlength' => '20', 'onkeypress'=>'checkAlphaNumericWithComma(event)')) !!}
+                            {!! Form::text('mobile', @$user->mobile, array('class'=>'form-control', 'placeholder' => trans('main.user.mobileno'), 'maxlength' => '10', 'onkeypress'=>'checkAlphaNumericWithComma(event)')) !!}
                             <!-- @if ($errors->has('mobile'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('mobile') }}</strong>

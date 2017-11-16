@@ -10,7 +10,7 @@
     <p>{!!trans('main.user.help') !!}</p>
 @stop
 @section('content')
-    {!! Form::open(array('route' => array('main.user.update',$user->id),'method'=>'PUT','class' => 'form-horizontal row-border','id'=>'form','data-toggle'=>"validator",'files' => true)) !!}
+    {!! Form::open(array('route' => array('main.user.update',$user->id),'method'=>'PUT','class' => 'form-horizontal row-border','id'=>'editForm','data-toggle'=>"validator",'files' => true)) !!}
     @include('user/partials/_form', ['submit_text' => trans('main.editupdate').' '.trans('main.user.title'),'btn'=>trans('main.update')])
     {!! Form::close() !!}
 @stop

@@ -171,6 +171,33 @@
             }
 
   });
+  $("#editForm").validate({
+        ignore: ".ignore",
+        rules: {
+            fullname:"required",
+            mobile:{
+						required: true,
+						minlength: 10,
+				      	maxlength: 10
+					},
+            email:"required",
+        },
+        messages:{
+            fullname:"Full Name field is required",
+            email:"Email field is required",
+        },
+          
+            //To check during tabing itself
+            onkeyup: function(element) {
+            this.element(element);
+            //console.log('onkeyup fired');
+            },
+            onfocusout: function(element) {
+            this.element(element);
+            //console.log('onfocusout fired');
+            }
+
+  });
  });
  </script>
 @endsection

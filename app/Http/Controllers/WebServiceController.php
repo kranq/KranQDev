@@ -37,7 +37,7 @@ class WebServiceController extends Controller {
      */
     public function __construct() {
         $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'delete']]);
-        $this->middleware('auth', ['except' => ['index', 'register', 'getCms', 'sendFeedback', 'getServiceImages', 'getPrerequisites', 'mobileVerification', 'spLogin', 'spRegister', 'spForgotPassword', 'spChangePassword', 'prerequisitesList', 'getServiceProvider', 'getreviewlist', 'updateServiceProvider', 'mobileOTPVerification', 'resendOTP', 'getCategories', 'reviewList', 'getServiceProviders', 'UserList', 'userDetails', 'updateCustomer', 'viewServiceProvider', 'userReviews', 'spReviews', 'addReview', 'updateReview']]);
+        $this->middleware('auth', ['except' => ['index', 'register', 'getCms', 'sendFeedback', 'getServiceImages', 'getPrerequisites', 'mobileVerification', 'spLogin', 'spRegister', 'spForgotPassword', 'spChangePassword', 'prerequisitesList', 'getServiceProvider', 'getreviewlist', 'updateServiceProvider', 'mobileOTPVerification', 'resendOTP', 'getCategories', 'reviewList', 'getServiceProviders', 'UserList', 'userDetails', 'updateCustomer', 'viewServiceProvider', 'userReviews', 'spReviews', 'addReview', 'updateReview', 'UserLogin']]);
     }
 
     /**
@@ -132,75 +132,127 @@ class WebServiceController extends Controller {
                       return $resultData;
                       } */
                     // To create a directory if not exists
-                    if (!(Storage::disk('s3')->exists('/uploads/user'))) {
+                    /*if (!(Storage::disk('s3')->exists('/uploads/user'))) {
                         Storage::disk('s3')->makeDirectory('/uploads/user/');
-                    }
+                    }*/
                     $userData['name'] = $data['fullname'];
-                    $userData['email'] = $data['email'];
+                    $userData['email'] = ($data['email']) ? $data['email'] : "";
                     $userData['mobile'] = ($data['mobile']) ? $data['mobile'] : "";
-                    if ($data['register_mode'] == 'Mobile') {
-                        //$emailExists = User::get()->where('email',$data['email'])->count();
-                        $mobileExists = User::get()->where('mobile', $data['mobile'])->count();
-                        if ($mobileExists == 0) {
-                            //$data['password'] = bcrypt($data['password']);
-                            $data['password'] = bcrypt($data['fullname']);
+
+                    if ($data['register_mode'] == 'Email') {
+                        if (!isset($data['email']) && $data['email']) {
+                            $resultData = array('status' => false, 'message' => 'Email id is mandatory', 'result' => '');
+                            return $resultData;
+                        }
+                        $EmailAndMobileExists = User::where(function ($q) use ($data) {
+                                    return $q->where('email', $data['email'])->orWhere('mobile', $data['mobile']);
+                                })->count();
+                        if ($EmailAndMobileExists == 0) {
+                            $data['password'] = bcrypt($data['password']);
                             $data['register_mode'] = $this->getRegisterMode($data['register_mode']);
                             //$data['been_there_status'] = ($data['been_there_status']=='Yes') ? 1 : 2;
                             $data['registered_on'] = date('Y-m-d H:i:s');
                             $data['status'] = 'Active';
+                            /* $userProfilePath = '/uploads/user/';
+                              if(isset($data['profile_picture'])){
+                              $data['profile_picture'] = KranHelper::convertStringToImage($data['profile_picture'],$data['fullname'],$userProfilePath);
+                              } else {
+                              $data['profile_picture'] = '';
+                              } */
+                            
                             if (isset($data['profile_url']) && $data['profile_url']) {
-                                $imageData = base64_decode($data['profile_url']);
+								$imageData = base64_decode($data['profile_url']);
                                 if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {
-                                    $input['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'], $data['fullname'], $logoPath);
-                                    $userData['image'] = $imagePath . $input['profile_picture'];
+                                    $data['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'], $data['fullname'], $logoPath);
+
+                                    $userData['image'] = $imagePath . $data['profile_picture'];
                                     // To upload the images into Amazon S3
-                                    $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $input['profile_picture'], $imageData, 'public');
+                                   // $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $data['profile_picture'], $imageData, 'public');
                                 }
                             }
-
                             $registerStatus = User::create($data);
                             $id = User::max('id');
                             if ($registerStatus) {
                                 $userData['id'] = $id;
-
-                                /* To send OTP */
-                                $mobileOTP = $this->generateOTP(); //get the OTP from traits method
-                                $authKey = env("SMS_AUTH_KEY", "173397Ad58dSrs59afe736");
-                                $senderId = env("SMS_SENDER_ID", "KRQ102234");
-                                $route = env("SMS_ROUTE", "4");
-                                $smsURI = env("SMS_URI", "https://control.msg91.com/api/sendhttp.php");
-                                $message = "Your OTP to verify the mobile number is " . $mobileOTP;
-
-                                $client = new Client(); //GuzzleHttp\Client
-                                $result = $client->post($smsURI, [
-                                    'form_params' => [
-                                        'authkey' => $authKey,
-                                        'mobiles' => $data['mobile'],
-                                        'message' => $message,
-                                        'sender' => $senderId,
-                                        'route' => $route
-                                    ]
-                                ]);
-                                $otpStatus = $result->getStatusCode(); // to get the status code
-                                if ($otpStatus == 200) {
-                                    $otpStoreStatus = User::where('mobile', '=', $data['mobile'])->update(['otp' => $mobileOTP, 'mobile_verification_status' => '0', 'resend_otp_status' => '0']);
-                                    if ($otpStoreStatus) {
-                                        $resultData = array('status' => true, 'message' => 'registered successfully. OTP is sent', 'result' => '');
-                                    } else {
-                                        $resultData = array('status' => false, 'message' => 'registered successfully. OTP sent but could not be registered (OTP) in database', 'result' => '');
-                                    }
-                                } else {
-                                    $resultData = array('status' => false, 'message' => 'registered successfully. OTP could not be sent', 'result' => '');
-                                }
-                                /* End send OTP */
-
-                                //$resultData = array('status'=>true,'message'=>'registered successfully','result'=>$userData);
+                                $resultData = array('status' => true, 'message' => 'registered successfully', 'result' => $userData);
                             } else {
                                 $resultData = array('status' => false, 'message' => 'registration failed', 'result' => '');
                             }
                         } else {
-                            $resultData = array('status' => false, 'message' => 'Mobile exists already', 'result' => '');
+							
+                            //$userFacebook = User::get()->where('facebook_id', ($data['facebook_id']) ? $data['facebook_id'] : '')->count();
+                            //$userEmail = User::get()->where('em1ail', '=', $data['email'])->count();
+                            if ($EmailAndMobileExists != 0) {
+                                $user = $EmailAndMobileExist = User::where(function ($q) use ($data) {
+                                    return $q->where('email', $data['email'])->orWhere('mobile', $data['mobile']);
+                                })->first();
+                            }
+                            $userData['id'] = $user->id;
+                            $userData['image'] = ($user->profile_picture) ? $imagePath . $user->profile_picture : "";
+                            $resultData = array('status' => true, 'message' => 'You already have an account with the given details', 'result' => $userData);
                         }
+                        ////$emailExists = User::get()->where('email',$data['email'])->count();
+//                        $mobileExists = User::get()->where('mobile', $data['mobile'])->count();
+//                        if ($mobileExists == 0) {
+//                            //$data['password'] = bcrypt($data['password']);
+//                            $data['password'] = bcrypt($data['fullname']);
+//                            $data['register_mode'] = $this->getRegisterMode($data['register_mode']);
+//                            //$data['been_there_status'] = ($data['been_there_status']=='Yes') ? 1 : 2;
+//                            $data['registered_on'] = date('Y-m-d H:i:s');
+//                            $data['status'] = 'Active';
+//                            if (isset($data['profile_url']) && $data['profile_url']) {
+//                                $imageData = base64_decode($data['profile_url']);
+//                                if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {
+//                                    $input['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'], $data['fullname'], $logoPath);
+//                                    $userData['image'] = $imagePath . $input['profile_picture'];
+//                                    // To upload the images into Amazon S3
+//                                    $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $input['profile_picture'], $imageData, 'public');
+//                                }
+//                            }
+//
+//                            $registerStatus = User::create($data);
+//                            $id = User::max('id');
+//                            if ($registerStatus) {
+//                                $userData['id'] = $id;
+//
+//                                /* To send OTP */
+//                                $mobileOTP = $this->generateOTP(); //get the OTP from traits method
+//                                $authKey = env("SMS_AUTH_KEY", "173397Ad58dSrs59afe736");
+//                                $senderId = env("SMS_SENDER_ID", "KRQ102234");
+//                                $route = env("SMS_ROUTE", "4");
+//                                $smsURI = env("SMS_URI", "https://control.msg91.com/api/sendhttp.php");
+//                                $message = "Your OTP to verify the mobile number is " . $mobileOTP;
+//
+//                                $client = new Client(); //GuzzleHttp\Client
+//                                $result = $client->post($smsURI, [
+//                                    'form_params' => [
+//                                        'authkey' => $authKey,
+//                                        'mobiles' => $data['mobile'],
+//                                        'message' => $message,
+//                                        'sender' => $senderId,
+//                                        'route' => $route
+//                                    ]
+//                                ]);
+//                                $otpStatus = $result->getStatusCode(); // to get the status code
+//                                if ($otpStatus == 200) {
+//                                    $otpStoreStatus = User::where('mobile', '=', $data['mobile'])->update(['otp' => $mobileOTP, 'mobile_verification_status' => '0', 'resend_otp_status' => '0']);
+//                                    if ($otpStoreStatus) {
+//                                        $resultData = array('status' => true, 'message' => 'registered successfully. OTP is sent', 'result' => '');
+//                                    } else {
+//                                        $resultData = array('status' => false, 'message' => 'registered successfully. OTP sent but could not be registered (OTP) in database', 'result' => '');
+//                                    }
+//                                } else {
+//                                    $resultData = array('status' => false, 'message' => 'registered successfully. OTP could not be sent', 'result' => '');
+//                                }
+//                                /* End send OTP */
+//
+//                                //$resultData = array('status'=>true,'message'=>'registered successfully','result'=>$userData);
+//                            } else {
+//                                $resultData = array('status' => false, 'message' => 'registration failed', 'result' => '');
+//                            }
+//                        } else {
+//                            $resultData = array('status' => false, 'message' => 'Mobile exists already', 'result' => '');
+//                        }
                     } else if ($data['register_mode'] == 'Facebook') {
                         if (!isset($data['facebook_id']) && $data['facebook_id']) {
                             $resultData = array('status' => false, 'message' => 'facebook id is mandatory', 'result' => '');
@@ -268,7 +320,55 @@ class WebServiceController extends Controller {
         }
         return $resultData;
     }
-
+	
+	/**
+	 * To get the login credential  
+	 *
+	 * @return array
+	 */
+	 public function UserLogin(Request $request) {
+        try {
+            $data = $request->all();
+            if ($data) {
+                if ($data['username'] && $data['password']) {
+                    $unameExist = User::get()->where('email', $data['username'])->count();
+                    $unameData = User::get()->where('email', $data['username'])->first();
+                    //$user = User::find($reviewDetails['user_id']);
+                    $basePath = URL::to('/') . '/..';
+                    $imagePath = $basePath . trans('main.provider_path');
+                    if ($unameExist != 0) {
+                        //compare the entered password with the password in the db with the given uname
+                        $checkpwd = Hash::check($data['password'], $unameData->password);
+                        $userData['id'] = $unameData->id;
+                        $userData['name'] = ($unameData->name_sp) ? $unameData->name_sp : '';
+                        $userData['email'] = ($unameData->email) ? $unameData->email : '';
+                        $userData['mobile'] = ($unameData->phone) ? $unameData->phone : '';
+                        // To get the image form the Amazon s3 account
+                        //if (Storage::disk('s3')->exists('uploads/provider/' . $unameData->logo)) {	
+                            //$userData['logo'] = \Storage::disk('s3')->url('uploads/provider/' . $unameData->logo);
+                        //} else {
+                            $userData['logo'] = ($unameData->logo) ? $imagePath . $unameData->logo : "";
+                        //}
+                        if ($checkpwd) {
+                            $resultData = array('status' => true, 'message' => 'User login available', 'result' => $userData);
+                        } else {
+                            $resultData = array('status' => false, 'message' => 'invalid password', 'result' => '');
+                        }
+                    } else {
+                        $resultData = array('status' => false, 'message' => 'invalid username', 'result' => '');
+                    }
+                } else {
+                    $resultData = array('status' => false, 'message' => 'invalid Input', 'result' => '');
+                }
+            } else {
+                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            }
+        } catch (Exception $e) {
+            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+        }
+        return $resultData;
+    }
+	
     /**
      * To get the pre-requisites data
      *
@@ -1059,7 +1159,7 @@ class WebServiceController extends Controller {
             $data = $request->all();
             if ($data) {
                 if ($data['id']) {
-                    $reviewDetails = Review::where('id', '=', $data['id'])->first();
+                    $reviewDetails = Review::where('id', '=', $data['id'])->where('status', '=', 'Active')->first();
                     if ($reviewDetails) {
                         $user = User::find($reviewDetails['user_id']);
                         $basePath = URL::to('/') . '/..';

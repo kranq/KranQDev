@@ -24,9 +24,14 @@ trait WebserviceTrait {
 	public function registerModesList(){
 		$registerModes = array(
 							''=>'0',
-							'Mobile'=>'1',
+							'Email'=>'1',
 							'Facebook'=>'2'
 						);
+		/*$registerModes = array(
+							''=>'0',
+							'Mobile'=>'1',
+							'Facebook'=>'2'
+						);*/
 		return $registerModes;
 	}
 	

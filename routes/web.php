@@ -126,6 +126,7 @@ Route::group(['middleware' => 'auth', 'as' => 'main.'], function (){
 Route::get('webservice/index', array('as' => 'webservice.index', 'uses' => 'WebServiceController@index'));
 Route::get('webservice/getcms/{slug}', array('as' => 'webservice.getcms', 'uses' => 'WebServiceController@getCms'));
 Route::post('webservice/register', array('as' => 'webservice.register', 'uses' => 'WebServiceController@register'));
+Route::post('webservice/login', array('as' => 'webservice.login', 'uses' => 'WebServiceController@UserLogin'));
 Route::post('webservice/feedback', array('as' => 'webservice.feedback', 'uses' => 'WebServiceController@sendFeedback'));
 Route::post('webservice/serviceimage', array('as' => 'webservice.serviceimage', 'uses' => 'WebServiceController@getServiceImages'));
 Route::get('webservice/pre-requisites', array('as' => 'webservice.pre-requisites', 'uses' => 'WebServiceController@getPrerequisites'));

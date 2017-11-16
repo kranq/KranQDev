@@ -74,7 +74,7 @@
                     <div class="form-group">
                         {!! Form::label('mobileno',trans('main.user.mobileno'),array('class'=>'control-label col-lg-3 custom_required')) !!}
 						<div class="col-lg-6">
-                            {!! Form::text('mobile', @$user->mobile, array('class'=>'form-control', 'placeholder' => trans('main.user.mobileno'), 'maxlength' => '10', 'onkeypress'=>'checkAlphaNumericWithComma(event)')) !!}
+                            {!! Form::text('mobile', @$user->mobile, array('class'=>'form-control', 'placeholder' => trans('main.user.mobileno'), 'maxlength' => '10','minlength' => '10', 'onkeypress'=>'checkAlphaNumericWithComma(event)')) !!}
                             <!-- @if ($errors->has('mobile'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('mobile') }}</strong>
@@ -138,25 +138,26 @@
     @section('page_js')
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
 <script type="text/javascript">
-   
+ $(document).ready(function(){
+ 
    //To Show the client side validation
      $("#form").validate({
         ignore: ".ignore",
         rules: {
             fullname:"required",
-            mobile:"required",
+            mobile:{
+						required: true,
+						minlength: 10,
+				      	maxlength: 10
+					},
             email:"required",
             password:"required",
            
         },
-        
-
         messages:{
             fullname:"Full Name field is required",
-            mobile:"Mobile No is required",
             email:"Email field is required",
-            password:"Password field is required",
-                      
+            password:"Password field is required",     
         },
           
             //To check during tabing itself
@@ -170,6 +171,7 @@
             }
 
   });
-    </script>
-    @endsection
+ });
+ </script>
+@endsection
 <!--main content end-->

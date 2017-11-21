@@ -132,9 +132,9 @@ class WebServiceController extends Controller {
                       return $resultData;
                       } */
                     // To create a directory if not exists
-                    /*if (!(Storage::disk('s3')->exists('/uploads/user'))) {
+                    if (!(Storage::disk('s3')->exists('/uploads/user'))) {
                         Storage::disk('s3')->makeDirectory('/uploads/user/');
-                    }*/
+                    }
                     $userData['name'] = $data['fullname'];
                     $userData['email'] = ($data['email']) ? $data['email'] : "";
                     $userData['mobile'] = ($data['mobile']) ? $data['mobile'] : "";
@@ -167,7 +167,7 @@ class WebServiceController extends Controller {
 
                                     $userData['image'] = $imagePath . $data['profile_picture'];
                                     // To upload the images into Amazon S3
-                                   // $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $data['profile_picture'], $imageData, 'public');
+                                    $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $data['profile_picture'], $imageData, 'public');
                                 }
                             }
                             $registerStatus = User::create($data);
@@ -344,11 +344,11 @@ class WebServiceController extends Controller {
                         $userData['email'] = ($unameData->email) ? $unameData->email : '';
                         $userData['mobile'] = ($unameData->phone) ? $unameData->phone : '';
                         // To get the image form the Amazon s3 account
-                        //if (Storage::disk('s3')->exists('uploads/provider/' . $unameData->logo)) {	
-                            //$userData['logo'] = \Storage::disk('s3')->url('uploads/provider/' . $unameData->logo);
-                        //} else {
+                        if (Storage::disk('s3')->exists('uploads/provider/' . $unameData->logo)) {	
+                            $userData['logo'] = \Storage::disk('s3')->url('uploads/provider/' . $unameData->logo);
+                        } else {
                             $userData['logo'] = ($unameData->logo) ? $imagePath . $unameData->logo : "";
-                        //}
+                        }
                         if ($checkpwd) {
                             $resultData = array('status' => true, 'message' => 'User login available', 'result' => $userData);
                         } else {
@@ -1287,18 +1287,18 @@ class WebServiceController extends Controller {
                     }
                     $provider->fill($input);
                     if ($provider->save()) {
-                        $resultData = array('status' => true, 'message' => 'service provider updated successfully', 'result' => '');
+                        $resultData = array('status' => true, 'message' => 'Service provider updated successfully', 'result' => '');
                     } else {
-                        $resultData = array('status' => false, 'message' => 'could not update service provider', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Could not update service provider', 'result' => '');
                     }
                 } else {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1822,15 +1822,15 @@ class WebServiceController extends Controller {
                 $arrayData['rating'] = $data['rating'];
                 $arrayData['reviews'] = $data['reviews'];
                 if (Review::create($arrayData)) {
-                    $resultData = array('status' => true, 'message' => 'review added successfully', 'result' => $arrayData);
+                    $resultData = array('status' => true, 'message' => 'Review added successfully', 'result' => $arrayData);
                 } else {
-                    $resultData = array('status' => false, 'message' => 'review add failed', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Review add failed', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1852,18 +1852,18 @@ class WebServiceController extends Controller {
                     $arrayData['reviews'] = ($data['reviews']) ? $data['reviews'] : "";
                     $reviewDetails->fill($arrayData);
                     if ($reviewDetails->save()) {
-                        $resultData = array('status' => true, 'message' => 'review edited successfully', 'result' => $arrayData);
+                        $resultData = array('status' => true, 'message' => 'Review edited successfully', 'result' => $arrayData);
                     } else {
-                        $resultData = array('status' => false, 'message' => 'review edit failed', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Review edit failed', 'result' => '');
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid id', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid id', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }

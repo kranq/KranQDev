@@ -132,9 +132,9 @@ class WebServiceController extends Controller {
                       return $resultData;
                       } */
                     // To create a directory if not exists
-                    /*if (!(Storage::disk('s3')->exists('/uploads/user'))) {
+                    if (!(Storage::disk('s3')->exists('/uploads/user'))) {
                         Storage::disk('s3')->makeDirectory('/uploads/user/');
-                    }*/
+                    }
                     $userData['name'] = $data['fullname'];
                     $userData['email'] = ($data['email']) ? $data['email'] : "";
                     $userData['mobile'] = ($data['mobile']) ? $data['mobile'] : "";
@@ -167,16 +167,16 @@ class WebServiceController extends Controller {
 
                                     $userData['image'] = $imagePath . $data['profile_picture'];
                                     // To upload the images into Amazon S3
-                                   // $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $data['profile_picture'], $imageData, 'public');
+                                   $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $data['profile_picture'], $imageData, 'public');
                                 }
                             }
                             $registerStatus = User::create($data);
                             $id = User::max('id');
                             if ($registerStatus) {
                                 $userData['id'] = $id;
-                                $resultData = array('status' => true, 'message' => 'registered successfully', 'result' => $userData);
+                                $resultData = array('status' => true, 'message' => 'Registered successfully', 'result' => $userData);
                             } else {
-                                $resultData = array('status' => false, 'message' => 'registration failed', 'result' => '');
+                                $resultData = array('status' => false, 'message' => 'Registration failed', 'result' => '');
                             }
                         } else {
 							
@@ -274,24 +274,24 @@ class WebServiceController extends Controller {
                               } else {
                               $data['profile_picture'] = '';
                               } */
-                            $imageData = base64_decode($data['profile_url']);
-                            if (isset($data['profile_url']) && $data['profile_url']) {
-                                if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {
-                                    $data['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'], $data['fullname'], $logoPath);
-
-                                    $userData['image'] = $imagePath . $data['profile_picture'];
-                                    // To upload the images into Amazon S3
-                                    $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $data['profile_picture'], $imageData, 'public');
-                                }
-                            }
-
+							if ( isset($data['profile_picture']) ) { 
+								$imageData = base64_decode($data['profile_url']);
+								if (isset($data['profile_url']) && $data['profile_url']) {
+									if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {
+										$data['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'], $data['fullname'], $logoPath);
+										$userData['image'] = $imagePath . $data['profile_picture'];
+										// To upload the images into Amazon S3
+										$amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $data['profile_picture'], $imageData, 'public');
+									}
+								}
+							}
                             $registerStatus = User::create($data);
                             $id = User::max('id');
                             if ($registerStatus) {
                                 $userData['id'] = $id;
-                                $resultData = array('status' => true, 'message' => 'registered successfully', 'result' => $userData);
+                                $resultData = array('status' => true, 'message' => 'Registered successfully', 'result' => $userData);
                             } else {
-                                $resultData = array('status' => false, 'message' => 'registration failed', 'result' => '');
+                                $resultData = array('status' => false, 'message' => 'Registration failed', 'result' => '');
                             }
                         } else {
                             $userFacebook = User::get()->where('facebook_id', $data['facebook_id'])->count();
@@ -313,10 +313,10 @@ class WebServiceController extends Controller {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -352,19 +352,19 @@ class WebServiceController extends Controller {
                         if ($checkpwd) {
                             $resultData = array('status' => true, 'message' => 'User login available', 'result' => $userData);
                         } else {
-                            $resultData = array('status' => false, 'message' => 'invalid password', 'result' => '');
+                            $resultData = array('status' => false, 'message' => 'Invalid password', 'result' => '');
                         }
                     } else {
-                        $resultData = array('status' => false, 'message' => 'invalid username', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Invalid username', 'result' => '');
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid Input', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -421,9 +421,9 @@ class WebServiceController extends Controller {
             $data['howitWorksData'] = $howitWorksData;
             $data['privacyPolicyData'] = $privacyPolicyData;
             $data['termsConditionsData'] = $termsConditionsData;
-            $resultData = array('status' => true, 'message' => 'request success', 'result' => $data);
+            $resultData = array('status' => true, 'message' => 'Request success', 'result' => $data);
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return json_encode($resultData);
     }
@@ -441,7 +441,7 @@ class WebServiceController extends Controller {
                 if ($data['mobile']) {
                     $mobileExists = User::get()->where('mobile', $data['mobile'])->count();
                     if ($mobileExists == 0) {
-                        $resultData = array('status' => false, 'message' => 'mobile not registered yet', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Mobile not registered yet', 'result' => '');
                     } else {
                         $mobileOTP = $this->generateOTP(); //get the OTP from traits method
                         $authKey = env("SMS_AUTH_KEY", "173397Ad58dSrs59afe736");
@@ -464,22 +464,22 @@ class WebServiceController extends Controller {
                         if ($otpStatus == 200) {
                             $otpStoreStatus = User::where('mobile', '=', $data['mobile'])->update(['otp' => $mobileOTP, 'mobile_verification_status' => '0', 'resend_otp_status' => '0']);
                             if ($otpStoreStatus) {
-                                $resultData = array('status' => true, 'message' => 'mobile registered. OTP is sent', 'result' => '');
+                                $resultData = array('status' => true, 'message' => 'Mobile registered. OTP is sent', 'result' => '');
                             } else {
                                 $resultData = array('status' => false, 'message' => 'OTP sent but could not register in database', 'result' => '');
                             }
                         } else {
-                            $resultData = array('status' => false, 'message' => 'mobile registered. OTP could not be sent', 'result' => '');
+                            $resultData = array('status' => false, 'message' => 'Mobile registered. OTP could not be sent', 'result' => '');
                         }
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid input', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -523,19 +523,19 @@ class WebServiceController extends Controller {
                                 $resultData = array('status' => false, 'message' => 'OTP is sent again but could not be stored', 'result' => '');
                             }
                         } else {
-                            $resultData = array('status' => false, 'message' => 'resend OTP failed', 'result' => '');
+                            $resultData = array('status' => false, 'message' => 'Resend OTP failed', 'result' => '');
                         }
                     } else {
-                        $resultData = array('status' => false, 'message' => 'invalid mobile number', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Invalid mobile number', 'result' => '');
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid input', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -555,7 +555,7 @@ class WebServiceController extends Controller {
                     $basePath = URL::to('/') . '/..';
                     $imagePath = $basePath . trans('main.user_path');
                     if ($mobileExists == 0) {
-                        $resultData = array('status' => false, 'message' => 'invalid OTP', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Invalid OTP', 'result' => '');
                     } else {
                         $user = User::get()->where('mobile', $data['mobile'])->where('otp', $data['otp'])->first();
                         $userData['id'] = $user->id;
@@ -573,13 +573,13 @@ class WebServiceController extends Controller {
                         $resultData = array('status' => true, 'message' => 'OTP verification success', 'result' => $userData);
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid input', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -608,9 +608,9 @@ class WebServiceController extends Controller {
                 $categoryData[$index]['category_service_data'] = $this->getCategoryServices($category->id);
             }
             $data['categoryData'] = $categoryData;
-            $resultData = array('status' => true, 'message' => 'request success', 'result' => $data);
+            $resultData = array('status' => true, 'message' => 'Request success', 'result' => $data);
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -674,7 +674,7 @@ class WebServiceController extends Controller {
                         }
                         $resultData['id'] = $data['id'];
                         $resultData['serviceProviderData'] = $serviceProviderData;
-                        $resultData = array('status' => true, 'message' => 'request success', 'result' => $resultData);
+                        $resultData = array('status' => true, 'message' => 'Request success', 'result' => $resultData);
                     } else {
                         $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
                     }
@@ -682,10 +682,10 @@ class WebServiceController extends Controller {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -716,15 +716,15 @@ class WebServiceController extends Controller {
                 $cmsData = CmsPages::get()->where('slug', $slug);
                 $cmsData = $cmsData->toArray();
                 if ($cmsData) {
-                    $resultData = array('status' => true, 'message' => 'request success', 'result' => $cmsData);
+                    $resultData = array('status' => true, 'message' => 'Request success', 'result' => $cmsData);
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid slug', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid slug', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -750,18 +750,18 @@ class WebServiceController extends Controller {
                     });
                     $feedbackStatus = Feedback::create($data);
                     if ($feedbackStatus) {
-                        $resultData = array('status' => true, 'message' => 'feedback sent successfully', 'result' => '');
+                        $resultData = array('status' => true, 'message' => 'Feedback sent successfully', 'result' => '');
                     } else {
-                        $resultData = array('status' => false, 'message' => 'feedback could not be sent', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Feedback could not be sent', 'result' => '');
                     }
                 } else {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -792,18 +792,18 @@ class WebServiceController extends Controller {
                     }
                     $serviceImageStatus = ServiceProviderDetails::create($data);
                     if ($serviceImageStatus) {
-                        $resultData = array('status' => true, 'message' => 'added successfully', 'result' => '');
+                        $resultData = array('status' => true, 'message' => 'Added successfully', 'result' => '');
                     } else {
-                        $resultData = array('status' => false, 'message' => 'could not add', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Could not add', 'result' => '');
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid Input', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -840,21 +840,21 @@ class WebServiceController extends Controller {
                             $userData['logo'] = ($unameData->logo) ? $imagePath . $unameData->logo : "";
                         }
                         if ($checkpwd) {
-                            $resultData = array('status' => true, 'message' => 'service provider login available', 'result' => $userData);
+                            $resultData = array('status' => true, 'message' => 'Service provider login available', 'result' => $userData);
                         } else {
-                            $resultData = array('status' => false, 'message' => 'invalid password', 'result' => '');
+                            $resultData = array('status' => false, 'message' => 'Invalid password', 'result' => '');
                         }
                     } else {
-                        $resultData = array('status' => false, 'message' => 'invalid username', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Invalid username', 'result' => '');
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid Input', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -955,9 +955,9 @@ class WebServiceController extends Controller {
                             } else {
                                 $userData['logo'] = ($insertData['logo']) ? $imagePath . $insertData['logo'] : "";
                             }
-                            $resultData = array('status' => true, 'message' => 'registered successfully', 'result' => $userData);
+                            $resultData = array('status' => true, 'message' => 'Registered successfully', 'result' => $userData);
                         } else {
-                            $resultData = array('status' => false, 'message' => 'registration failed', 'result' => '');
+                            $resultData = array('status' => false, 'message' => 'Registration failed', 'result' => '');
                         }
                     } else {
                         $resultData = array('status' => false, 'message' => 'Email exist already', 'result' => '');
@@ -966,10 +966,10 @@ class WebServiceController extends Controller {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -997,18 +997,18 @@ class WebServiceController extends Controller {
                             $message->to($data['email'])->subject('Feedback');
                             //$message->to('joanbritto18@gmail.com', 'Joan Britto')->subject('Reset Password');
                         });
-                        $resultData = array('status' => true, 'message' => 'password reset link is sent to the email id', 'result' => '');
+                        $resultData = array('status' => true, 'message' => 'Password reset link is sent to the email id', 'result' => '');
                     } else {
-                        $resultData = array('status' => false, 'message' => 'invalid email', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Invalid email', 'result' => '');
                     }
                 } else {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1035,24 +1035,24 @@ class WebServiceController extends Controller {
                             $cryptedPassword = bcrypt($data['new_password']);
                             $updateQuery = ServiceProvider::where('email', $data['email'])->update(['password' => $cryptedPassword]);
                             if ($updateQuery) {
-                                $resultData = array('status' => true, 'message' => 'password changed successfully', 'result' => '');
+                                $resultData = array('status' => true, 'message' => 'Password changed successfully', 'result' => '');
                             } else {
-                                $resultData = array('status' => true, 'message' => 'password could not be changed', 'result' => '');
+                                $resultData = array('status' => true, 'message' => 'Password could not be changed', 'result' => '');
                             }
                         } else {
-                            $resultData = array('status' => false, 'message' => 'invalid old password', 'result' => '');
+                            $resultData = array('status' => false, 'message' => 'Invalid old password', 'result' => '');
                         }
                     } else {
-                        $resultData = array('status' => false, 'message' => 'invalid email', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Invalid email', 'result' => '');
                     }
                 } else {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
 
         return $resultData;
@@ -1096,12 +1096,12 @@ class WebServiceController extends Controller {
                     $arrayData[$index]['category_services'] = $serviceArray;
                 }
                 $data['categories_list'] = $arrayData;
-                $resultData = array('status' => true, 'message' => 'request success', 'result' => $data);
+                $resultData = array('status' => true, 'message' => 'Request success', 'result' => $data);
             } else {
                 $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1133,7 +1133,7 @@ class WebServiceController extends Controller {
                         $arrayData['address'] = ($spData->address) ? $spData->address : "";
                         $arrayData['phone'] = ($spData->phone) ? $spData->phone : "";
                         $arrayData['website_link'] = ($spData->website_link) ? $spData->website_link : "";
-                        $resultData = array('status' => true, 'message' => 'request success', 'result' => $arrayData);
+                        $resultData = array('status' => true, 'message' => 'Request success', 'result' => $arrayData);
                     } else {
                         $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
                     }
@@ -1141,10 +1141,10 @@ class WebServiceController extends Controller {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1176,7 +1176,7 @@ class WebServiceController extends Controller {
                         $arrayData['reviews'] = ($reviewDetails['reviews']) ? $reviewDetails['reviews'] : "";
                         $arrayData['ratings'] = ($reviewDetails['rating']) ? $reviewDetails['rating'] : "";
                         $arrayData['posted_on'] = ($reviewDetails['postted_on']) ? KranHelper::formatDate($reviewDetails['postted_on']) : "";
-                        $resultData = array('status' => true, 'message' => 'request success', 'result' => $arrayData);
+                        $resultData = array('status' => true, 'message' => 'Request success', 'result' => $arrayData);
                     } else {
                         $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
                     }
@@ -1184,10 +1184,10 @@ class WebServiceController extends Controller {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1287,18 +1287,18 @@ class WebServiceController extends Controller {
                     }
                     $provider->fill($input);
                     if ($provider->save()) {
-                        $resultData = array('status' => true, 'message' => 'service provider updated successfully', 'result' => '');
+                        $resultData = array('status' => true, 'message' => 'Service provider updated successfully', 'result' => '');
                     } else {
-                        $resultData = array('status' => false, 'message' => 'could not update service provider', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Could not update service provider', 'result' => '');
                     }
                 } else {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1341,7 +1341,7 @@ class WebServiceController extends Controller {
                     }
                     if ($arrayData) {
                         $data['reviews_list'] = $arrayData;
-                        $resultData = array('status' => true, 'message' => 'request success', 'result' => $data);
+                        $resultData = array('status' => true, 'message' => 'Request success', 'result' => $data);
                     } else {
                         $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
                     }
@@ -1349,10 +1349,10 @@ class WebServiceController extends Controller {
                     $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1402,7 +1402,7 @@ class WebServiceController extends Controller {
                     }
                     if ($arrayData) {
                         $data['users_list'] = $arrayData;
-                        $resultData = array('status' => true, 'message' => 'request success', 'result' => $data);
+                        $resultData = array('status' => true, 'message' => 'Request success', 'result' => $data);
                     } else {
                         $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
                     }
@@ -1410,10 +1410,10 @@ class WebServiceController extends Controller {
                     $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1457,13 +1457,13 @@ class WebServiceController extends Controller {
                         $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid input', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'request' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'request' => '');
         }
         return $resultData;
     }
@@ -1522,21 +1522,21 @@ class WebServiceController extends Controller {
                         }
                         $user->fill($input);
                         if ($user->save()) {
-                            $resultData = array('status' => true, 'message' => 'customer updated successfully', 'result' => '');
+                            $resultData = array('status' => true, 'message' => 'Customer updated successfully', 'result' => '');
                         } else {
-                            $resultData = array('status' => false, 'message' => 'could not update customer', 'result' => '');
+                            $resultData = array('status' => false, 'message' => 'Could not update customer', 'result' => '');
                         }
                     } else {
-                        $resultData = array('status' => false, 'message' => 'email already exist', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Email already exist', 'result' => '');
                     }
                 } else {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1617,18 +1617,18 @@ class WebServiceController extends Controller {
                             }
                         }
                         $data['service_provider_images'] = $arrayData;
-                        $resultData = array('status' => true, 'message' => 'request success', 'result' => $data);
+                        $resultData = array('status' => true, 'message' => 'Request success', 'result' => $data);
                     } else {
-                        $resultData = array('status' => false, 'message' => 'invalid id', 'result' => "");
+                        $resultData = array('status' => false, 'message' => 'Invalid id', 'result' => "");
                     }
                 } else {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1671,16 +1671,16 @@ class WebServiceController extends Controller {
                         $arrayData['user_id'] = ($inputData['user_id']) ? $inputData['user_id'] : "";
                         $arrayData['reviews'] = ($inputData['reviews']) ? $inputData['reviews'] : "";
                         $arrayData['rating'] = ($inputData['rating']) ? $inputData['rating'] : "";
-                        $resultData = array('status' => true, 'message' => 'review added/edited successfully', 'result' => $arrayData);
+                        $resultData = array('status' => true, 'message' => 'Review added/edited successfully', 'result' => $arrayData);
                     } else {
-                        $resultData = array('status' => false, 'message' => 'review add/edit failed', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Review add/edit failed', 'result' => '');
                     }
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1725,21 +1725,21 @@ class WebServiceController extends Controller {
                                 $arrayData[$index]['posted_on'] = ($value['postted_on']) ? KranHelper::formatDate($value['postted_on']) : "";
                             }
                             //$data['reviews_list'] = $arrayData;
-                            $resultData = array('status' => true, 'message' => 'request success', 'result' => $arrayData);
+                            $resultData = array('status' => true, 'message' => 'Request success', 'result' => $arrayData);
                         } else {
                             $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
                         }
                     } else {
-                        $resultData = array('status' => false, 'message' => 'invalid id', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Invalid id', 'result' => '');
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid input', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1789,21 +1789,21 @@ class WebServiceController extends Controller {
                                 $arrayData[$index]['posted_on'] = ($value->postted_on) ? KranHelper::formatDate($value->postted_on) : "";
                             }
                             //$data['reviews_list'] = $arrayData;
-                            $resultData = array('status' => true, 'message' => 'request success', 'result' => $arrayData);
+                            $resultData = array('status' => true, 'message' => 'Request success', 'result' => $arrayData);
                         } else {
                             $resultData = array('status' => false, 'message' => 'No Records Found', 'result' => '');
                         }
                     } else {
-                        $resultData = array('status' => false, 'message' => 'invalid id', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Invalid id', 'result' => '');
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid input', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid input', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1822,15 +1822,15 @@ class WebServiceController extends Controller {
                 $arrayData['rating'] = $data['rating'];
                 $arrayData['reviews'] = $data['reviews'];
                 if (Review::create($arrayData)) {
-                    $resultData = array('status' => true, 'message' => 'review added successfully', 'result' => $arrayData);
+                    $resultData = array('status' => true, 'message' => 'Review added successfully', 'result' => $arrayData);
                 } else {
-                    $resultData = array('status' => false, 'message' => 'review add failed', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Review add failed', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }
@@ -1852,18 +1852,18 @@ class WebServiceController extends Controller {
                     $arrayData['reviews'] = ($data['reviews']) ? $data['reviews'] : "";
                     $reviewDetails->fill($arrayData);
                     if ($reviewDetails->save()) {
-                        $resultData = array('status' => true, 'message' => 'review edited successfully', 'result' => $arrayData);
+                        $resultData = array('status' => true, 'message' => 'Review edited successfully', 'result' => $arrayData);
                     } else {
-                        $resultData = array('status' => false, 'message' => 'review edit failed', 'result' => '');
+                        $resultData = array('status' => false, 'message' => 'Review edit failed', 'result' => '');
                     }
                 } else {
-                    $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+                    $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
                 }
             } else {
-                $resultData = array('status' => false, 'message' => 'invalid id', 'result' => '');
+                $resultData = array('status' => false, 'message' => 'Invalid id', 'result' => '');
             }
         } catch (Exception $e) {
-            $resultData = array('status' => false, 'message' => 'invalid request', 'result' => '');
+            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
         }
         return $resultData;
     }

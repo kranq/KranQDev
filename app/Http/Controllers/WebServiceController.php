@@ -1482,7 +1482,7 @@ class WebServiceController extends Controller {
                     $user = User::findorFail($data['id']);
                     $checkEmailCount = User::where('id', '!=', $data['id'])->where('email', $data['email'])->count();
                     $checkEmail = User::where('id', '!=', $data['id'])->where('email', $data['email'])->get();
-                    if ($checkEmailCount == 0) {
+                    if ($checkEmailCount) {
                         /* if($data['mobile'] != $user->mobile){
                           $resultData = array('status'=>false,'message'=>'you are not allowed to modify the mobile number','result'=>'');
                           return $resultData;

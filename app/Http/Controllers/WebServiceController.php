@@ -918,10 +918,10 @@ class WebServiceController extends Controller {
                                     $file = $row_photo['image_no'] . '.jpg';
                                     $dir = trans('main.provider_path') . $id . '/'; //file upload path
                                     // To check the object is exists or not
-                                    if (Storage::disk('s3')->exists('uploads/provider/' . $row_photo['name'])) {
+                                    //if (Storage::disk('s3')->exists('uploads/provider/' . $row_photo['name'])) {
                                         // To delete the object from Amazon S3 repository
-                                        Storage::disk('s3')->delete('uploads/provider/' . $row_photo['name']);
-                                    }
+                                      //  Storage::disk('s3')->delete('uploads/provider/' . $row_photo['name']);
+                                   // }
                                     $checkImageExist = ServiceProviderImages::where('service_provider_id', $id)->where('image_name', $file)->count();
                                     if ($checkImageExist == 0) {
                                         if (!filter_var($row_photo['name'], FILTER_VALIDATE_URL)) {

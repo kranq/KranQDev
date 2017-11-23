@@ -341,9 +341,9 @@ class WebServiceController extends Controller {
                         //compare the entered password with the password in the db with the given uname
                         $checkpwd = Hash::check($data['password'], $unameData->password);
                         $userData['id'] = $unameData->id;
-                        $userData['name'] = ($unameData->name_sp) ? $unameData->name_sp : '';
+                        $userData['name'] = ($unameData->fullname) ? $unameData->fullname : '';
                         $userData['email'] = ($unameData->email) ? $unameData->email : '';
-                        $userData['mobile'] = ($unameData->phone) ? $unameData->phone : '';
+                        $userData['mobile'] = ($unameData->mobile) ? $unameData->mobile : '';
                         // To get the image form the Amazon s3 account
                         //if (Storage::disk('s3')->exists('uploads/provider/' . $unameData->logo)) {	
                             //$userData['logo'] = \Storage::disk('s3')->url('uploads/provider/' . $unameData->logo);

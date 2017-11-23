@@ -123,6 +123,7 @@ class WebServiceController extends Controller {
                 if ($data['fullname'] && $data['email']) {
                     $data['email'] = ($data['email']) ? $data['email'] : "";
                     $data['mobile'] = ($data['mobile']) ? $data['mobile'] : "";
+					$data['facebook_id'] = (isset($data['facebook_id'])) ? $data['facebook_id'] : "";
                     $basePath = URL::to('/') . '/..';
                     $imagePath = $basePath . trans('main.user_path');
                     $logoPath = trans('main.user_path');

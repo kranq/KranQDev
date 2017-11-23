@@ -889,7 +889,7 @@ class WebServiceController extends Controller {
                         $insertData['closing_hrs'] = (isset($data['closing_hrs']) && $data['closing_hrs']) ? $data['closing_hrs'] : "";
                         $insertData['working_days'] = (isset($data['working_days']) && $data['working_days']) ? $data['working_days'] : "" ;
                         $insertData['phone'] = (isset($data['phone']) && $data['phone']) ? $data['phone'] : "";
-                        $insertData['website_link'] = (isset($data['website_link']) && $data['website_link'] : "";
+                        $insertData['website_link'] = (isset($data['website_link']) && $data['website_link']) ? $data['website_link'] : "";
                         $insertData['googlemap_latitude'] = (isset($data['latitude']) && $data['latitude']) ? $data['latitude'] : "";
                         $insertData['googlemap_longitude'] = (isset($data['longitude']) && $data['longitude']) ? $data['longitude'] : "";
                         $insertData['email'] = $data['email'];

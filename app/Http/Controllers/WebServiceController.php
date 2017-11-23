@@ -1163,7 +1163,7 @@ class WebServiceController extends Controller {
                     if ($reviewDetails) {
                         $user = User::find($reviewDetails['user_id']);
                         $basePath = URL::to('/') . '/..';
-                        $imagePath = $basePath . trans('main.user_path');
+                        //$imagePath = $basePath . trans('main.user_path');
                         $arrayData['id'] = $reviewDetails['id'];
                         $arrayData['service_provider_name'] = ($reviewDetails['service_provider_id']) ? ServiceProvider::getServiceNameById($reviewDetails['service_provider_id']) : "";
                         $arrayData['user'] = ($reviewDetails['user_id']) ? User::getUserNameById($reviewDetails['user_id']) : "";
@@ -1171,7 +1171,7 @@ class WebServiceController extends Controller {
                         if (Storage::disk('s3')->exists('uploads/user/' . $user->profile_picture)) {
                             $arrayData['user_image'] = \Storage::disk('s3')->url('uploads/user/' . $user->profile_picture);
                         } else {
-                            $arrayData['user_image'] = $imagePath . $user->profile_picture;
+                            $arrayData['user_image'] = $basePath . 'uploads/no_image.jpeg'; //$imagePath . $user->profile_picture;
                         }
                         $arrayData['reviews'] = ($reviewDetails['reviews']) ? $reviewDetails['reviews'] : "";
                         $arrayData['ratings'] = ($reviewDetails['rating']) ? $reviewDetails['rating'] : "";

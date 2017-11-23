@@ -146,7 +146,7 @@ class WebServiceController extends Controller {
                             return $resultData;
                         }
                         $EmailAndMobileExists = User::where(function ($q) use ($data) {
-                                    return $q->where('email', $data['email'])->orWhere('mobile', $data['mobile']);
+                                    return $q->where('email', $data['email']);
                                 })->count();
                         if ($EmailAndMobileExists == 0) {
                             $data['password'] = bcrypt($data['password']);

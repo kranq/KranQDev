@@ -884,14 +884,14 @@ class WebServiceController extends Controller {
                         $insertData['status_owner_manager'] = (isset($data['status_owner_manager']) && $data['status_owner_manager']) ? $data['status_owner_manager'] : "";
                         $insertData['owner_name'] = (isset($data['owner_name']) && $data['owner_name']) ? $data['owner_name'] : "";
                         $insertData['owner_phone'] = (isset($data['owner_phone']) && $data['owner_phone']) ? $data['owner_phone'] : "";
-                        $insertData['owner_designation'] = $data['owner_designation'];
-                        $insertData['opening_hrs'] = $data['opening_hrs'];
-                        $insertData['closing_hrs'] = $data['closing_hrs'];
-                        $insertData['working_days'] = $data['working_days'];
-                        $insertData['phone'] = $data['phone'];
-                        $insertData['website_link'] = $data['website_link'];
-                        $insertData['googlemap_latitude'] = $data['latitude'];
-                        $insertData['googlemap_longitude'] = $data['longitude'];
+                        $insertData['owner_designation'] = (isset($data['owner_designation']) && $data['owner_designation']) ? $data['owner_designation'] : "";
+                        $insertData['opening_hrs'] = (isset($data['opening_hrs']) && $data['opening_hrs']) ? $data['opening_hrs'] : "";
+                        $insertData['closing_hrs'] = (isset($data['closing_hrs']) && $data['closing_hrs']) ? $data['closing_hrs'] : "";
+                        $insertData['working_days'] = (isset($data['working_days']) && $data['working_days']) ? $data['working_days'] : "" ;
+                        $insertData['phone'] = (isset($data['phone']) && $data['phone']) ? $data['phone'] : "";
+                        $insertData['website_link'] = (isset($data['website_link']) && $data['website_link'] : "";
+                        $insertData['googlemap_latitude'] = (isset($data['latitude']) && $data['latitude']) ? $data['latitude'] : "";
+                        $insertData['googlemap_longitude'] = (isset($data['longitude']) && $data['longitude']) ? $data['longitude'] : "";
                         $insertData['email'] = $data['email'];
                         $insertData['created_at'] = date('Y-m-d H:i:s');
 

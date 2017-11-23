@@ -345,11 +345,11 @@ class WebServiceController extends Controller {
                         $userData['email'] = ($unameData->email) ? $unameData->email : '';
                         $userData['mobile'] = ($unameData->mobile) ? $unameData->mobile : '';
                         // To get the image form the Amazon s3 account
-                        //if (Storage::disk('s3')->exists('uploads/provider/' . $unameData->logo)) {	
-                            //$userData['logo'] = \Storage::disk('s3')->url('uploads/provider/' . $unameData->logo);
-                        //} else {
+                        if (Storage::disk('s3')->exists('uploads/provider/' . $unameData->logo)) {	
+                            $userData['logo'] = \Storage::disk('s3')->url('uploads/provider/' . $unameData->logo);
+                        } else {
                             $userData['logo'] = ($unameData->logo) ? $imagePath . $unameData->logo : "";
-                        //}
+                        }
                         if ($checkpwd) {
                             $resultData = array('status' => true, 'message' => 'User login available', 'result' => $userData);
                         } else {
@@ -605,7 +605,6 @@ class WebServiceController extends Controller {
                 } else {
                     $categoryData[$index]['category_image'] = ($category->category_image) ? $imagePath . $category->category_image : "";
                 }
-
                 $categoryData[$index]['category_service_data'] = $this->getCategoryServices($category->id);
             }
             $data['categoryData'] = $categoryData;

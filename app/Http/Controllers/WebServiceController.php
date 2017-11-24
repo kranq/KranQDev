@@ -140,9 +140,8 @@ class WebServiceController extends Controller {
                             return $resultData;
                         }
                         $EmailAndMobileExists = User::where(function ($q) use ($data) {
-                                    return $q->where('email', $data['email']);
-                                })->count();
-						
+													return $q->where('email', $data['email']);
+												})->count();
                         if ($EmailAndMobileExists == 0) {
                             $data['password'] = bcrypt($data['password']);
                             $data['register_mode'] = $this->getRegisterMode($data['register_mode']);
@@ -230,6 +229,7 @@ class WebServiceController extends Controller {
                             $resultData = array('status' => true, 'message' => 'You already have an account with the given details', 'result' => $userData);
                         }
                     } else {
+						$resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
                     }
                 } else {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');

@@ -116,7 +116,7 @@ class WebServiceController extends Controller {
      * @param array
      * @return array
      */
-    public function register(Request $request) {
+	 public function register(Request $request) {
         try {
             $data = $request->all();
             if ($data) {
@@ -127,11 +127,6 @@ class WebServiceController extends Controller {
                     $basePath = URL::to('/') . '/..';
                     $imagePath = $basePath . trans('main.user_path');
                     $logoPath = trans('main.user_path');
-                    //$emailCount = User::where('email',$data['email'])->count();
-                    /* if($emailCount != 0){
-                      $resultData = array('status'=>false,'message'=>'Email exists already','result'=>'');
-                      return $resultData;
-                      } */
                     // To create a directory if not exists
                     if (!(Storage::disk('s3')->exists('/uploads/user'))) {
                         Storage::disk('s3')->makeDirectory('/uploads/user/');
@@ -139,7 +134,6 @@ class WebServiceController extends Controller {
                     $userData['name'] = $data['fullname'];
                     $userData['email'] = ($data['email']) ? $data['email'] : "";
                     $userData['mobile'] = ($data['mobile']) ? $data['mobile'] : "";
-
                     if ($data['register_mode'] == 'Email') {
                         if (!isset($data['email']) && $data['email']) {
                             $resultData = array('status' => false, 'message' => 'Email id is mandatory', 'result' => '');
@@ -148,24 +142,16 @@ class WebServiceController extends Controller {
                         $EmailAndMobileExists = User::where(function ($q) use ($data) {
                                     return $q->where('email', $data['email']);
                                 })->count();
+						
                         if ($EmailAndMobileExists == 0) {
                             $data['password'] = bcrypt($data['password']);
                             $data['register_mode'] = $this->getRegisterMode($data['register_mode']);
-                            //$data['been_there_status'] = ($data['been_there_status']=='Yes') ? 1 : 2;
                             $data['registered_on'] = date('Y-m-d H:i:s');
                             $data['status'] = 'Active';
-                            /* $userProfilePath = '/uploads/user/';
-                              if(isset($data['profile_picture'])){
-                              $data['profile_picture'] = KranHelper::convertStringToImage($data['profile_picture'],$data['fullname'],$userProfilePath);
-                              } else {
-                              $data['profile_picture'] = '';
-                              } */
-                            
-                            if (isset($data['profile_url']) && $data['profile_url']) {
-								$imageData = base64_decode($data['profile_url']);
-                                if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {
-                                    $data['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'], $data['fullname'], $logoPath);
-
+                            if (isset($data['profile_picture']) && $data['profile_picture']) {
+								$imageData = base64_decode($data['profile_picture']);
+                                if (!filter_var($data['profile_picture'], FILTER_VALIDATE_URL)) {
+                                    $data['profile_picture'] = KranHelper::convertStringToImage($data['profile_picture'], $data['fullname'], $logoPath);
                                     $userData['image'] = $imagePath . $data['profile_picture'];
                                     // To upload the images into Amazon S3
                                    $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $data['profile_picture'], $imageData, 'public');
@@ -180,80 +166,19 @@ class WebServiceController extends Controller {
                                 $resultData = array('status' => false, 'message' => 'Registration failed', 'result' => '');
                             }
                         } else {
-							
-                            //$userFacebook = User::get()->where('facebook_id', ($data['facebook_id']) ? $data['facebook_id'] : '')->count();
-                            //$userEmail = User::get()->where('em1ail', '=', $data['email'])->count();
                             if ($EmailAndMobileExists != 0) {
                                 $user = $EmailAndMobileExist = User::where(function ($q) use ($data) {
                                     return $q->where('email', $data['email'])->orWhere('mobile', $data['mobile']);
                                 })->first();
                             }
                             $userData['id'] = $user->id;
-                            $userData['image'] = ($user->profile_picture) ? $imagePath . $user->profile_picture : "";
+							if (Storage::disk('s3')->exists('uploads/user/' . $user->profile_picture)) {	
+								$userData['image'] = \Storage::disk('s3')->url('uploads/user/' . $user->profile_picture);
+							} else {
+								$userData['image'] = ($user->profile_picture) ? $imagePath . $user->profile_picture : "";
+							}
                             $resultData = array('status' => true, 'message' => 'You already have an account with the given details', 'result' => $userData);
                         }
-                        ////$emailExists = User::get()->where('email',$data['email'])->count();
-//                        $mobileExists = User::get()->where('mobile', $data['mobile'])->count();
-//                        if ($mobileExists == 0) {
-//                            //$data['password'] = bcrypt($data['password']);
-//                            $data['password'] = bcrypt($data['fullname']);
-//                            $data['register_mode'] = $this->getRegisterMode($data['register_mode']);
-//                            //$data['been_there_status'] = ($data['been_there_status']=='Yes') ? 1 : 2;
-//                            $data['registered_on'] = date('Y-m-d H:i:s');
-//                            $data['status'] = 'Active';
-//                            if (isset($data['profile_url']) && $data['profile_url']) {
-//                                $imageData = base64_decode($data['profile_url']);
-//                                if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {
-//                                    $input['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'], $data['fullname'], $logoPath);
-//                                    $userData['image'] = $imagePath . $input['profile_picture'];
-//                                    // To upload the images into Amazon S3
-//                                    $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $input['profile_picture'], $imageData, 'public');
-//                                }
-//                            }
-//
-//                            $registerStatus = User::create($data);
-//                            $id = User::max('id');
-//                            if ($registerStatus) {
-//                                $userData['id'] = $id;
-//
-//                                /* To send OTP */
-//                                $mobileOTP = $this->generateOTP(); //get the OTP from traits method
-//                                $authKey = env("SMS_AUTH_KEY", "173397Ad58dSrs59afe736");
-//                                $senderId = env("SMS_SENDER_ID", "KRQ102234");
-//                                $route = env("SMS_ROUTE", "4");
-//                                $smsURI = env("SMS_URI", "https://control.msg91.com/api/sendhttp.php");
-//                                $message = "Your OTP to verify the mobile number is " . $mobileOTP;
-//
-//                                $client = new Client(); //GuzzleHttp\Client
-//                                $result = $client->post($smsURI, [
-//                                    'form_params' => [
-//                                        'authkey' => $authKey,
-//                                        'mobiles' => $data['mobile'],
-//                                        'message' => $message,
-//                                        'sender' => $senderId,
-//                                        'route' => $route
-//                                    ]
-//                                ]);
-//                                $otpStatus = $result->getStatusCode(); // to get the status code
-//                                if ($otpStatus == 200) {
-//                                    $otpStoreStatus = User::where('mobile', '=', $data['mobile'])->update(['otp' => $mobileOTP, 'mobile_verification_status' => '0', 'resend_otp_status' => '0']);
-//                                    if ($otpStoreStatus) {
-//                                        $resultData = array('status' => true, 'message' => 'registered successfully. OTP is sent', 'result' => '');
-//                                    } else {
-//                                        $resultData = array('status' => false, 'message' => 'registered successfully. OTP sent but could not be registered (OTP) in database', 'result' => '');
-//                                    }
-//                                } else {
-//                                    $resultData = array('status' => false, 'message' => 'registered successfully. OTP could not be sent', 'result' => '');
-//                                }
-//                                /* End send OTP */
-//
-//                                //$resultData = array('status'=>true,'message'=>'registered successfully','result'=>$userData);
-//                            } else {
-//                                $resultData = array('status' => false, 'message' => 'registration failed', 'result' => '');
-//                            }
-//                        } else {
-//                            $resultData = array('status' => false, 'message' => 'Mobile exists already', 'result' => '');
-//                        }
                     } else if ($data['register_mode'] == 'Facebook') {
                         if (!isset($data['facebook_id']) && $data['facebook_id']) {
                             $resultData = array('status' => false, 'message' => 'facebook id is mandatory', 'result' => '');
@@ -266,15 +191,8 @@ class WebServiceController extends Controller {
 
                             $data['password'] = bcrypt($data['fullname']);
                             $data['register_mode'] = $this->getRegisterMode($data['register_mode']);
-                            //$data['been_there_status'] = ($data['been_there_status']=='Yes') ? 1 : 2;
                             $data['registered_on'] = date('Y-m-d H:i:s');
                             $data['status'] = 'Active';
-                            /* $userProfilePath = '/uploads/user/';
-                              if(isset($data['profile_picture'])){
-                              $data['profile_picture'] = KranHelper::convertStringToImage($data['profile_picture'],$data['fullname'],$userProfilePath);
-                              } else {
-                              $data['profile_picture'] = '';
-                              } */
 							if ( isset($data['profile_picture']) ) { 
 								$imageData = base64_decode($data['profile_url']);
 								if (isset($data['profile_url']) && $data['profile_url']) {
@@ -302,13 +220,16 @@ class WebServiceController extends Controller {
                             } else if ($userEmail != 0) {
                                 $user = User::get()->where('email', $data['email'])->first();
                             }
-
                             $userData['id'] = $user->id;
-                            $userData['image'] = ($user->profile_picture) ? $imagePath . $user->profile_picture : "";
+							if (Storage::disk('s3')->exists('uploads/user/' . $user->profile_picture)) {	
+								$userData['image'] = \Storage::disk('s3')->url('uploads/user/' . $user->profile_picture);
+							} else {
+								$userData['image'] = ($user->profile_picture) ? $imagePath . $user->profile_picture : "";
+							}
+                            //$userData['image'] = ($user->profile_picture) ? $imagePath . $user->profile_picture : "";
                             $resultData = array('status' => true, 'message' => 'You already have an account with the given details', 'result' => $userData);
                         }
                     } else {
-                        
                     }
                 } else {
                     $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
@@ -321,6 +242,196 @@ class WebServiceController extends Controller {
         }
         return $resultData;
     }
+    //public function register(Request $request) {
+//        try {
+//            $data = $request->all();
+//            if ($data) {
+//                if ($data['fullname'] && $data['email']) {
+//                    $data['email'] = ($data['email']) ? $data['email'] : "";
+//                    $data['mobile'] = ($data['mobile']) ? $data['mobile'] : "";
+//					$data['facebook_id'] = (isset($data['facebook_id'])) ? $data['facebook_id'] : "";
+//                    $basePath = URL::to('/') . '/..';
+//                    $imagePath = $basePath . trans('main.user_path');
+//                    $logoPath = trans('main.user_path');
+//                    //$emailCount = User::where('email',$data['email'])->count();
+//                    // To create a directory if not exists
+//                    if (!(Storage::disk('s3')->exists('/uploads/user'))) {
+//                        Storage::disk('s3')->makeDirectory('/uploads/user/');
+//                    }
+//                    $userData['name'] = $data['fullname'];
+//                    $userData['email'] = ($data['email']) ? $data['email'] : "";
+//                    $userData['mobile'] = ($data['mobile']) ? $data['mobile'] : "";
+//
+//                    if ($data['register_mode'] == 'Email') {
+//                        if (!isset($data['email']) && $data['email']) {
+//                            $resultData = array('status' => false, 'message' => 'Email id is mandatory', 'result' => '');
+//                            return $resultData;
+//                        }
+//                        $EmailAndMobileExists = User::where(function ($q) use ($data) {
+//                                    return $q->where('email', $data['email']);
+//                                })->count();
+//                        if ($EmailAndMobileExists == 0) {
+//                            $data['password'] = bcrypt($data['password']);
+//                            $data['register_mode'] = $this->getRegisterMode($data['register_mode']);
+//                            //$data['been_there_status'] = ($data['been_there_status']=='Yes') ? 1 : 2;
+//                            $data['registered_on'] = date('Y-m-d H:i:s');
+//                            $data['status'] = 'Active';
+//                            
+//                            if (isset($data['profile_url']) && $data['profile_url']) {
+//								$imageData = base64_decode($data['profile_url']);
+//                                if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {
+//                                    $data['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'], $data['fullname'], $logoPath);
+//
+//                                    $userData['image'] = $imagePath . $data['profile_picture'];
+//                                    // To upload the images into Amazon S3
+//                                   $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $data['profile_picture'], $imageData, 'public');
+//                                }
+//                            }
+//                            $registerStatus = User::create($data);
+//                            $id = User::max('id');
+//                            if ($registerStatus) {
+//                                $userData['id'] = $id;
+//                                $resultData = array('status' => true, 'message' => 'Registered successfully', 'result' => $userData);
+//                            } else {
+//                                $resultData = array('status' => false, 'message' => 'Registration failed', 'result' => '');
+//                            }
+//                        } else {
+//							
+//                            //$userFacebook = User::get()->where('facebook_id', ($data['facebook_id']) ? $data['facebook_id'] : '')->count();
+//                            //$userEmail = User::get()->where('em1ail', '=', $data['email'])->count();
+//                            if ($EmailAndMobileExists != 0) {
+//                                $user = $EmailAndMobileExist = User::where(function ($q) use ($data) {
+//                                    return $q->where('email', $data['email'])->orWhere('mobile', $data['mobile']);
+//                                })->first();
+//                            }
+//                            $userData['id'] = $user->id;
+//                            $userData['image'] = ($user->profile_picture) ? $imagePath . $user->profile_picture : "";
+//                            $resultData = array('status' => true, 'message' => 'You already have an account with the given details', 'result' => $userData);
+//                        }
+//                        ////$emailExists = User::get()->where('email',$data['email'])->count();
+////                        $mobileExists = User::get()->where('mobile', $data['mobile'])->count();
+////                        if ($mobileExists == 0) {
+////                            //$data['password'] = bcrypt($data['password']);
+////                            $data['password'] = bcrypt($data['fullname']);
+////                            $data['register_mode'] = $this->getRegisterMode($data['register_mode']);
+////                            //$data['been_there_status'] = ($data['been_there_status']=='Yes') ? 1 : 2;
+////                            $data['registered_on'] = date('Y-m-d H:i:s');
+////                            $data['status'] = 'Active';
+////                            if (isset($data['profile_url']) && $data['profile_url']) {
+////                                $imageData = base64_decode($data['profile_url']);
+////                                if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {
+////                                    $input['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'], $data['fullname'], $logoPath);
+////                                    $userData['image'] = $imagePath . $input['profile_picture'];
+////                                    // To upload the images into Amazon S3
+////                                    $amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $input['profile_picture'], $imageData, 'public');
+////                                }
+////                            }
+////
+////                            $registerStatus = User::create($data);
+////                            $id = User::max('id');
+////                            if ($registerStatus) {
+////                                $userData['id'] = $id;
+////
+////                                /* To send OTP */
+////                                $mobileOTP = $this->generateOTP(); //get the OTP from traits method
+////                                $authKey = env("SMS_AUTH_KEY", "173397Ad58dSrs59afe736");
+////                                $senderId = env("SMS_SENDER_ID", "KRQ102234");
+////                                $route = env("SMS_ROUTE", "4");
+////                                $smsURI = env("SMS_URI", "https://control.msg91.com/api/sendhttp.php");
+////                                $message = "Your OTP to verify the mobile number is " . $mobileOTP;
+////
+////                                $client = new Client(); //GuzzleHttp\Client
+////                                $result = $client->post($smsURI, [
+////                                    'form_params' => [
+////                                        'authkey' => $authKey,
+////                                        'mobiles' => $data['mobile'],
+////                                        'message' => $message,
+////                                        'sender' => $senderId,
+////                                        'route' => $route
+////                                    ]
+////                                ]);
+////                                $otpStatus = $result->getStatusCode(); // to get the status code
+////                                if ($otpStatus == 200) {
+////                                    $otpStoreStatus = User::where('mobile', '=', $data['mobile'])->update(['otp' => $mobileOTP, 'mobile_verification_status' => '0', 'resend_otp_status' => '0']);
+////                                    if ($otpStoreStatus) {
+////                                        $resultData = array('status' => true, 'message' => 'registered successfully. OTP is sent', 'result' => '');
+////                                    } else {
+////                                        $resultData = array('status' => false, 'message' => 'registered successfully. OTP sent but could not be registered (OTP) in database', 'result' => '');
+////                                    }
+////                                } else {
+////                                    $resultData = array('status' => false, 'message' => 'registered successfully. OTP could not be sent', 'result' => '');
+////                                }
+////                                /* End send OTP */
+////
+////                                //$resultData = array('status'=>true,'message'=>'registered successfully','result'=>$userData);
+////                            } else {
+////                                $resultData = array('status' => false, 'message' => 'registration failed', 'result' => '');
+////                            }
+////                        } else {
+////                            $resultData = array('status' => false, 'message' => 'Mobile exists already', 'result' => '');
+////                        }
+//                    } else if ($data['register_mode'] == 'Facebook') {
+//                        if (!isset($data['facebook_id']) && $data['facebook_id']) {
+//                            $resultData = array('status' => false, 'message' => 'facebook id is mandatory', 'result' => '');
+//                            return $resultData;
+//                        }
+//                        $facebookAndEmailExists = User::where(function ($q) use ($data) {
+//                                    return $q->where('facebook_id', $data['facebook_id'])->orWhere('email', $data['email']);
+//                                })->count();
+//                        if ($facebookAndEmailExists == 0) {
+//
+//                            $data['password'] = bcrypt($data['fullname']);
+//                            $data['register_mode'] = $this->getRegisterMode($data['register_mode']);
+//                            //$data['been_there_status'] = ($data['been_there_status']=='Yes') ? 1 : 2;
+//                            $data['registered_on'] = date('Y-m-d H:i:s');
+//                            $data['status'] = 'Active';
+//                          
+//							if ( isset($data['profile_picture']) ) { 
+//								$imageData = base64_decode($data['profile_url']);
+//								if (isset($data['profile_url']) && $data['profile_url']) {
+//									if (!filter_var($data['profile_url'], FILTER_VALIDATE_URL)) {
+//										$data['profile_picture'] = KranHelper::convertStringToImage($data['profile_url'], $data['fullname'], $logoPath);
+//										$userData['image'] = $imagePath . $data['profile_picture'];
+//										// To upload the images into Amazon S3
+//										$amazonImgUpload = Storage::disk('s3')->put('/uploads/user/' . $data['profile_picture'], $imageData, 'public');
+//									}
+//								}
+//							}
+//                            $registerStatus = User::create($data);
+//                            $id = User::max('id');
+//                            if ($registerStatus) {
+//                                $userData['id'] = $id;
+//                                $resultData = array('status' => true, 'message' => 'Registered successfully', 'result' => $userData);
+//                            } else {
+//                                $resultData = array('status' => false, 'message' => 'Registration failed', 'result' => '');
+//                            }
+//                        } else {
+//                            $userFacebook = User::get()->where('facebook_id', $data['facebook_id'])->count();
+//                            $userEmail = User::get()->where('email', $data['email'])->count();
+//                            if ($userFacebook != 0) {
+//                                $user = User::get()->where('facebook_id', $data['facebook_id'])->first();
+//                            } else if ($userEmail != 0) {
+//                                $user = User::get()->where('email', $data['email'])->first();
+//                            }
+//
+//                            $userData['id'] = $user->id;
+//                            $userData['image'] = ($user->profile_picture) ? $imagePath . $user->profile_picture : "";
+//                            $resultData = array('status' => true, 'message' => 'You already have an account with the given details', 'result' => $userData);
+//                        }
+//                    } else {
+//                        
+//                    }
+//                } else {
+//                    $resultData = array('status' => false, 'message' => 'Invalid Input', 'result' => '');
+//                }
+//            } else {
+//                $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
+//            }
+//        } catch (Exception $e) {
+//            $resultData = array('status' => false, 'message' => 'Invalid request', 'result' => '');
+//        }
+//        return $resultData;
+//    } 
 	
 	/**
 	 * To get the login credential  
